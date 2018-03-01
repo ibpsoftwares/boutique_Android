@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/tabLayout">
+
+        <ImageView
+            android:layout_width="50sp"
+            android:layout_height="match_parent"
+            android:layout_margin="5sp"
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/logo_white" />
+
+<com.kftsoftwares.boutique.Utils.TextViewRegular
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/home"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:ignore="RelativeOverlap" />
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            >
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="10dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:id="@+id/cartView"
+                android:src="@mipmap/ic_cart" />
+            <TextView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="1dp"
+                android:text=""
+                android:textSize="10dp"
+                android:visibility="gone"
+
+                android:layout_alignParentEnd="true"
+
+                android:id="@+id/cartCount"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:background="@drawable/red_circle"
+                />
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/tablayout"
+        android:id="@+id/frameLayout"
+        android:layout_below="@+id/action_bar"
+        android:background="@android:color/transparent" />
+
+    <LinearLayout
+        android:id="@+id/tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="55sp"
+        android:layout_alignParentBottom="true"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="5">
+
+        <RelativeLayout
+            android:id="@+id/homeRelativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/tabLayout"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/homeImage"
+                android:layout_width="25sp"
+                android:layout_centerHorizontal="true"
+                android:layout_height="25sp"
+                android:scaleType="fitXY"
+                android:layout_marginTop="5sp"
+                android:src="@mipmap/ic_home" />
+
+            <com.kftsoftwares.boutique.Utils.TextViewRegular
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/homeImage"
+                android:layout_centerInParent="true"
+                android:text="@string/home"
+                android:textColor="#fff"
+                android:textSize="14sp"
+
+                />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/categoryRelativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/tabLayout"
+
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/category"
+                android:layout_width="25sp"
+                android:layout_height="25sp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:src="@mipmap/ic_product_white"
+                android:contentDescription="@string/app_name" />
+
+            <com.kftsoftwares.boutique.Utils.TextViewRegular
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/category"
+                android:layout_centerInParent="true"
+                android:text="@string/category"
+                android:textColor="#fff"
+                android:textSize="14sp"
+
+                />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/profileRelativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/tabLayout"
+
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/profile"
+                android:layout_width="25sp"
+                android:layout_height="25sp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/ic_profile"
+                />
+
+            <com.kftsoftwares.boutique.Utils.TextViewRegular
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profile"
+                android:layout_centerInParent="true"
+                android:text="@string/profile"
+                android:textColor="#fff"
+                android:textSize="14sp"
+
+                />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/settingRelativeLayout"
+            android:layout_width="match_parent"
+            android:background="@color/tabLayout"
+
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/setting"
+                android:layout_width="25sp"
+                android:layout_height="25sp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/ic_setting"
+                />
+
+            <com.kftsoftwares.boutique.Utils.TextViewRegular
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/setting"
+                android:layout_centerInParent="true"
+                android:text="@string/setting"
+                android:textColor="#fff"
+                android:textSize="14sp"
+
+                />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/wishListRelativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/tabLayout"
+            android:layout_weight="1">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/wishList"
+
+                >
+
+            <ImageView
+                android:layout_width="25sp"
+                android:layout_height="25sp"
+                android:layout_marginTop="5dp"
+                android:src="@mipmap/ic_heart"
+                android:contentDescription="@string/app_name" />
+                <TextView
+                    android:layout_width="14dp"
+                    android:layout_height="13dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="2dp"
+                    android:text=""
+                    android:textSize="10dp"
+                    android:id="@+id/wishListCount"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:textColor="@color/white"
+                    android:background="@drawable/red_circle"
+                    />
+
+            </RelativeLayout>
+            <com.kftsoftwares.boutique.Utils.TextViewRegular
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/wishList"
+                android:layout_centerInParent="true"
+                android:text="@string/wishlist"
+                android:textColor="#fff"
+                android:textSize="14sp"
+                />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

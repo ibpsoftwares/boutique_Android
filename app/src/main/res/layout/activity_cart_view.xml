@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.kftsoftwares.boutique.activities.CartView">
+
+    <RelativeLayout
+        android:id="@+id/action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/tabLayout">
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="25sp"
+            android:layout_height="25sp"
+            android:layout_centerVertical="true"
+            android:layout_margin="5sp"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitCenter"
+            android:src="@drawable/arrow_left" />
+
+        <com.kftsoftwares.boutique.Utils.TextViewRegular
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/cart_view"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:ignore="RelativeOverlap" />
+
+        <ImageView
+            android:id="@+id/cart"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
+            android:layout_toStartOf="@+id/shoppingTag"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop"
+            android:src="@drawable/cart"
+            android:visibility="gone" />
+
+
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/cartListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linearLayout"
+        android:layout_below="@+id/action_bar" />
+
+
+
+
+
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/orange">
+
+            <com.kftsoftwares.boutique.Utils.TextViewRegular
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text=""
+                android:id="@+id/totalItemCount"
+                android:padding="10sp"
+                android:textColor="@color/white"
+                android:layout_alignParentStart="true"
+                />
+
+            <com.kftsoftwares.boutique.Utils.TextViewBold
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_toEndOf="@+id/totalItemCount"
+                android:text=""
+                android:gravity="end"
+                android:id="@+id/amountCount"
+                android:padding="10sp"
+                android:textColor="@color/white"
+                android:layout_alignParentEnd="true"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white"
+                 android:textAllCaps="false"
+            android:textColor="@color/white"
+
+            >
+
+            <com.kftsoftwares.boutique.Utils.TextViewBold
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:padding="10sp"
+                android:text="CHECKOUT"
+                android:textColor="@color/orange"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/no_data_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:layout_below="@+id/action_bar"
+        >
+
+        <com.kftsoftwares.boutique.Utils.TextViewRegular
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="No Data Found"
+            android:textColor="@color/black"
+            android:textSize="30dp"
+
+            />
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,161 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.kftsoftwares.boutique.Fragments.Setting_Fragment">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp">
+<ImageView
+    android:layout_width="30sp"
+    android:layout_height="30sp"
+    android:contentDescription="@string/app_name"
+    android:src="@mipmap/help"
+
+    />
+    <com.kftsoftwares.boutique.Utils.TextViewRegular
+        android:layout_width="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="Help"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:layout_height="wrap_content" />
+
+
+
+</LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/border_color"
+        android:layout_marginStart="20dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+        <ImageView
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/profile_green"
+
+            />
+        <com.kftsoftwares.boutique.Utils.TextViewRegular
+            android:layout_width="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Profile"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:layout_height="wrap_content" />
+
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/border_color"
+        android:layout_marginStart="20dp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/changePassword"
+        android:padding="10dp">
+        <ImageView
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/setting_green"
+
+            />
+        <com.kftsoftwares.boutique.Utils.TextViewRegular
+            android:layout_width="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Change Password"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:layout_height="wrap_content" />
+
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/border_color"
+        android:layout_marginStart="20dp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+        <ImageView
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/history"
+
+
+            />
+        <com.kftsoftwares.boutique.Utils.TextViewRegular
+            android:layout_width="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="History"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:layout_height="wrap_content" />
+
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/border_color"
+        android:layout_marginStart="20dp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+        <ImageView
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/signout_green"
+
+            />
+        <com.kftsoftwares.boutique.Utils.TextViewRegular
+            android:layout_width="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Sign out"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:layout_height="wrap_content" />
+
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/border_color"
+        android:layout_marginStart="20dp"
+        />
+
+</LinearLayout>

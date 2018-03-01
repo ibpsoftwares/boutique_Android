@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="10dp">
+
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        app:civ_border_color="#EEEEEE"
+        app:civ_border_width="1dp"
+        app:civ_shadow="true"
+        android:id="@+id/profile_image"
+        app:civ_shadow_radius="1"
+        app:civ_shadow_color="#8BC34A"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/delete"
+        android:contentDescription="@string/app_name"
+        android:src="@mipmap/close" />
+    <com.kftsoftwares.boutique.Utils.TextViewRegular
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/dark_gray"
+        android:layout_alignParentBottom="true"
+        android:textSize="16sp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10sp"
+        android:layout_toEndOf="@+id/profile_image"
+        android:orientation="vertical">
+
+        <com.kftsoftwares.boutique.Utils.TextViewRegular
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="sjdhahjhh"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <com.kftsoftwares.boutique.Utils.TextViewRegular
+                android:id="@+id/size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:background="@color/light_gray"
+                android:text="Size: 7"
+                android:padding="5sp"
+
+                android:textSize="14sp" />
+
+            <com.kftsoftwares.boutique.Utils.TextViewRegular
+                android:id="@+id/Quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:background="@color/light_gray"
+                android:text="X 2"
+                android:textAllCaps="false"
+                android:layout_marginStart="10sp"
+                android:padding="5sp"
+
+                android:textSize="14sp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</RelativeLayout>
