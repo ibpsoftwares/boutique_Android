@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public ImageView mCartView;
     private SharedPreferences sharedPreferences;
     public TextView mWishCountText , mCartCountText;
+    //testing
     public int mCartCount;
 
     @Override
