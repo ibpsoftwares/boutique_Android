@@ -20,14 +20,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.kftsoftwares.boutique.Adapter.CartViewAdapter;
 import com.kftsoftwares.boutique.Fragments.Category;
 import com.kftsoftwares.boutique.Fragments.Home;
 import com.kftsoftwares.boutique.Fragments.Profile_Fragment;
 import com.kftsoftwares.boutique.Fragments.Setting_Fragment;
 import com.kftsoftwares.boutique.Fragments.WishList_Fragment;
-import com.kftsoftwares.boutique.Models.CartViewModel;
 import com.kftsoftwares.boutique.R;
+import com.kftsoftwares.boutique.utils.Util;
 import com.kftsoftwares.boutique.volly.AppController;
 
 import org.json.JSONArray;
@@ -37,13 +36,13 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.kftsoftwares.boutique.Utils.Constants.ADD_WISH_LIST;
-import static com.kftsoftwares.boutique.Utils.Constants.GET_WISH_LIST;
-import static com.kftsoftwares.boutique.Utils.Constants.MyPREFERENCES;
-import static com.kftsoftwares.boutique.Utils.Constants.REMOVE_FROM_WISHLIST;
-import static com.kftsoftwares.boutique.Utils.Constants.TOKEN;
-import static com.kftsoftwares.boutique.Utils.Constants.User_ID;
-import static com.kftsoftwares.boutique.Utils.Constants.VIEW_CART;
+import static com.kftsoftwares.boutique.utils.Constants.ADD_WISH_LIST;
+import static com.kftsoftwares.boutique.utils.Constants.GET_WISH_LIST;
+import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
+import static com.kftsoftwares.boutique.utils.Constants.REMOVE_FROM_WISHLIST;
+import static com.kftsoftwares.boutique.utils.Constants.TOKEN;
+import static com.kftsoftwares.boutique.utils.Constants.User_ID;
+import static com.kftsoftwares.boutique.utils.Constants.VIEW_CART;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -52,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public ImageView mCartView;
     private SharedPreferences sharedPreferences;
     public TextView mWishCountText , mCartCountText;
+    private Util mUtil;
     //testing
     public int mCartCount;
 
@@ -60,12 +60,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         getWishList();
         getCartList();
+
+if (AppController.getInstance().isOnline())
+{
+    mUtil.checkConnection(MainActivity.this,true);
+}
+else {
+    mUtil.checkConnection(MainActivity.this,false);
+
+}
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+        mUtil = new Util();
+
         mHome = findViewById(R.id.homeRelativeLayout);
         mCategory = findViewById(R.id.categoryRelativeLayout);
         mProfile = findViewById(R.id.profileRelativeLayout);
@@ -256,7 +268,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onErrorResponse(VolleyError error) {
                 pDialog.cancel();
                 pDialog.dismiss();
-                Toast.makeText(MainActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         }
         );
@@ -464,4 +475,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
+
+
 }

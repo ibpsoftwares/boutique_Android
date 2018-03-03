@@ -25,7 +25,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.kftsoftwares.boutique.Utils.Constants.SIGN_UP;
+import static com.kftsoftwares.boutique.utils.Constants.SIGN_UP;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 

@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="10dp">
 
-    <com.kftsoftwares.boutique.Utils.CircularImageView
+    <com.kftsoftwares.boutique.utils.CircularImageView
         android:layout_width="66dp"
         android:layout_height="66dp"
         app:civ_border_color="#EEEEEE"
@@ -31,7 +31,7 @@
         android:layout_toEndOf="@+id/profile_image"
         android:orientation="vertical">
 
-        <com.kftsoftwares.boutique.Utils.TextViewRegular
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
             android:lines="1"
             android:textSize="16sp" />
 
-        <com.kftsoftwares.boutique.Utils.TextViewRegular
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:id="@+id/price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -1,4 +1,4 @@
-package com.kftsoftwares.boutique.Utils;
+package com.kftsoftwares.boutique.utils;
 
 import android.content.Context;
 import android.util.AttributeSet;

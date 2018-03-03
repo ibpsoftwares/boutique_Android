@@ -1,4 +1,4 @@
-package com.kftsoftwares.boutique.Utils;
+package com.kftsoftwares.boutique.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,7 +8,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.widget.ImageView;
 
 public class ZoomInZoomOut extends android.support.v7.widget.AppCompatImageView
 {

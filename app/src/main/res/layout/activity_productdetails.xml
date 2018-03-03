@@ -22,7 +22,7 @@
             android:scaleType="fitCenter"
             android:src="@drawable/arrow_left" />
 
-        <com.kftsoftwares.boutique.Utils.TextViewRegular
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -88,7 +88,7 @@
                 android:gravity="start"
                 android:orientation="vertical"/>
 </ScrollView>
-<com.kftsoftwares.boutique.Utils.TextViewRegular
+<com.kftsoftwares.boutique.utils.TextViewRegular
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:id="@+id/brandName"
@@ -98,7 +98,7 @@
 
     />
 
-        <com.kftsoftwares.boutique.Utils.TextViewRegular
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/oldPrice"
@@ -107,7 +107,7 @@
             android:textColor="@color/red"
             android:text="$999"
             />
-        <com.kftsoftwares.boutique.Utils.TextViewRegular
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/newPrice"
@@ -117,7 +117,7 @@
             android:textColor="@color/black"
             />
 
-        <com.kftsoftwares.boutique.Utils.TextViewRegular
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/name"
@@ -135,7 +135,7 @@
             android:id="@+id/view1"
             />
 
-        <com.kftsoftwares.boutique.Utils.TextViewRegular
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/selectSize"
@@ -162,7 +162,7 @@
             android:layout_margin="5sp"
             android:id="@+id/view2"
             />
-        <com.kftsoftwares.boutique.Utils.TextViewRegular
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/des"
@@ -172,7 +172,7 @@
             android:textColor="@color/dark_gray"
             />
 
-        <com.kftsoftwares.boutique.Utils.TextViewRegular
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/description"

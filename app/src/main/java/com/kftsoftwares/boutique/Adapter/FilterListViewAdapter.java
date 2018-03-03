@@ -1,7 +1,6 @@
 package com.kftsoftwares.boutique.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,20 +9,14 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kftsoftwares.boutique.Interface.FilterListView;
 import com.kftsoftwares.boutique.Models.FilterDataModel;
 import com.kftsoftwares.boutique.R;
-import com.kftsoftwares.boutique.activities.ProductList;
 
 import java.util.ArrayList;
 
-import static com.kftsoftwares.boutique.Utils.Constants.Checked;
-import static com.kftsoftwares.boutique.Utils.Constants.Email;
-import static com.kftsoftwares.boutique.Utils.Constants.MyPREFERENCES;
-import static com.kftsoftwares.boutique.Utils.Constants.User_ID;
-import static com.kftsoftwares.boutique.Utils.Constants.User_Name;
+import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 
 /**
  * Created by apple on 21/02/18.

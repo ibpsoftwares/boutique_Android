@@ -1,4 +1,4 @@
-package com.kftsoftwares.boutique.Utils;
+package com.kftsoftwares.boutique.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

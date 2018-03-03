@@ -42,12 +42,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.kftsoftwares.boutique.Utils.Constants.ADD_TO_CART;
-import static com.kftsoftwares.boutique.Utils.Constants.ADD_WISH_LIST;
-import static com.kftsoftwares.boutique.Utils.Constants.GET_SINGLE_PRODUCT;
-import static com.kftsoftwares.boutique.Utils.Constants.MyPREFERENCES;
-import static com.kftsoftwares.boutique.Utils.Constants.TOKEN;
-import static com.kftsoftwares.boutique.Utils.Constants.User_ID;
+import static com.kftsoftwares.boutique.utils.Constants.ADD_TO_CART;
+import static com.kftsoftwares.boutique.utils.Constants.ADD_WISH_LIST;
+import static com.kftsoftwares.boutique.utils.Constants.GET_SINGLE_PRODUCT;
+import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
+import static com.kftsoftwares.boutique.utils.Constants.TOKEN;
+import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 
 public class Productdetails extends AppCompatActivity implements View.OnClickListener {
 

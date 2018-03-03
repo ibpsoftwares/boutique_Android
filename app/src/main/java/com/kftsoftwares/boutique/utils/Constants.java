@@ -1,4 +1,4 @@
-package com.kftsoftwares.boutique.Utils;
+package com.kftsoftwares.boutique.utils;
 
 /**
  * Created by apple on 19/02/18.

@@ -17,7 +17,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.kftsoftwares.boutique.Adapter.ListViewAdapter;
 import com.kftsoftwares.boutique.R;
 import com.kftsoftwares.boutique.activities.MainActivity;
-import com.kftsoftwares.boutique.activities.ProductList;
 import com.kftsoftwares.boutique.volly.AppController;
 
 import org.json.JSONArray;
@@ -26,7 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static com.kftsoftwares.boutique.Utils.Constants.GET_CATEGORIES;
+import static com.kftsoftwares.boutique.utils.Constants.GET_CATEGORIES;
 
 
 public class Category extends Fragment {

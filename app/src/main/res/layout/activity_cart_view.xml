@@ -21,7 +21,7 @@
             android:scaleType="fitCenter"
             android:src="@drawable/arrow_left" />
 
-        <com.kftsoftwares.boutique.Utils.TextViewRegular
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -74,7 +74,7 @@
             android:layout_weight="1"
             android:background="@color/orange">
 
-            <com.kftsoftwares.boutique.Utils.TextViewRegular
+            <com.kftsoftwares.boutique.utils.TextViewRegular
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
@@ -85,7 +85,7 @@
                 android:layout_alignParentStart="true"
                 />
 
-            <com.kftsoftwares.boutique.Utils.TextViewBold
+            <com.kftsoftwares.boutique.utils.TextViewBold
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
@@ -109,7 +109,7 @@
 
             >
 
-            <com.kftsoftwares.boutique.Utils.TextViewBold
+            <com.kftsoftwares.boutique.utils.TextViewBold
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
@@ -131,7 +131,7 @@
         android:layout_below="@+id/action_bar"
         >
 
-        <com.kftsoftwares.boutique.Utils.TextViewRegular
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"

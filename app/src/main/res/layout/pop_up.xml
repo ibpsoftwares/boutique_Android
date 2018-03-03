@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.kftsoftwares.boutique.Utils.TextViewRegular xmlns:android="http://schemas.android.com/apk/res/android"
+<com.kftsoftwares.boutique.utils.TextViewRegular xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="10dp"
@@ -8,4 +8,4 @@
     >
 
 
-</com.kftsoftwares.boutique.Utils.TextViewRegular>
+</com.kftsoftwares.boutique.utils.TextViewRegular>

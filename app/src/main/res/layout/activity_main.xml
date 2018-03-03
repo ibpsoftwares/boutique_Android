@@ -48,7 +48,7 @@
             />
 
 
-    <com.kftsoftwares.boutique.Utils.TextViewRegular
+    <com.kftsoftwares.boutique.utils.TextViewRegular
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"

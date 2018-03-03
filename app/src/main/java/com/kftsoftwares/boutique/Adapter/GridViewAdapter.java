@@ -21,6 +21,7 @@ import com.kftsoftwares.boutique.activities.ProductList;
 import com.kftsoftwares.boutique.activities.Productdetails;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by apple on 20/02/18.
@@ -31,10 +32,13 @@ public class GridViewAdapter extends BaseAdapter {
     private Context mContext;
 
     private ArrayList<GetAllProductModel> mArrayList;
+    private ArrayList<GetAllProductModel> mSortedList;
 
     public GridViewAdapter(Context context, ArrayList<GetAllProductModel> arrayList) {
         mContext = context;
         mArrayList = arrayList;
+        this.mSortedList = new ArrayList<GetAllProductModel>();
+        this.mSortedList.addAll(arrayList);
     }
 
     @Override
@@ -69,8 +73,11 @@ public class GridViewAdapter extends BaseAdapter {
         if (mArrayList.get(position).getOfferPrice() != null &&
 
                 !mArrayList.get(position).getOfferPrice().equalsIgnoreCase("null")) {
-            oldPrice.setPaintFlags(oldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+            oldPrice.setPaintFlags(oldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG |Paint.ANTI_ALIAS_FLAG);
+
             name.setText(mArrayList.get(position).getBrandName());
+            oldPrice.setVisibility(View.VISIBLE);
             oldPrice.setText(mArrayList.get(position).getPrice());
             price.setText(mArrayList.get(position).getOfferPrice());
         } else {
@@ -137,4 +144,46 @@ public class GridViewAdapter extends BaseAdapter {
 
 
     }
+
+    public void update(ArrayList<GetAllProductModel> arrayList){
+        if (mArrayList!=null)
+        {
+            mArrayList.clear();
+        }
+
+        if (mSortedList!=null)
+        {
+            mSortedList.clear();
+        }
+
+        mArrayList.addAll(arrayList);
+        mSortedList.addAll(arrayList);
+        notifyDataSetChanged();
+    }
+
+
+    // Filter method
+    public void filter(String charText) {
+        charText = charText.toLowerCase(Locale.getDefault());
+       mArrayList.clear();
+        if (charText.length() == 0) {
+            mArrayList.addAll(mSortedList);
+        }
+        else
+        {
+
+
+            for (GetAllProductModel wp : mSortedList)
+            {
+                if (wp.getTitle().toLowerCase(Locale.getDefault()).contains(charText) || wp.getBrandName().toLowerCase(Locale.getDefault()).contains(charText))
+                {
+                    mArrayList.add(wp);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+
+
 }

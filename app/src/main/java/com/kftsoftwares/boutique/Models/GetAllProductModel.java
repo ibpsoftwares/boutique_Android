@@ -12,7 +12,7 @@ public class GetAllProductModel {
         private String title;
         private String description;
         private String price;
-        private String offer_price;
+        private String offerprice;
         private String colour;
         private String deleteStatus;
         private String currency;
@@ -20,13 +20,6 @@ public class GetAllProductModel {
         private String brandName;
         private String Wish_list;
 
-    public String getOffer_price() {
-        return offer_price;
-    }
-
-    public void setOffer_price(String offer_price) {
-        this.offer_price = offer_price;
-    }
 
     public String getWish_list() {
         return Wish_list;
@@ -92,11 +85,11 @@ public class GetAllProductModel {
             this.price = price;
         }
    public String getOfferPrice() {
-            return offer_price;
+            return offerprice;
         }
 
         public void setOfferPrice(String price) {
-            this.offer_price = price;
+            this.offerprice = price;
         }
 
         public String getColour() {

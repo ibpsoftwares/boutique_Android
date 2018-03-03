@@ -1,8 +1,14 @@
-package com.kftsoftwares.boutique.Utils;
+package com.kftsoftwares.boutique.utils;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.widget.TextView;
+
+import com.kftsoftwares.boutique.R;
 
 /**
  * Created by apple on 23/02/18.
@@ -172,5 +178,31 @@ public class Util {
 
             "+998", "+678", "+58", "+84", "+681", "+970", "+967", "+260", "+263"};
 
+
+    public void strikeColor(TextView textView,Context context)
+    {
+        Canvas canvas = new Canvas();
+        Paint paint = new Paint();
+        paint.setColor(ContextCompat.getColor(context,R.color.black));
+        paint.setStyle(Paint.Style.FILL);
+        paint.setStrikeThruText(true);
+        paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        float width = textView.getWidth();
+        float heigh = textView.getHeight();
+        canvas.drawLine(width/10, heigh/10, (width-width/10),(heigh-heigh/10), paint);
+
+        textView.setPaintFlags(paint.getFlags());
+    }
+
+    public void checkConnection(Context context , boolean isConnected) {
+
+        if (isConnected)
+        {
+            showSingleOkAlert(context,"Internet Connected","Internet Status");
+        }
+        else {
+            showSingleOkAlert(context,"No Internet Connection","Internet Status");
+        }
+    }
 
 }

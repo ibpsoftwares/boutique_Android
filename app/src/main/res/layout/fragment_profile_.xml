@@ -68,7 +68,7 @@
                 android:background="@mipmap/edit"
                 android:contentDescription="@string/app_name" />
 
-            <com.kftsoftwares.boutique.Utils.TextViewRegular
+            <com.kftsoftwares.boutique.utils.TextViewRegular
                 android:id="@+id/text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

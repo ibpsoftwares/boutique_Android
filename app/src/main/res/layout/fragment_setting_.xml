@@ -16,7 +16,7 @@
     android:src="@mipmap/help"
 
     />
-    <com.kftsoftwares.boutique.Utils.TextViewRegular
+    <com.kftsoftwares.boutique.utils.TextViewRegular
         android:layout_width="wrap_content"
         android:layout_marginStart="10dp"
         android:text="Help"
@@ -47,7 +47,7 @@
             android:src="@mipmap/profile_green"
 
             />
-        <com.kftsoftwares.boutique.Utils.TextViewRegular
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
             android:layout_marginStart="10dp"
             android:text="Profile"
@@ -78,7 +78,7 @@
             android:src="@mipmap/setting_green"
 
             />
-        <com.kftsoftwares.boutique.Utils.TextViewRegular
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
             android:layout_marginStart="10dp"
             android:text="Change Password"
@@ -109,7 +109,7 @@
 
 
             />
-        <com.kftsoftwares.boutique.Utils.TextViewRegular
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
             android:layout_marginStart="10dp"
             android:text="History"
@@ -139,7 +139,7 @@
             android:src="@mipmap/signout_green"
 
             />
-        <com.kftsoftwares.boutique.Utils.TextViewRegular
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
             android:layout_marginStart="10dp"
             android:text="Sign out"

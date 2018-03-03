@@ -6,7 +6,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -38,18 +37,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
-import static com.kftsoftwares.boutique.Utils.Constants.GET_ALL_CATEGORIES_BY_ID;
-import static com.kftsoftwares.boutique.Utils.Constants.PRICE_RANGE;
-import static com.kftsoftwares.boutique.Utils.Constants.SORT_DATA;
-import static com.kftsoftwares.boutique.Utils.Constants.TOKEN;
+import static com.kftsoftwares.boutique.utils.Constants.GET_ALL_CATEGORIES_BY_ID;
+import static com.kftsoftwares.boutique.utils.Constants.PRICE_RANGE;
+import static com.kftsoftwares.boutique.utils.Constants.SORT_DATA;
+import static com.kftsoftwares.boutique.utils.Constants.TOKEN;
 
 public class ProductList extends AppCompatActivity implements View.OnClickListener, FilterListView {
 
     private GridView mGridView;
     private ArrayList<GetAllProductModel> mGetAllProductModels;
+    private ArrayList<GetAllProductModel> mSortedGetAllProductModels;
+    private ArrayList<Integer> mIdArrayList;
     private ArrayList<GetAllProductModel> mGetSortedList;
     private String mId;
     private ImageView mBackButton;
@@ -62,6 +66,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
     private FilterListViewAdapter mFilterListViewAdapter;
     private String mSelectedId = "";
     private PopupWindow popupWindow;
+    private GridViewAdapter mGridViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
             }
         }
         mGetAllProductModels = new ArrayList<>();
+        mSortedGetAllProductModels = new ArrayList<>();
         mGetSortedList = new ArrayList<>();
         mGridView = findViewById(R.id.gridView);
         mBackButton = findViewById(R.id.backButton);
@@ -93,19 +99,19 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                // searchApi(searchEditText.getText().toString());
-                getProductList(searchEditText.getText().toString(), "");
 
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                String text = searchEditText.getText().toString().toLowerCase(Locale.getDefault());
+                mGridViewAdapter.filter(text);
 
             }
         });
         ImageView cart = findViewById(R.id.cart);
 
-        getProductList("", "");
+        getProductList();
         getPriceList();
 
         mBackButton.setOnClickListener(new View.OnClickListener() {
@@ -122,13 +128,17 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
             }
         });
         mFilterDataModel = new ArrayList<>();
+        mIdArrayList = new ArrayList<>();
         mFilterListViewAdapter = new FilterListViewAdapter(ProductList.this, new ArrayList<FilterDataModel>(), mVal, ProductList.this);
+        mGridViewAdapter = new GridViewAdapter(ProductList.this, new ArrayList<GetAllProductModel>());
+        mGridView.setAdapter(mGridViewAdapter);
+
     }
 
 
     //---------------------GET PRODUCT LIST BY CATEGORY -----------------//
 
-    private void getProductList(final String product_name, final String id) {
+    private void getProductList() {
         if (mGetAllProductModels != null) {
             mGetAllProductModels.clear();
         }
@@ -179,9 +189,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
                         }
                         mlinearLayout.setVisibility(View.GONE);
                         mGridView.setVisibility(View.VISIBLE);
-                        GridViewAdapter gridViewAdapter = new GridViewAdapter(ProductList.this, mGetAllProductModels);
-                        mGridView.setAdapter(gridViewAdapter);
-                        gridViewAdapter.notifyDataSetChanged();
+                        mGridViewAdapter.update(mGetAllProductModels);
                     }
 
                 } catch (JSONException e) {
@@ -196,16 +204,8 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
                 Toast.makeText(ProductList.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         }
-        ) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-               // params.put("product_name", product_name);
-              //  params.put("range_id", id);
-                return params;
-            }
-        };
-        ;
+        );
+
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
@@ -214,11 +214,8 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.filter:
-                //startActivity(new Intent(ProductList.this,FilterPreference.class));
                 showDialog();
-
                 break;
-
             case R.id.sort:
                 PopupWindow popUp = popupWindowsort();
                 popUp.showAsDropDown(v, 1, 1); // show popup like dropdown list
@@ -251,27 +248,23 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // getProductList("", mSelectedId);
+                // getProductList("", mSelectedId);
 
-                if (mSelectedId.equalsIgnoreCase(""))
-                {
+                if (mSelectedId.equalsIgnoreCase("")) {
 
 
-                    if (mGetAllProductModels!=null && mGetAllProductModels.size()>0)
-                    {
+                    if (mGetAllProductModels != null && mGetAllProductModels.size() > 0) {
                         mlinearLayout.setVisibility(View.GONE);
                         GridViewAdapter gridViewAdapter = new GridViewAdapter(ProductList.this, mGetAllProductModels);
                         mGridView.setAdapter(gridViewAdapter);
                         gridViewAdapter.notifyDataSetChanged();
-                    }
-                    else {
+                    } else {
                         mlinearLayout.setVisibility(View.VISIBLE);
                         mGridView.setVisibility(View.GONE);
 
                     }
-                }
-                else {
-                    getFilteredList(Double.valueOf(mFilterDataModel.get(Integer.valueOf(mSelectedId)).getRangeA()),Double.valueOf(mFilterDataModel.get(Integer.valueOf(mSelectedId)).getRangeB()));
+                } else {
+                    getFilteredList(Double.valueOf(mFilterDataModel.get(Integer.valueOf(mSelectedId)).getRangeA()), Double.valueOf(mFilterDataModel.get(Integer.valueOf(mSelectedId)).getRangeB()));
 
                 }
                 alert.dismiss();
@@ -290,10 +283,10 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         alert.show();
     }
     //-------------------GET FILTER LIST--------------------------//
-    private void getFilteredList(Double start , Double end) {
 
-        if (mGetSortedList!=null)
-        {
+    private void getFilteredList(Double start, Double end) {
+
+        if (mGetSortedList != null) {
             mGetSortedList.clear();
         }
 
@@ -302,13 +295,11 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
 
             String priceStr;
 
-            if (mGetAllProductModels.get(i).getOfferPrice()!=null &&
+            if (mGetAllProductModels.get(i).getOfferPrice() != null &&
 
-           !mGetAllProductModels.get(i).getOfferPrice().equalsIgnoreCase("null"))
-            {
+                    !mGetAllProductModels.get(i).getOfferPrice().equalsIgnoreCase("null")) {
                 priceStr = mGetAllProductModels.get(i).getOfferPrice();
-            }
-            else {
+            } else {
                 priceStr = mGetAllProductModels.get(i).getPrice();
             }
 
@@ -320,15 +311,12 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
 
         }
 
-        if (mGetSortedList!=null && mGetSortedList.size()>0)
-        {
+        if (mGetSortedList != null && mGetSortedList.size() > 0) {
             mlinearLayout.setVisibility(View.GONE);
-            GridViewAdapter gridViewAdapter = new GridViewAdapter(ProductList.this, mGetSortedList);
-            mGridView.setAdapter(gridViewAdapter);
-            gridViewAdapter.notifyDataSetChanged();
+            mGridView.setVisibility(View.VISIBLE);
+            mGridViewAdapter.update(mGetSortedList);
 
-        }
-        else {
+        } else {
             mlinearLayout.setVisibility(View.VISIBLE);
             mGridView.setVisibility(View.GONE);
 
@@ -456,12 +444,67 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onItemClick(AdapterView parent, View view, int position, long id) {
 
-              getSortedList(String.valueOf(position));
+                //  getSortedList(String.valueOf(position));
+
+                getLocalSortedList(position);
 
                 dismissPopup();
             }
         };
     }
+
+    private void getLocalSortedList(int position) {
+
+        switch (position) {
+            case 0:
+                //-----------------------HIGH TO LOW------------------------//
+                if (mSortedGetAllProductModels != null) {
+                    mSortedGetAllProductModels.clear();
+                }
+                mSortedGetAllProductModels.addAll(mGetAllProductModels);
+
+
+                Collections.sort(mSortedGetAllProductModels, new MyHighToLowPrice());
+                mGridViewAdapter.update(mSortedGetAllProductModels);
+
+                break;
+            //-----------------------LOW TO HIGH------------------------//
+
+            case 1:
+                if (mSortedGetAllProductModels != null) {
+                    mSortedGetAllProductModels.clear();
+                }
+                mSortedGetAllProductModels.addAll(mGetAllProductModels);
+
+
+                Collections.sort(mSortedGetAllProductModels, new MyLowToHighPrice());
+                mGridViewAdapter.update(mSortedGetAllProductModels);
+
+                break;
+
+            case 2:
+                //-----------------------NEWEST FIRST-------------------------------------//
+                mGridViewAdapter.update(mGetAllProductModels);
+
+                break;
+            case 3:
+                //-----------------------OLDEST FIRST-------------------------------------//
+
+                if (mSortedGetAllProductModels != null) {
+                    mSortedGetAllProductModels.clear();
+                }
+                mSortedGetAllProductModels.addAll(mGetAllProductModels);
+
+
+                Collections.sort(mSortedGetAllProductModels, new MySortedList());
+                mGridViewAdapter.update(mSortedGetAllProductModels);
+
+
+                break;
+        }
+    }
+
+
     //---------------------------------- Dismiss PopUp Dialog --------------------------------------//
 
     private void dismissPopup() {
@@ -471,7 +514,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
     }
 
     //---------------------------------- Sort Data --------------------------------------//
-    private void getSortedList( final String id) {
+    private void getSortedList(final String id) {
         if (mGetAllProductModels != null) {
             mGetAllProductModels.clear();
         }
@@ -510,7 +553,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
                             getAllProductModel.setCategoryId(jsonObject1.getString("category_id"));
                             getAllProductModel.setTitle(jsonObject1.getString("title"));
                             getAllProductModel.setPrice(jsonObject1.getString("price"));
-                             // getAllProductModel.setBrandName(jsonObject1.getString("brand"));
+                            // getAllProductModel.setBrandName(jsonObject1.getString("brand"));
                             getAllProductModel.setCategoryName(jsonObject1.getString("category_name"));
                             getAllProductModel.setImage1(jsonObject1.getString("image1"));
                             getAllProductModel.setDescription("description");
@@ -551,5 +594,64 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
+    class MySortedList implements Comparator<GetAllProductModel> {
 
+
+        @Override
+        public int compare(GetAllProductModel o1, GetAllProductModel o2) {
+            if (Integer.valueOf(o1.getId()) < Integer.valueOf(o2.getId())) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+    }
+
+
+    class MyHighToLowPrice implements Comparator<GetAllProductModel> {
+
+
+        @Override
+        public int compare(GetAllProductModel o1, GetAllProductModel o2) {
+            if (Integer.valueOf(o1.getPrice()) > Integer.valueOf(o2.getPrice())) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+    }
+
+    class MyLowToHighPrice implements Comparator<GetAllProductModel> {
+
+
+        @Override
+        public int compare(GetAllProductModel o1, GetAllProductModel o2) {
+
+            Double val1,val2;
+
+            if (o1.getOfferPrice()==null &&o1.getOfferPrice().equalsIgnoreCase("null"))
+            {
+                val1 =Double.valueOf(o1.getOfferPrice());
+            }
+            else {
+                val1 =Double.valueOf(o1.getPrice());
+
+            }
+
+            if (o2.getOfferPrice()==null &&o2.getOfferPrice().equalsIgnoreCase("null"))
+            {
+                val2 =Double.valueOf(o2.getOfferPrice());
+            }
+            else {
+                val2 =Double.valueOf(o2.getPrice());
+
+            }
+
+            if (val1 < val2) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+    }
 }

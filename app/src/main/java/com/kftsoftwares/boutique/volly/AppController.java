@@ -1,7 +1,11 @@
 package com.kftsoftwares.boutique.volly;
 
 import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -16,6 +20,10 @@ public class AppController extends Application {
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
 
+    ConnectivityManager connectivityManager;
+    NetworkInfo wifiInfo, mobileInfo;
+    boolean connected = false;
+
     private static AppController mInstance;
 
     @Override
@@ -23,6 +31,8 @@ public class AppController extends Application {
         super.onCreate();
         mInstance = this;
     }
+
+
 
     public static synchronized AppController getInstance() {
         return mInstance;
@@ -61,4 +71,24 @@ public class AppController extends Application {
             mRequestQueue.cancelAll(tag);
         }
     }
+
+    public boolean isOnline() {
+        try {
+            connectivityManager = (ConnectivityManager) mInstance
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            connected = networkInfo != null && networkInfo.isAvailable() &&
+                    networkInfo.isConnected();
+            return connected;
+
+
+        } catch (Exception e) {
+            System.out.println("CheckConnectivity Exception: " + e.getMessage());
+            Log.v("connectivity", e.toString());
+        }
+        return connected;
+    }
+
+
 }

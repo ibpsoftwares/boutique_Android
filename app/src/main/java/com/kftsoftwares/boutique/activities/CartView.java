@@ -30,11 +30,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.kftsoftwares.boutique.Utils.Constants.MyPREFERENCES;
-import static com.kftsoftwares.boutique.Utils.Constants.REMOVE_FROM_CART;
-import static com.kftsoftwares.boutique.Utils.Constants.TOKEN;
-import static com.kftsoftwares.boutique.Utils.Constants.User_ID;
-import static com.kftsoftwares.boutique.Utils.Constants.VIEW_CART;
+import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
+import static com.kftsoftwares.boutique.utils.Constants.REMOVE_FROM_CART;
+import static com.kftsoftwares.boutique.utils.Constants.TOKEN;
+import static com.kftsoftwares.boutique.utils.Constants.User_ID;
+import static com.kftsoftwares.boutique.utils.Constants.VIEW_CART;
 
 public class CartView extends AppCompatActivity implements CartListInterface {
 

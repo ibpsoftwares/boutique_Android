@@ -32,12 +32,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.kftsoftwares.boutique.Utils.Constants.GET_WISH_LIST;
-import static com.kftsoftwares.boutique.Utils.Constants.MOVETOWISHLIST;
-import static com.kftsoftwares.boutique.Utils.Constants.MyPREFERENCES;
-import static com.kftsoftwares.boutique.Utils.Constants.REMOVE_FROM_WISHLIST;
-import static com.kftsoftwares.boutique.Utils.Constants.TOKEN;
-import static com.kftsoftwares.boutique.Utils.Constants.User_ID;
+import static com.kftsoftwares.boutique.utils.Constants.GET_WISH_LIST;
+import static com.kftsoftwares.boutique.utils.Constants.MOVETOWISHLIST;
+import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
+import static com.kftsoftwares.boutique.utils.Constants.REMOVE_FROM_WISHLIST;
+import static com.kftsoftwares.boutique.utils.Constants.TOKEN;
+import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 
 public class WishList_Fragment extends Fragment implements WishListInterface {
 

@@ -29,13 +29,13 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.kftsoftwares.boutique.Utils.Constants.Email;
-import static com.kftsoftwares.boutique.Utils.Constants.FORGET_PASSWORD;
-import static com.kftsoftwares.boutique.Utils.Constants.LOGIN;
-import static com.kftsoftwares.boutique.Utils.Constants.MyPREFERENCES;
+import static com.kftsoftwares.boutique.utils.Constants.Email;
+import static com.kftsoftwares.boutique.utils.Constants.FORGET_PASSWORD;
+import static com.kftsoftwares.boutique.utils.Constants.LOGIN;
+import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 
-import static com.kftsoftwares.boutique.Utils.Constants.User_ID;
-import static com.kftsoftwares.boutique.Utils.Constants.User_Name;
+import static com.kftsoftwares.boutique.utils.Constants.User_ID;
+import static com.kftsoftwares.boutique.utils.Constants.User_Name;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 

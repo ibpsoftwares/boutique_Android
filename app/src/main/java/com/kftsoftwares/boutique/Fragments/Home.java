@@ -31,8 +31,8 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.kftsoftwares.boutique.Utils.Constants.GET_ALL_PRODUCTS;
-import static com.kftsoftwares.boutique.Utils.Constants.GET_BANNER_IMAGES;
+import static com.kftsoftwares.boutique.utils.Constants.GET_ALL_PRODUCTS;
+import static com.kftsoftwares.boutique.utils.Constants.GET_BANNER_IMAGES;
 
 
 public class Home extends Fragment implements View.OnClickListener {
@@ -182,6 +182,7 @@ public class Home extends Fragment implements View.OnClickListener {
                         getAllProductModel.setCategoryId(jsonObject1.getString("category_id"));
                         getAllProductModel.setTitle(jsonObject1.getString("title"));
                         getAllProductModel.setPrice(jsonObject1.getString("original_price"));
+                        getAllProductModel.setOfferPrice(jsonObject1.getString("offer_price"));
                         getAllProductModel.setId(jsonObject1.getString("id"));
                         if (jsonObject1.has("Wishlist"))
                         {

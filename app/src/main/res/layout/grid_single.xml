@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:padding="10dp">
 
-        <com.kftsoftwares.boutique.Utils.TextViewRegular
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             android:contentDescription="@string/app_name"
            />
 
-        <com.kftsoftwares.boutique.Utils.TextViewRegular
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:id="@+id/price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
             android:textColor="@color/black"
             android:textSize="14sp" />
 
-        <com.kftsoftwares.boutique.Utils.TextViewRegular
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/name"
@@ -59,7 +59,7 @@
             android:textColor="@android:color/holo_red_dark"
             android:textSize="14sp" />
 
-        <com.kftsoftwares.boutique.Utils.TextViewRegular
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

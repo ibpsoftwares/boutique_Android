@@ -17,7 +17,7 @@
             android:contentDescription="@string/app_name"
             android:src="@mipmap/logo_white" />
 
-<com.kftsoftwares.boutique.Utils.TextViewRegular
+<com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -101,7 +101,7 @@
                 android:layout_marginTop="5sp"
                 android:src="@mipmap/ic_home" />
 
-            <com.kftsoftwares.boutique.Utils.TextViewRegular
+            <com.kftsoftwares.boutique.utils.TextViewRegular
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/homeImage"
@@ -133,7 +133,7 @@
                 android:src="@mipmap/ic_product_white"
                 android:contentDescription="@string/app_name" />
 
-            <com.kftsoftwares.boutique.Utils.TextViewRegular
+            <com.kftsoftwares.boutique.utils.TextViewRegular
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/category"
@@ -165,7 +165,7 @@
                 android:src="@mipmap/ic_profile"
                 />
 
-            <com.kftsoftwares.boutique.Utils.TextViewRegular
+            <com.kftsoftwares.boutique.utils.TextViewRegular
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/profile"
@@ -197,7 +197,7 @@
                 android:src="@mipmap/ic_setting"
                 />
 
-            <com.kftsoftwares.boutique.Utils.TextViewRegular
+            <com.kftsoftwares.boutique.utils.TextViewRegular
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/setting"
@@ -247,7 +247,7 @@
                     />
 
             </RelativeLayout>
-            <com.kftsoftwares.boutique.Utils.TextViewRegular
+            <com.kftsoftwares.boutique.utils.TextViewRegular
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/wishList"
