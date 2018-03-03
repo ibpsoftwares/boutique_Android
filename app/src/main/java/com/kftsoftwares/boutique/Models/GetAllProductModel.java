@@ -18,6 +18,23 @@ public class GetAllProductModel {
         private String currency;
         private String image1;
         private String brandName;
+        private String Wish_list;
+
+    public String getOffer_price() {
+        return offer_price;
+    }
+
+    public void setOffer_price(String offer_price) {
+        this.offer_price = offer_price;
+    }
+
+    public String getWish_list() {
+        return Wish_list;
+    }
+
+    public void setWish_list(String wish_list) {
+        Wish_list = wish_list;
+    }
 
     public String getBrandName() {
         return brandName;

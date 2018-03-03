@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -33,8 +34,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.kftsoftwares.boutique.Utils.Constants.ADD_WISH_LIST;
 import static com.kftsoftwares.boutique.Utils.Constants.GET_WISH_LIST;
 import static com.kftsoftwares.boutique.Utils.Constants.MyPREFERENCES;
+import static com.kftsoftwares.boutique.Utils.Constants.REMOVE_FROM_WISHLIST;
 import static com.kftsoftwares.boutique.Utils.Constants.TOKEN;
 import static com.kftsoftwares.boutique.Utils.Constants.User_ID;
 import static com.kftsoftwares.boutique.Utils.Constants.VIEW_CART;
@@ -259,6 +265,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+
+   //----------------GET WISHLIST DATA FROM SERVER WITHOUT LOADER-----------//
+    public void getWishListWithoutLoader() {
+
+        String tag_string_req = "string_req";
+
+
+
+
+        String userId = sharedPreferences.getString(User_ID, "");
+
+        StringRequest strReq = new StringRequest(Request.Method.GET,
+                GET_WISH_LIST + userId + "/" + TOKEN, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.has("message") && jsonObject.getString("message")!=null && jsonObject.get("message").toString().equalsIgnoreCase("Wishlist Empty")) {
+
+                        mWishCountText.setVisibility(View.GONE);
+                    } else {
+
+                        JSONArray jsonArray = jsonObject.getJSONArray("Wishlist");
+
+                        mWishCountText.setVisibility(View.VISIBLE);
+                        mWishCountText.setText(String.valueOf(jsonArray.length()));
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Toast.makeText(MainActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+            }
+        }
+        );
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+    }
+
     //-----------------GET CART DATA----------//
     public void getCartList() {
 
@@ -314,5 +368,100 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
+    //--------------DELETE DATA FROM WISH LIST--------------------------------//
+    public void deleteFromWishList(final String cloth_id ,final String way) {
+        String tag_string_req = "string_req";
 
+        final String userId = sharedPreferences.getString(User_ID, "");
+
+
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                REMOVE_FROM_WISHLIST + "/" + TOKEN, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (way.equalsIgnoreCase("home"))
+                    {
+                    //    Home fragment = (Home) getSupportFragmentManager().findFragmentById(R.id.frameLayout);
+                   //     fragment.getAllProducts();
+
+                    }
+
+                    getWishListWithoutLoader();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Toast.makeText(MainActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("user_id", userId);
+                map.put("cloth_id", cloth_id);
+                return map;
+            }
+        };
+// Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+    }
+
+    //---------------------API FOR GET ADD TO WISH LIST----------------------//
+    public void addToWishList(final  String clothId,String way) {
+
+        String tag_string_req = "string_req";
+
+
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                ADD_WISH_LIST + TOKEN, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    // new com.kftsoftwares.boutique.Utils.Util().showSingleOkAlert(Productdetails.this,jsonObject.getString("message"),"Success Add to WishList");
+
+                    getWishListWithoutLoader();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Toast.makeText(MainActivity.this, "" + error, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("user_id", sharedPreferences.getString(User_ID, ""));
+                params.put("cloth_id", clothId);
+                return params;
+            }
+        };
+
+// Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
 }

@@ -34,7 +34,7 @@
             android:layout_alignEnd="@+id/name"
             android:layout_alignParentEnd="true"
             android:contentDescription="@string/app_name"
-            android:src="@mipmap/heart" />
+           />
 
         <com.kftsoftwares.boutique.Utils.TextViewRegular
             android:id="@+id/price"

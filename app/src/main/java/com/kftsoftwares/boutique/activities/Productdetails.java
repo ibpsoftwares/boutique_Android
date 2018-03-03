@@ -1,16 +1,16 @@
 package com.kftsoftwares.boutique.activities;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,20 +49,20 @@ import static com.kftsoftwares.boutique.Utils.Constants.MyPREFERENCES;
 import static com.kftsoftwares.boutique.Utils.Constants.TOKEN;
 import static com.kftsoftwares.boutique.Utils.Constants.User_ID;
 
-public class Productdetails extends AppCompatActivity implements View.OnClickListener{
+public class Productdetails extends AppCompatActivity implements View.OnClickListener {
 
-    private String mId,mClotheId;
+    private String mId, mClotheId;
     private ArrayList<Image> mSingleProductImage;
     private ArrayList<Size> mSingleProductSize;
     private ArrayList<String> mImageString;
     private ViewPager mViewPager;
-    private TextView mDescreption,mPrice,mName;
+    private TextView mDescreption, mPrice, mName;
     private SharedPreferences mSharedPreferences;
     private LinearLayout mDots;
     private LinearLayout mSizeLinearLayout;
     private TextView mBrandName;
-    private ScrollView mParentScrollView,mChildScrollView;
-    private String mSizeDetail="";
+    private ScrollView mParentScrollView, mChildScrollView;
+    private String mSizeDetail = "";
 
     private ImageView[] ivArrayDotsPager;
 
@@ -88,7 +88,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
         mSingleProductImage = new ArrayList<>();
         mSingleProductSize = new ArrayList<>();
         mImageString = new ArrayList<>();
-        mSharedPreferences = getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
+        mSharedPreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         ImageView backButton = findViewById(R.id.backButton);
         mParentScrollView = findViewById(R.id.parentScrollView);
         mChildScrollView = findViewById(R.id.childScrollView);
@@ -112,11 +112,11 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void onPageSelected(int position) {
-               for (int i = 0; i < ivArrayDotsPager.length; i++) {
-                   ivArrayDotsPager[i].setBackground(ContextCompat.getDrawable(Productdetails.this,R.drawable.un_select));
+                for (int i = 0; i < ivArrayDotsPager.length; i++) {
+                    ivArrayDotsPager[i].setBackground(ContextCompat.getDrawable(Productdetails.this, R.drawable.un_select));
 
-               }
-                ivArrayDotsPager[position].setBackground(ContextCompat.getDrawable(Productdetails.this,R.drawable.selected_dots));
+                }
+                ivArrayDotsPager[position].setBackground(ContextCompat.getDrawable(Productdetails.this, R.drawable.selected_dots));
 
             }
 
@@ -126,20 +126,16 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        mParentScrollView.setOnTouchListener(new View.OnTouchListener()
-        {
-            public boolean onTouch(View p_v, MotionEvent p_event)
-            {
+        mParentScrollView.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View p_v, MotionEvent p_event) {
                 mChildScrollView.getParent().requestDisallowInterceptTouchEvent(false);
                 //  We will have to follow above for all scrollable contents
                 return false;
             }
         });
 
-        mChildScrollView.setOnTouchListener(new View.OnTouchListener()
-        {
-            public boolean onTouch(View p_v, MotionEvent p_event)
-            {
+        mChildScrollView.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View p_v, MotionEvent p_event) {
                 // this will disallow the touch request for parent scroll on touch of child view
                 p_v.getParent().requestDisallowInterceptTouchEvent(true);
                 return false;
@@ -148,30 +144,27 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
     }
 
 
-
     @Override
     public void onClick(View v) {
-        switch (v.getId())
-        {
+        switch (v.getId()) {
             case R.id.addToWishList:
-                if (mSizeDetail.equalsIgnoreCase(""))
-                {
+                if (mSizeDetail.equalsIgnoreCase("")) {
+                    Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                            R.anim.bounce);
+                    mSizeLinearLayout.startAnimation(animation);
                     Toast.makeText(this, "Please Select the size first", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     addToWishList();
                 }
                 break;
 
-                case R.id.addToCart:
+            case R.id.addToCart:
 
-                    if (mSizeDetail.equalsIgnoreCase(""))
-                    {
-                        Toast.makeText(this, "Please Select the size first", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        addToCart();
-                    }
+                if (mSizeDetail.equalsIgnoreCase("")) {
+                    Toast.makeText(this, "Please Select the size first", Toast.LENGTH_SHORT).show();
+                } else {
+                    addToCart();
+                }
                 break;
         }
     }
@@ -229,19 +222,19 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                     }
                     mDescreption.setText(object.getString("description"));
                     mPrice.setText(object.getString("original_price"));
-                   // mPrice.s
+                    // mPrice.s
                     //
                     //
                     // etText(object.getString("offer_price"));
                     mName.setText(object.getString("title"));
                     mBrandName.setText(object.getString("brand"));
-                    mClotheId= object.getString("id");
-                    ViewPagerAdapterForSingleProduct viewPagerAdapter = new ViewPagerAdapterForSingleProduct(Productdetails.this,mSingleProductImage,mImageString);
+                    mClotheId = object.getString("id");
+                    ViewPagerAdapterForSingleProduct viewPagerAdapter = new ViewPagerAdapterForSingleProduct(Productdetails.this, mSingleProductImage, mImageString);
 
                     mViewPager.setAdapter(viewPagerAdapter);
                     setupPagerIndidcatorDots();
                     setUpSizes();
-                    ivArrayDotsPager[0].setBackground(ContextCompat.getDrawable(Productdetails.this,R.drawable.selected_dots));
+                    ivArrayDotsPager[0].setBackground(ContextCompat.getDrawable(Productdetails.this, R.drawable.selected_dots));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -261,14 +254,13 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
     }
 
 
-
     //----------------ADD SIZES BUTTON-------------------//
 
     private void setUpSizes() {
         mSizeLinearLayout.removeAllViews();
         // create two layouts to hold buttons
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(100, 100);
-        params.rightMargin= 10;
+        params.rightMargin = 10;
         // create buttons in a loop
         for (int i = 0; i < mSingleProductSize.size(); i++) {
             final Button button = new Button(this);
@@ -277,16 +269,14 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
             button.setId(i);
             button.setLayoutParams(params);
             button.setGravity(Gravity.CENTER);
-            button.setTextColor(ContextCompat.getColor(this,R.color.black));
+            button.setTextColor(ContextCompat.getColor(this, R.color.black));
             button.setTextSize(10);
-            if (String.valueOf(mSingleProductSize.get(i).getSize()).equalsIgnoreCase(mSizeDetail))
-            {
-                button.setBackground(ContextCompat.getDrawable(Productdetails.this,R.drawable.round_button_colored));
-                button.setTextColor(ContextCompat.getColor(this,R.color.white));
-            }
-            else {
-                button.setBackground(ContextCompat.getDrawable(this,R.drawable.round_button));
-                button.setTextColor(ContextCompat.getColor(this,R.color.black));
+            if (String.valueOf(mSingleProductSize.get(i).getSize()).equalsIgnoreCase(mSizeDetail)) {
+                button.setBackground(ContextCompat.getDrawable(Productdetails.this, R.drawable.round_button_colored));
+                button.setTextColor(ContextCompat.getColor(this, R.color.white));
+            } else {
+                button.setBackground(ContextCompat.getDrawable(this, R.drawable.round_button));
+                button.setTextColor(ContextCompat.getColor(this, R.color.black));
             }
             // add our event handler (less memory than an anonymous inner class)
             button.setOnClickListener(new View.OnClickListener() {
@@ -312,7 +302,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
         pDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                ADD_WISH_LIST+TOKEN, new Response.Listener<String>() {
+                ADD_WISH_LIST + TOKEN, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -321,8 +311,8 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    Toast.makeText(Productdetails.this, ""+jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-                   // new com.kftsoftwares.boutique.Utils.Util().showSingleOkAlert(Productdetails.this,jsonObject.getString("message"),"Success Add to WishList");
+                    Toast.makeText(Productdetails.this, "" + jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    // new com.kftsoftwares.boutique.Utils.Util().showSingleOkAlert(Productdetails.this,jsonObject.getString("message"),"Success Add to WishList");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -341,7 +331,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("user_id", mSharedPreferences.getString(User_ID,""));
+                params.put("user_id", mSharedPreferences.getString(User_ID, ""));
                 params.put("cloth_id", mClotheId);
                 return params;
             }
@@ -352,8 +342,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
     }
 
     //----------------ADD TO CART API-------------------//
-    public  void addToCart()
-    {
+    public void addToCart() {
         String tag_string_req = "string_req";
 
 
@@ -362,19 +351,19 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
         pDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                ADD_TO_CART+TOKEN, new Response.Listener<String>() {
+                ADD_TO_CART + TOKEN, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 pDialog.cancel();
                 pDialog.dismiss();
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    Toast.makeText(Productdetails.this, ""+jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    Toast.makeText(Productdetails.this, "" + jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-            }, new Response.ErrorListener() {
+        }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -386,7 +375,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("user_id", mSharedPreferences.getString(User_ID,""));
+                params.put("user_id", mSharedPreferences.getString(User_ID, ""));
                 params.put("cloth_id", mClotheId);
                 return params;
             }
@@ -394,6 +383,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
+
     //----------------ADD IMAGES ON VIEWPAGER-------------------//
 
     private void setupPagerIndidcatorDots() {
@@ -403,15 +393,14 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(180, 230);
             params.setMargins(10, 10, 10, 10);
             ivArrayDotsPager[i].setLayoutParams(params);
-        //   ivArrayDotsPager[i].setBackground(ContextCompat.getDrawable(this,R.drawable.un_select));
+            //   ivArrayDotsPager[i].setBackground(ContextCompat.getDrawable(this,R.drawable.un_select));
             //ivArrayDotsPager[i].setAlpha(0.4f);
-            ivArrayDotsPager[i].setBackground(ContextCompat.getDrawable(Productdetails.this,R.drawable.un_select));
+            ivArrayDotsPager[i].setBackground(ContextCompat.getDrawable(Productdetails.this, R.drawable.un_select));
             ivArrayDotsPager[i].setScaleType(ImageView.ScaleType.FIT_CENTER);
-            ivArrayDotsPager[i].setClickable(true);
-            ivArrayDotsPager[i].setFocusable(true);
+            ivArrayDotsPager[i].setClickable(false);
+            ivArrayDotsPager[i].setFocusable(false);
             final int val = i;
-            ivArrayDotsPager[i].setOnClickListener(new View.OnClickListener()
-            {
+            ivArrayDotsPager[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mViewPager.setCurrentItem(val);

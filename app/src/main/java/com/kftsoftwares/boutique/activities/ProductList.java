@@ -150,7 +150,8 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    if (jsonObject.has("message") && jsonObject.getString("message") != null && jsonObject.getString("message").equalsIgnoreCase("no match found")) {
+                    if (jsonObject.has("message") && jsonObject.getString("message") != null
+                            && jsonObject.getString("message").equalsIgnoreCase("no match found")) {
                         //Toast.makeText(ProductList.this, "No Data Found", Toast.LENGTH_SHORT).show();
                         mGridView.setVisibility(View.GONE);
                         mlinearLayout.setVisibility(View.VISIBLE);
@@ -298,9 +299,20 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
 
         for (int i = 0; i < mGetAllProductModels.size(); i++) {
 
-           // Double price = mGetAllProductModels.get(i).getPrice();
 
-            if (Double.valueOf(mGetAllProductModels.get(i).getPrice()) > start && Double.valueOf(mGetAllProductModels.get(i).getPrice()) < end) {
+            String priceStr;
+
+            if (mGetAllProductModels.get(i).getOfferPrice()!=null &&
+
+           !mGetAllProductModels.get(i).getOfferPrice().equalsIgnoreCase("null"))
+            {
+                priceStr = mGetAllProductModels.get(i).getOfferPrice();
+            }
+            else {
+                priceStr = mGetAllProductModels.get(i).getPrice();
+            }
+
+            if (Double.valueOf(priceStr) > start && Double.valueOf(priceStr) < end) {
 
                 mGetSortedList.add(mGetAllProductModels.get(i));
 
@@ -387,7 +399,6 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         mVal = Integer.valueOf(val);
         if (!val.equalsIgnoreCase("-1")) {
             mSelectedId = id;
-
         } else {
             mSelectedId = "";
         }

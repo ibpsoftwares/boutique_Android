@@ -46,7 +46,7 @@ public class Home extends Fragment implements View.OnClickListener {
     private int mCount;
     private int mVal=0;
     int currentPage = 0;
-    Timer timer;
+    private Timer timer;
     final long DELAY_MS = 500;//delay in milliseconds before task is to be executed
     final long PERIOD_MS = 1500; // time in milliseconds between successive task executions.
 
@@ -61,11 +61,14 @@ public class Home extends Fragment implements View.OnClickListener {
             ((MainActivity)getActivity()).mCartCountText.setVisibility(View.VISIBLE);
 
         }
+        getAllProducts();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         mViewPager = view.findViewById(R.id.viewPager);
@@ -83,7 +86,6 @@ public class Home extends Fragment implements View.OnClickListener {
 
         mGetAllProductModels = new ArrayList<>();
         mBannerImages = new ArrayList<>();
-        getAllProducts();
         getBannerImages();
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -149,7 +151,7 @@ public class Home extends Fragment implements View.OnClickListener {
 
     //---------------GET ALL PRODUCTS---------------------------//
 
-    private void getAllProducts() {
+    public void getAllProducts() {
 
         if (mGetAllProductModels != null) {
             mGetAllProductModels.clear();
@@ -181,6 +183,15 @@ public class Home extends Fragment implements View.OnClickListener {
                         getAllProductModel.setTitle(jsonObject1.getString("title"));
                         getAllProductModel.setPrice(jsonObject1.getString("original_price"));
                         getAllProductModel.setId(jsonObject1.getString("id"));
+                        if (jsonObject1.has("Wishlist"))
+                        {
+                            getAllProductModel.setWish_list(jsonObject1.getString("Wishlist"));
+
+                        }
+                        else {
+                            getAllProductModel.setWish_list("0");
+
+                        }
                           getAllProductModel.setBrandName(jsonObject1.getString("brand"));
                         getAllProductModel.setCategoryName(jsonObject1.getString("category_name"));
                         getAllProductModel.setImage1(jsonObject1.getString("image1"));
