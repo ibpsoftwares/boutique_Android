@@ -10,10 +10,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.kftsoftwares.boutique.Models.GetAllProductModel;
 import com.kftsoftwares.boutique.R;
 import com.kftsoftwares.boutique.activities.MainActivity;
@@ -69,6 +73,7 @@ public class GridViewAdapter extends BaseAdapter {
         final TextView price = convertView.findViewById(R.id.price);
         final TextView title = convertView.findViewById(R.id.title);
         final TextView oldPrice = convertView.findViewById(R.id.oldPrice);
+        final ProgressBar progressBar = convertView.findViewById(R.id.progrss_bar);
 
         if (mArrayList.get(position).getOfferPrice() != null &&
 
@@ -76,7 +81,6 @@ public class GridViewAdapter extends BaseAdapter {
 
             oldPrice.setPaintFlags(oldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG |Paint.ANTI_ALIAS_FLAG);
 
-            name.setText(mArrayList.get(position).getBrandName());
             oldPrice.setVisibility(View.VISIBLE);
             oldPrice.setText(mArrayList.get(position).getPrice());
             price.setText(mArrayList.get(position).getOfferPrice());
@@ -89,7 +93,6 @@ public class GridViewAdapter extends BaseAdapter {
             imageView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.heart));
         } else {
             imageView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.heartborder));
-
         }
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +102,16 @@ public class GridViewAdapter extends BaseAdapter {
                     mArrayList.get(position).setWish_list("0");
                     imageView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.heartborder));
 
-                    ((MainActivity) mContext).deleteFromWishList(mArrayList.get(position).getId(), "home");
+
+                    if(mContext instanceof  MainActivity)
+                    {
+                        ((MainActivity) mContext).deleteFromWishList(mArrayList.get(position).getId(), "home");
+
+
+                    }
+                    else {
+                        ((ProductList)mContext).deleteFromWishList(mArrayList.get(position).getId(), "home");
+                    }
 
                     notifyDataSetChanged();
                 } else {
@@ -107,7 +119,19 @@ public class GridViewAdapter extends BaseAdapter {
                     imageView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.heart));
 
 
-                    ((MainActivity) mContext).addToWishList(mArrayList.get(position).getId(), "home");
+                    if(mContext instanceof  MainActivity)
+                    {
+                        ((MainActivity)mContext).addToWishList(mArrayList.get(position).getId(), "home");
+
+
+                    }
+                    else {
+
+                        ((ProductList)mContext).addToWishList(mArrayList.get(position).getId(), "home");
+
+                    }
+
+
 
                     notifyDataSetChanged();
 
@@ -125,6 +149,21 @@ public class GridViewAdapter extends BaseAdapter {
                 .crossFade()
                 .fitCenter()
                 .dontTransform()
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        progressBar.setVisibility(View.GONE);
+
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        progressBar.setVisibility(View.GONE);
+
+                        return false;
+                    }
+                })
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(productImage);
 
@@ -171,8 +210,6 @@ public class GridViewAdapter extends BaseAdapter {
         }
         else
         {
-
-
             for (GetAllProductModel wp : mSortedList)
             {
                 if (wp.getTitle().toLowerCase(Locale.getDefault()).contains(charText) || wp.getBrandName().toLowerCase(Locale.getDefault()).contains(charText))

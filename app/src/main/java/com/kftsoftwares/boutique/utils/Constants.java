@@ -40,6 +40,7 @@ public class Constants {
      public static final String GET_SINGLE_PRODUCT = HOST_URL + "getcloth/";
 
      public static final String ADD_TO_CART = HOST_URL + "addToCart/";
+
      public static final String VIEW_CART = HOST_URL + "ViewCart/";
 
      public static final String REMOVE_FROM_CART = HOST_URL + "rmcart/";
@@ -49,6 +50,8 @@ public class Constants {
      public static final String SORT_DATA = HOST_URL + "sort/";
 
      public static final String MOVETOWISHLIST = HOST_URL + "movetocart/";
+
+     public static final String CHANGE_PASSWORD = HOST_URL + "changepassword/";
 
      public static final String GET_BANNER_IMAGES = HOST_URL + "get_banner_images/"+TOKEN;
 }

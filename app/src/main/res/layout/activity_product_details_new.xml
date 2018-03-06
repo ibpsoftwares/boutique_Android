@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/border_color">
+
+    <LinearLayout
+        android:id="@+id/action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/tabLayout">
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="25sp"
+            android:layout_height="match_parent"
+            android:layout_margin="5sp"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitCenter"
+            android:src="@drawable/arrow_left" />
+
+
+        <EditText
+            android:id="@+id/searchEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:hint="Search..."
+            android:background="@drawable/searchbar_background"
+            android:drawableStart="@mipmap/search"
+             />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100sp"
+        android:layout_below="@+id/linearLayout"
+        android:id="@+id/linearLayout1"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/action_bar"
+        android:background="@color/border_color"
+        android:horizontalSpacing="1dp"
+        android:layout_above="@+id/linearLayout"
+        android:numColumns="2"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="1dp" />
+
+
+    <RelativeLayout
+        android:id="@+id/no_data_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/action_bar"
+        android:layout_above="@+id/linearLayout"
+        android:background="@color/white"
+        >
+
+        <com.kftsoftwares.boutique.utils.TextViewRegular
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="No Data Found"
+            android:textColor="@color/black"
+            android:textSize="30dp"
+
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/filter"
+            android:background="@color/green"
+            >
+
+
+
+
+            <com.kftsoftwares.boutique.utils.TextViewRegular
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Filter"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                />
+            <ImageView
+                android:layout_width="20sp"
+                android:layout_height="20sp"
+                android:layout_marginStart="10sp"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/filter"
+                />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/sort"
+            android:background="@color/tabLayout"
+            >
+
+
+
+
+            <com.kftsoftwares.boutique.utils.TextViewRegular
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sort"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                />
+            <ImageView
+                android:layout_width="20sp"
+                android:layout_height="20sp"
+                android:layout_marginStart="10sp"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/sort"
+                />
+
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="35sp"
+            android:layout_weight="1"
+            android:layout_marginEnd="3sp"
+            android:text="Filter"
+            android:visibility="gone"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:background="@color/tabLayout"
+            tools:ignore="ButtonStyle" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="35sp"
+            android:layout_weight="1"
+            android:text="Sort"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:background="@color/tabLayout"
+            tools:ignore="ButtonStyle"
+            />
+
+
+
+    </LinearLayout>
+</RelativeLayout>

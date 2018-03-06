@@ -3,7 +3,7 @@
     <string name="enter_email">Enter Email</string>
     <string name="enter_password">Enter Password</string>
     <string name="enter_confirm_password">Enter Confirm Password</string>
-    <string name="enter_userName">Enter User Name</string>
+    <string name="enter_userName">Enter Name</string>
     <string name="forget_password">Forget Password ?</string>
     <string name="already_account">Already Have an Account ?</string>
     <string name="sign_in">Sign In</string>

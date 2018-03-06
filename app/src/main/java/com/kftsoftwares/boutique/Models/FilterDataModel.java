@@ -4,7 +4,7 @@ package com.kftsoftwares.boutique.Models;
  * Created by apple on 23/02/18.
  */
 
-public class FilterDataModel {
+public class    FilterDataModel {
     private String id;
     private String rangeA;
     private String rangeB;

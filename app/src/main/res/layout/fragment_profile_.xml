@@ -26,10 +26,9 @@
                 android:layout_height="100sp"
                 android:layout_centerHorizontal="true"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/profile_image"
+                android:src="@mipmap/ic_profile_image"
                 app:civ_border="true"
-
-                app:civ_border_color="#000"
+                app:civ_border_color="@color/tabLayout"
                 app:civ_border_width="2dp" />
 
             <ImageView
@@ -37,18 +36,17 @@
                 android:layout_height="25sp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
-                android:background="@mipmap/photo_side"
+                android:background="@mipmap/phche"
                 android:contentDescription="@string/app_name" />
         </RelativeLayout>
 
-        <TextView
+        <com.kftsoftwares.boutique.utils.TextViewRegular
             android:id="@+id/profile_Name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/relativeLayout"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:text="Zane David"
             android:textColor="@color/black"
             android:textSize="18sp" />
 
@@ -65,7 +63,7 @@
                 android:id="@+id/editImage"
                 android:layout_width="30sp"
                 android:layout_height="30sp"
-                android:background="@mipmap/edit"
+                android:background="@mipmap/edit_greem"
                 android:contentDescription="@string/app_name" />
 
             <com.kftsoftwares.boutique.utils.TextViewRegular
@@ -95,24 +93,35 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_border"
                 android:hint="Name"
-                android:padding="10sp" />
+                android:id="@+id/name"
+                android:textColorHint="@color/gray_edit_text"
+                android:fontFamily="@font/whitney_medium"
+                android:padding="8sp" />
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5sp"
                 android:background="@drawable/edit_text_border"
-                android:hint="Last Name"
-                android:padding="10sp" />
+                android:hint="Email"
+                android:id="@+id/email"
+                android:inputType="textEmailAddress"
+                android:fontFamily="@font/whitney_medium"
+                android:textColorHint="@color/gray_edit_text"
+
+                android:padding="8sp" />
 
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5sp"
+                android:fontFamily="@font/whitney_medium"
+                android:textColorHint="@color/gray_edit_text"
+
                 android:background="@drawable/edit_text_border"
                 android:hint="Mobile Number"
-                android:padding="10sp" />
+                android:padding="8sp" />
 
 
             <EditText
@@ -121,7 +130,10 @@
                 android:layout_marginTop="5sp"
                 android:background="@drawable/edit_text_border"
                 android:hint="DOB"
-                android:padding="10sp" />
+                android:fontFamily="@font/whitney_medium"
+                android:textColorHint="@color/gray_edit_text"
+
+                android:padding="8sp" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -129,7 +141,10 @@
                 android:layout_marginTop="5sp"
                 android:background="@drawable/edit_text_border"
                 android:hint="Gender"
-                android:padding="10sp" />
+                android:textColorHint="@color/gray_edit_text"
+                android:fontFamily="@font/whitney_medium"
+
+                android:padding="8sp" />
 
             <Button
                 android:layout_width="150dp"
@@ -138,6 +153,7 @@
                 android:layout_margin="20dp"
                 android:background="@color/tabLayout"
                 android:text="Save"
+                android:fontFamily="@font/whitney_medium"
                 android:textAllCaps="false"
                 android:textColor="@color/white" />
         </LinearLayout>

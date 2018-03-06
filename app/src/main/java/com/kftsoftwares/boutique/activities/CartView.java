@@ -1,5 +1,6 @@
 package com.kftsoftwares.boutique.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -75,6 +76,7 @@ public class CartView extends AppCompatActivity implements CartListInterface {
 
         final ProgressDialog pDialog = new ProgressDialog(CartView.this);
         pDialog.setMessage("Loading...");
+        pDialog.setCancelable(false);
         pDialog.show();
         String user_id = mSharedPreferences.getString(User_ID, "");
         StringRequest strReq = new StringRequest(Request.Method.GET,
@@ -103,7 +105,7 @@ no_data_image.setVisibility(View.VISIBLE);
                             cartViewModel.setDeleteStatus(jsonObject1.getString("delete_status"));
                             cartViewModel.setColour(jsonObject1.getString("colour"));
                             cartViewModel.setPrice(jsonObject1.getString("original_price"));
-
+                            cartViewModel.setOfferPrice(jsonObject1.getString("offer_price"));
                             mAmountCountValue += Integer.valueOf(jsonObject1.getString("original_price"));
                             cartViewModel.setDescription(jsonObject1.getString("description"));
                             //cartViewModel.setProductNum(jsonObject1.getString("product_num"));
@@ -111,6 +113,7 @@ no_data_image.setVisibility(View.VISIBLE);
                             cartViewModel.setCategoryId(jsonObject1.getString("category_name"));
                             cartViewModel.setImage1(jsonObject1.getString("image1"));
                             cartViewModel.setClothId(jsonObject1.getString("Cloth_id"));
+                            cartViewModel.setCount("1");
                             mCartViewModel.add(cartViewModel);
                         }
                         mTotalItemCount.setText("Total("+ jsonArray.length() +")");
@@ -149,6 +152,29 @@ no_data_image.setVisibility(View.VISIBLE);
 
     }
 
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void updatePrice(ArrayList<CartViewModel> arrayList) {
+        mAmountCountValue =0;
+
+        for (CartViewModel cartViewModel : arrayList)
+        {
+
+            mAmountCountValue = mAmountCountValue + Integer.valueOf(cartViewModel.getPrice()) * Integer.valueOf(cartViewModel.getCount());
+
+
+        }
+
+        CartViewAdapter cartViewAdapter = new CartViewAdapter(CartView.this, arrayList, CartView.this);
+
+        mListView.setAdapter(cartViewAdapter);
+        cartViewAdapter.notifyDataSetChanged();
+
+            mAmountCount.setText("$" + mAmountCountValue);
+
+
+    }
+
     private void removeFromCart(final String value) {
         String tag_string_req = "string_req";
         if(mCartViewModel!=null)
@@ -159,6 +185,7 @@ no_data_image.setVisibility(View.VISIBLE);
 
         final ProgressDialog pDialog = new ProgressDialog(CartView.this);
         pDialog.setMessage("Loading...");
+        pDialog.setCancelable(false);
         pDialog.show();
 
 

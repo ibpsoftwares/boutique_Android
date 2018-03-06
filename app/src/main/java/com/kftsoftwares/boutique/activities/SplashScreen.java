@@ -1,6 +1,7 @@
 package com.kftsoftwares.boutique.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,13 +9,17 @@ import android.view.Window;
 
 import com.kftsoftwares.boutique.R;
 
+import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
+import static com.kftsoftwares.boutique.utils.Constants.User_ID;
+
 public class SplashScreen extends AppCompatActivity {
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_splash_screen);
+        sharedPreferences = getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
 
         new Handler().postDelayed(new Runnable() {
 
@@ -27,11 +32,23 @@ public class SplashScreen extends AppCompatActivity {
             public void run() {
                 // This method will be executed once the timer is over
                 // Start your app main activity
-                Intent i = new Intent(SplashScreen.this, LoginActivity.class);
-                startActivity(i);
 
-                // close this activity
-                finish();
+                if (sharedPreferences.getString(User_ID,"").equalsIgnoreCase("")) {
+
+
+                    Intent i = new Intent(SplashScreen.this, LoginActivity.class);
+                    startActivity(i);
+
+                    // close this activity
+                    finish();
+                }
+                else {
+                    Intent i = new Intent(SplashScreen.this, MainActivity.class);
+                    startActivity(i);
+
+                    // close this activity
+                    finish();
+                }
             }
         }, 2000);
     }

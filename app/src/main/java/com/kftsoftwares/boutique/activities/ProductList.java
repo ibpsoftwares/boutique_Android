@@ -1,6 +1,7 @@
 package com.kftsoftwares.boutique.activities;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,21 +16,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.kftsoftwares.boutique.Adapter.FilterListViewAdapter;
 import com.kftsoftwares.boutique.Adapter.GridViewAdapter;
+import com.kftsoftwares.boutique.Adapter.SortListViewAdapter;
 import com.kftsoftwares.boutique.Interface.FilterListView;
+import com.kftsoftwares.boutique.Interface.SortListview;
 import com.kftsoftwares.boutique.Models.FilterDataModel;
 import com.kftsoftwares.boutique.Models.GetAllProductModel;
 import com.kftsoftwares.boutique.R;
+import com.kftsoftwares.boutique.utils.Util;
 import com.kftsoftwares.boutique.volly.AppController;
 
 import org.json.JSONArray;
@@ -43,12 +49,16 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.kftsoftwares.boutique.utils.Constants.ADD_WISH_LIST;
 import static com.kftsoftwares.boutique.utils.Constants.GET_ALL_CATEGORIES_BY_ID;
+import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 import static com.kftsoftwares.boutique.utils.Constants.PRICE_RANGE;
+import static com.kftsoftwares.boutique.utils.Constants.REMOVE_FROM_WISHLIST;
 import static com.kftsoftwares.boutique.utils.Constants.SORT_DATA;
 import static com.kftsoftwares.boutique.utils.Constants.TOKEN;
+import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 
-public class ProductList extends AppCompatActivity implements View.OnClickListener, FilterListView {
+public class ProductList extends AppCompatActivity implements View.OnClickListener, FilterListView ,SortListview{
 
     private GridView mGridView;
     private ArrayList<GetAllProductModel> mGetAllProductModels;
@@ -59,7 +69,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
     private ImageView mBackButton;
     private RelativeLayout mlinearLayout;
     private ArrayList<String> mPriceArrayList;
-    private Button mFilter;
+    private LinearLayout mFilter;
     private ArrayList<FilterDataModel> mFilterDataModel;
     private ListView mFilterListView;
     private int mVal = -1;
@@ -67,11 +77,12 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
     private String mSelectedId = "";
     private PopupWindow popupWindow;
     private GridViewAdapter mGridViewAdapter;
-
+    private SharedPreferences sharedPreferences;
+    public  AlertDialog mAlert;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_details);
+        setContentView(R.layout.activity_product_details_new);
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -86,7 +97,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         mBackButton = findViewById(R.id.backButton);
         mlinearLayout = findViewById(R.id.no_data_image);
         mFilter = findViewById(R.id.filter);
-        Button sort = findViewById(R.id.sort);
+        LinearLayout sort = findViewById(R.id.sort);
         mFilter.setOnClickListener(this);
         sort.setOnClickListener(this);
         final EditText searchEditText = findViewById(R.id.searchEditText);
@@ -109,7 +120,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
 
             }
         });
-        ImageView cart = findViewById(R.id.cart);
+        sharedPreferences = getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
 
         getProductList();
         getPriceList();
@@ -121,17 +132,13 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
             }
         });
 
-        cart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ProductList.this, "", Toast.LENGTH_SHORT).show();
-            }
-        });
+
         mFilterDataModel = new ArrayList<>();
         mIdArrayList = new ArrayList<>();
         mFilterListViewAdapter = new FilterListViewAdapter(ProductList.this, new ArrayList<FilterDataModel>(), mVal, ProductList.this);
         mGridViewAdapter = new GridViewAdapter(ProductList.this, new ArrayList<GetAllProductModel>());
         mGridView.setAdapter(mGridViewAdapter);
+
 
     }
 
@@ -144,6 +151,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         }
 
         String tag_string_req = "string_req";
+        final String userId = sharedPreferences.getString(User_ID, "");
 
         final ProgressDialog pDialog = new ProgressDialog(ProductList.this);
         pDialog.setMessage("Loading...");
@@ -185,7 +193,16 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
                             getAllProductModel.setDescription("description");
                             getAllProductModel.setColour("colour");
 
-                            mGetAllProductModels.add(getAllProductModel);
+                            if (jsonObject1.has("Wishlist"))
+                            {
+                                getAllProductModel.setWish_list(jsonObject1.getString("Wishlist"));
+
+                            }
+                            else {
+                                getAllProductModel.setWish_list("0");
+                            }
+
+                                mGetAllProductModels.add(getAllProductModel);
                         }
                         mlinearLayout.setVisibility(View.GONE);
                         mGridView.setVisibility(View.VISIBLE);
@@ -204,7 +221,15 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
                 Toast.makeText(ProductList.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         }
-        );
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("user_id", userId);
+                return map;
+            }
+        };
 
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
@@ -217,8 +242,9 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
                 showDialog();
                 break;
             case R.id.sort:
-                PopupWindow popUp = popupWindowsort();
-                popUp.showAsDropDown(v, 1, 1); // show popup like dropdown list
+//                PopupWindow popUp = popupWindowsort();
+//              popUp.showAsDropDown(v, -1, -1); // show popup like dropdown list
+                showSortDialog();
                 break;
         }
     }
@@ -281,6 +307,55 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         });
         // Show the dialog
         alert.show();
+    }
+
+    //-----------------------Show Sort Dialog---------------------------//
+    private void showSortDialog() {
+        LayoutInflater lf = LayoutInflater.from(this);
+        // This adds XML elements as a custom view (optional):
+        final View customElementsView = lf.inflate(R.layout.dialog_sort, null);
+
+        ListView filterListView = customElementsView.findViewById(R.id.listView);
+
+        ArrayList<String> sortList = new ArrayList<String>();
+        sortList.add("High To Low");
+        sortList.add("Low To High");
+        sortList.add("Newest First");
+        sortList.add("Oldest First");
+
+        SortListViewAdapter sortListViewAdapter = new SortListViewAdapter(ProductList.this,sortList,this);
+        filterListView.setAdapter(sortListViewAdapter);
+
+        Button button = customElementsView.findViewById(R.id.ok_Button);
+        Button cancel = customElementsView.findViewById(R.id.cancel);
+
+       mAlert = new AlertDialog.Builder(this)
+                // This adds the custom view to the Dialog (optional):
+                .setView(customElementsView)
+                .setTitle(null)
+                .setMessage(null)
+                .create();
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlert.dismiss();
+                mAlert.cancel();
+            }
+        });
+//        filterListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(ProductList.this, ""+position, Toast.LENGTH_SHORT).show();
+//
+//                getLocalSortedList(position);
+//                alert.dismiss();
+//                alert.cancel();
+//                dismissPopup();
+//            }
+//        });
+        // Show the dialog
+        mAlert.show();
     }
     //-------------------GET FILTER LIST--------------------------//
 
@@ -391,7 +466,6 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
             mSelectedId = "";
         }
         mFilterListViewAdapter.updateValue(Integer.valueOf(val), mFilterDataModel);
-
     }
 
     @Override
@@ -426,12 +500,18 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
 
         // some other visual settings for popup window
         popupWindow.setFocusable(true);
-        popupWindow.setWidth(550);
+
+        int width = new Util().getWidth(ProductList.this);
+        if (width<=0)
+        {
+            popupWindow.setWidth(500);
+        }
+        else {
+            popupWindow.setWidth(width/2);
+        }
         popupWindow.setHeight(600);
         popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.white_background));
         popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-
-
         // set the listview as popup content
         popupWindow.setContentView(listViewSort);
 
@@ -456,7 +536,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
     private void getLocalSortedList(int position) {
 
         switch (position) {
-            case 0:
+            case 1:
                 //-----------------------HIGH TO LOW------------------------//
                 if (mSortedGetAllProductModels != null) {
                     mSortedGetAllProductModels.clear();
@@ -470,7 +550,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
                 break;
             //-----------------------LOW TO HIGH------------------------//
 
-            case 1:
+            case 0:
                 if (mSortedGetAllProductModels != null) {
                     mSortedGetAllProductModels.clear();
                 }
@@ -594,6 +674,13 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
+    @Override
+    public void value(int position) {
+        getLocalSortedList(position);
+        mAlert.dismiss();
+        mAlert.cancel();
+    }
+
     class MySortedList implements Comparator<GetAllProductModel> {
 
 
@@ -653,5 +740,102 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
                 return -1;
             }
         }
+    }
+
+    //--------------DELETE DATA FROM WISH LIST--------------------------------//
+    public void deleteFromWishList(final String cloth_id ,final String way) {
+        String tag_string_req = "string_req";
+
+        final String userId = sharedPreferences.getString(User_ID, "");
+
+
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                REMOVE_FROM_WISHLIST + "/" + TOKEN, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (way.equalsIgnoreCase("home"))
+                    {
+                        //    Home fragment = (Home) getSupportFragmentManager().findFragmentById(R.id.frameLayout);
+                        //     fragment.getAllProducts();
+
+                    }
+
+                   // getWishListWithoutLoader();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Toast.makeText(ProductList.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+            }
+        }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("user_id", userId);
+                map.put("cloth_id", cloth_id);
+                return map;
+            }
+        };
+// Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+    }
+
+
+    //---------------------API FOR GET ADD TO WISH LIST----------------------//
+    public void     addToWishList(final  String clothId,String way) {
+
+        String tag_string_req = "string_req";
+
+
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                ADD_WISH_LIST + TOKEN, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    // new com.kftsoftwares.boutique.Utils.Util().showSingleOkAlert(Productdetails.this,jsonObject.getString("message"),"Success Add to WishList");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Toast.makeText(ProductList.this, "" + error, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("user_id", sharedPreferences.getString(User_ID, ""));
+                params.put("cloth_id", clothId);
+                return params;
+            }
+        };
+
+// Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 }

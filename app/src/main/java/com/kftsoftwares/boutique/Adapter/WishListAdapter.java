@@ -1,8 +1,8 @@
 package com.kftsoftwares.boutique.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.kftsoftwares.boutique.Interface.WishListInterface;
 import com.kftsoftwares.boutique.Models.WishListModel;
 import com.kftsoftwares.boutique.R;
-import com.kftsoftwares.boutique.activities.ProductList;
+import com.kftsoftwares.boutique.activities.Productdetails;
 
 import java.util.ArrayList;
 
@@ -70,6 +70,15 @@ public class WishListAdapter extends BaseAdapter {
                 .into(circleImageView);
 
         name.setText(mWishList.get(position).getTitle());
+
+        if (mWishList.get(position).getOfferprice() != null &&
+
+                !mWishList.get(position).getOfferprice().equalsIgnoreCase("null")) {
+
+            price.setText(mWishList.get(position).getOfferprice());
+        } else {
+            price.setText(mWishList.get(position).getPrice());
+        }
         price.setText(mWishList.get(position).getPrice());
         ImageView delete = convertView.findViewById(R.id.delete);
         delete.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +91,18 @@ public class WishListAdapter extends BaseAdapter {
         moveToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.moveToWishList(mWishList.get(position).getWishListID(),mWishList.get(position).getClothId());
+                mListener.moveToWishList(mWishList.get(position).getWishListID(), mWishList.get(position).getClothId());
+            }
+        });
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(mContext, Productdetails.class);
+
+                i.putExtra("id", mWishList.get(position).getClothId());
+
+                mContext.startActivity(i);
             }
         });
 

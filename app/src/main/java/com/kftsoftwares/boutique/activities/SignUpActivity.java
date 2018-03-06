@@ -2,6 +2,7 @@ package com.kftsoftwares.boutique.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -35,7 +36,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        getWindow().setBackgroundDrawableResource(R.drawable.sign_up_bg);
+        getWindow().setBackgroundDrawableResource(R.drawable.bg);
 
         TextView alreadyHaveAnAccount = findViewById(R.id.alreadyHaveAnAccount);
         Button signUp = findViewById(R.id.signUp);
@@ -63,7 +64,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.signUp:
 
                 if (mUserName != null && mUserName.getText().toString().equalsIgnoreCase("")) {
-                    Toast.makeText(this, "Please Enter UserName", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Please Enter Name", Toast.LENGTH_SHORT).show();
                 } else if (mEmail != null && mEmail.getText().toString().equalsIgnoreCase("")) {
                     Toast.makeText(this, "Please Enter Email", Toast.LENGTH_SHORT).show();
 
@@ -77,7 +78,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     Toast.makeText(this, "Please Enter ConfirmPassword", Toast.LENGTH_SHORT).show();
 
                 } else if (!mConfirmPassword.getText().toString().equalsIgnoreCase(mPassword.getText().toString())) {
-                    Toast.makeText(this, "Please Does not Matched", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Password Does not Matched", Toast.LENGTH_SHORT).show();
                 } else {
                       signUpUser();
 
@@ -97,6 +98,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         final ProgressDialog pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
+        pDialog.setCancelable(false);
         pDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,

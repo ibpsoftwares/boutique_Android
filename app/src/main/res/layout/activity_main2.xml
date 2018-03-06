@@ -14,8 +14,9 @@
             android:layout_width="50sp"
             android:layout_height="match_parent"
             android:layout_margin="5sp"
+            android:scaleType="fitCenter"
             android:contentDescription="@string/app_name"
-            android:src="@mipmap/logo_white" />
+            android:src="@mipmap/ic_toolbar_icon" />
 
 <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
@@ -23,6 +24,7 @@
             android:layout_centerInParent="true"
             android:text="@string/home"
             android:textColor="#fff"
+    android:id="@+id/headerText"
             android:textSize="18sp"
             android:textStyle="bold"
             tools:ignore="RelativeOverlap" />

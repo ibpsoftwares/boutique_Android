@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RelativeLayout mHome, mCategory, mProfile, mSetting, mWishList;
     public ImageView mCartView;
     private SharedPreferences sharedPreferences;
-    public TextView mWishCountText , mCartCountText;
+    public TextView mWishCountText , mCartCountText ,mHeaderText;
     private Util mUtil;
     //testing
     public int mCartCount;
@@ -61,15 +61,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getWishList();
         getCartList();
 
-if (AppController.getInstance().isOnline())
+if (!AppController.getInstance().isOnline())
 {
-    mUtil.checkConnection(MainActivity.this,true);
-}
-else {
     mUtil.checkConnection(MainActivity.this,false);
-
 }
-
     }
 
     @Override
@@ -85,6 +80,7 @@ else {
         mWishList = findViewById(R.id.wishListRelativeLayout);
         mCartView = findViewById(R.id.cartView);
         mWishCountText = findViewById(R.id.wishListCount);
+        mHeaderText = findViewById(R.id.headerText);
         mCartCountText = findViewById(R.id.cartCount);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.
@@ -142,20 +138,18 @@ else {
             case R.id.categoryRelativeLayout:
                 Fragment fragment = new Category();
 
-                changeFragment(fragment, "Category");
-                changeColor(1);
+                changeFragment(fragment, "Category",1);
+
                 break;
 
             case R.id.profileRelativeLayout:
                 Fragment profile = new Profile_Fragment();
 
-                changeFragment(profile, "Profile");
-                changeColor(2);
+                changeFragment(profile, "Profile",2);
                 break;
 
             case R.id.settingRelativeLayout:
-                changeFragment(new Setting_Fragment(), "Setting");
-                changeColor(3);
+                changeFragment(new Setting_Fragment(), "Setting",3);
                 break;
 
             case R.id.cartView:
@@ -164,8 +158,7 @@ else {
                 break;
 
             case R.id.wishListRelativeLayout:
-                changeColor(4);
-                changeFragment(new WishList_Fragment(), "Setting");
+                changeFragment(new WishList_Fragment(), "wishlist",4);
 
                 break;
 
@@ -174,13 +167,16 @@ else {
 
 
     //---------------------------Change Fragment----------------------//
-    private void changeFragment(Fragment fragment, String tag) {
+    public void changeFragment(Fragment fragment, String tag,int val) {
         clearStack();
+        changeColor(val);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.
                 beginTransaction().replace(R.id.frameLayout, fragment, tag);
         fragmentTransaction.commit();
     }
+
+
 
     //---------------------------Change Color on Custom Bar----------------------//
     private void changeColor(int val) {
@@ -219,12 +215,15 @@ else {
     }
 
 
+
     //---------------------------For Clear The Stack of Fragment----------------------//
     private void clearStack() {
         for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
             getSupportFragmentManager().popBackStack();
         }
     }
+
+
 
     //----------------GET WISHLIST DATA FROM SERVER-----------//
     public void getWishList() {
@@ -234,6 +233,7 @@ else {
 
         final ProgressDialog pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
+        pDialog.setCancelable(false);
         pDialog.show();
 
         String userId = sharedPreferences.getString(User_ID, "");
@@ -275,6 +275,8 @@ else {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
     }
+
+
 
 
    //----------------GET WISHLIST DATA FROM SERVER WITHOUT LOADER-----------//
@@ -324,6 +326,8 @@ else {
 
     }
 
+
+
     //-----------------GET CART DATA----------//
     public void getCartList() {
 
@@ -331,6 +335,7 @@ else {
 
         final ProgressDialog pDialog = new ProgressDialog(MainActivity.this);
         pDialog.setMessage("Loading...");
+        pDialog.setCancelable(false);
         pDialog.show();
         String user_id = sharedPreferences.getString(User_ID, "");
         StringRequest strReq = new StringRequest(Request.Method.GET,
@@ -351,12 +356,25 @@ else {
                     } else {
 
                         JSONArray jsonArray = jsonObject.getJSONArray("items");
-                        mCartCountText.setVisibility(View.VISIBLE);
+                        Fragment f = getSupportFragmentManager().findFragmentById(R.id.frameLayout);
+                        // add your code here
+                        if (f instanceof Setting_Fragment) {
+                            mCartCountText.setVisibility(View.GONE);
+
+                        } else if (f instanceof Profile_Fragment) {
+                            mCartCountText.setVisibility(View.GONE);
+
+
+                        } else {
+                            mCartCountText.setVisibility(View.VISIBLE);
+
+                        }
+
+
                         mCartCount = jsonArray.length();
 
                         mCartCountText.setText(String.valueOf(jsonArray.length()));
                     }
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -379,6 +397,9 @@ else {
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
+
+
+
     //--------------DELETE DATA FROM WISH LIST--------------------------------//
     public void deleteFromWishList(final String cloth_id ,final String way) {
         String tag_string_req = "string_req";
@@ -430,8 +451,9 @@ else {
 
     }
 
+    
     //---------------------API FOR GET ADD TO WISH LIST----------------------//
-    public void addToWishList(final  String clothId,String way) {
+    public void     addToWishList(final  String clothId,String way) {
 
         String tag_string_req = "string_req";
 

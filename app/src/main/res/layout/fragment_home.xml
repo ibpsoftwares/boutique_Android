@@ -51,7 +51,7 @@
             <com.kftsoftwares.boutique.utils.TextViewRegular
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="8dp"
                 android:text="@string/our_popular_products"
                 android:textColor="@color/black"
                 android:textSize="16sp"

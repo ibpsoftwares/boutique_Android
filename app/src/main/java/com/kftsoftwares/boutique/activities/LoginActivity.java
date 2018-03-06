@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -33,20 +33,19 @@ import static com.kftsoftwares.boutique.utils.Constants.Email;
 import static com.kftsoftwares.boutique.utils.Constants.FORGET_PASSWORD;
 import static com.kftsoftwares.boutique.utils.Constants.LOGIN;
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
-
 import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 import static com.kftsoftwares.boutique.utils.Constants.User_Name;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-   private EditText mEmail, mPassword;
-    private  SharedPreferences sharedpreferences;
+    private EditText mEmail, mPassword;
+    private SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getWindow().setBackgroundDrawableResource(R.drawable.sign_up_bg);
+        getWindow().setBackgroundDrawableResource(R.drawable.bg);
         Button signUp = findViewById(R.id.signUp_button);
         Button signIn_button = findViewById(R.id.signIn_button);
         TextView forgetPassword = findViewById(R.id.forget_password);
@@ -56,7 +55,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         forgetPassword.setOnClickListener(this);
         signIn_button.setOnClickListener(this);
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-
     }
 
     @Override
@@ -86,7 +84,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-
     //---------------------LOGIN API----------------------//
     private void loginApi() {
 
@@ -94,6 +91,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         final ProgressDialog pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
+        pDialog.setCancelable(false);
         pDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -105,7 +103,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 pDialog.dismiss();
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    Toast.makeText(LoginActivity.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                     if (jsonObject.getString("status").equals("1")) {
                         SharedPreferences.Editor editor = sharedpreferences.edit();
 
@@ -118,6 +115,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         startActivity(intent);
                         finish();
 
+                    } else {
+                        Toast.makeText(LoginActivity.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
@@ -203,6 +202,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         final ProgressDialog pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
+        pDialog.setCancelable(false);
         pDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,

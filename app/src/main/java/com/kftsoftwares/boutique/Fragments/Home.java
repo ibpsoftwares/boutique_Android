@@ -1,6 +1,8 @@
 package com.kftsoftwares.boutique.Fragments;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -28,11 +31,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import static com.kftsoftwares.boutique.utils.Constants.GET_ALL_PRODUCTS;
 import static com.kftsoftwares.boutique.utils.Constants.GET_BANNER_IMAGES;
+import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
+import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 
 
 public class Home extends Fragment implements View.OnClickListener {
@@ -46,6 +53,7 @@ public class Home extends Fragment implements View.OnClickListener {
     private int mCount;
     private int mVal=0;
     int currentPage = 0;
+    private SharedPreferences sharedPreferences;
     private Timer timer;
     final long DELAY_MS = 500;//delay in milliseconds before task is to be executed
     final long PERIOD_MS = 1500; // time in milliseconds between successive task executions.
@@ -56,6 +64,7 @@ public class Home extends Fragment implements View.OnClickListener {
         super.onResume();
         ((MainActivity)getActivity()).getCartList();
         ((MainActivity)getActivity()).mCartView.setVisibility(View.VISIBLE);
+        ((MainActivity)getActivity()).mHeaderText.setText("Home");
         if (((MainActivity)getActivity()).mCartCount!=0)
         {
             ((MainActivity)getActivity()).mCartCountText.setVisibility(View.VISIBLE);
@@ -143,7 +152,7 @@ public class Home extends Fragment implements View.OnClickListener {
             }
         }, DELAY_MS, PERIOD_MS);
 
-
+        sharedPreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         return view;
 
     }
@@ -161,9 +170,12 @@ public class Home extends Fragment implements View.OnClickListener {
 
         final ProgressDialog pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage("Loading...");
-        pDialog.show();
+        pDialog.setCancelable(false);
 
-        StringRequest strReq = new StringRequest(Request.Method.GET,
+        pDialog.show();
+        final String userId = sharedPreferences.getString(User_ID, "");
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
                 GET_ALL_PRODUCTS, new Response.Listener<String>() {
 
             @Override
@@ -220,7 +232,15 @@ public class Home extends Fragment implements View.OnClickListener {
             }
         }
 
-        );
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("user_id", userId);
+                return map;
+            }
+        };
 
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
@@ -234,6 +254,7 @@ public class Home extends Fragment implements View.OnClickListener {
 
         final ProgressDialog pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage("Loading...");
+        pDialog.setCancelable(false);
         pDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.GET,

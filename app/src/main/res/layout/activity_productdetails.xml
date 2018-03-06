@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,15 +12,20 @@
         android:layout_height="55dp"
         android:background="@color/tabLayout">
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:id="@+id/relativeLayoutBack"
+            android:layout_height="match_parent">
         <ImageView
             android:id="@+id/backButton"
             android:layout_width="25sp"
-            android:layout_height="25sp"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_margin="5sp"
             android:contentDescription="@string/app_name"
             android:scaleType="fitCenter"
             android:src="@drawable/arrow_left" />
+        </RelativeLayout>
 
         <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
@@ -49,6 +54,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:fillViewport="true"
+        android:layout_below="@+id/action_bar"
         android:id="@+id/parentScrollView"
 
         android:layout_height="match_parent">
@@ -66,7 +72,7 @@
             android:contentDescription="@string/app_name"
             />
 
-<ScrollView
+<android.support.v4.widget.NestedScrollView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_alignStart="@+id/viewPager"
@@ -87,13 +93,13 @@
                 android:background="@android:color/transparent"
                 android:gravity="start"
                 android:orientation="vertical"/>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>
 <com.kftsoftwares.boutique.utils.TextViewRegular
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:id="@+id/brandName"
     android:layout_below="@+id/viewPager"
-    android:layout_margin="5sp"
+    android:layout_margin="10sp"
     android:textColor="@color/black"
 
     />
@@ -102,8 +108,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/oldPrice"
-            android:layout_below="@+id/brandName"
-            android:layout_marginStart="5sp"
+            android:layout_below="@+id/newPrice"
+            android:layout_marginStart="10sp"
             android:textColor="@color/red"
             android:text="$999"
             />
@@ -113,7 +119,7 @@
             android:id="@+id/newPrice"
             android:layout_toEndOf="@+id/oldPrice"
             android:layout_below="@+id/brandName"
-            android:layout_marginStart="5sp"
+            android:layout_marginStart="10sp"
             android:textColor="@color/black"
             />
 
@@ -122,7 +128,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/name"
             android:layout_below="@+id/oldPrice"
-            android:layout_margin="5sp"
+            android:layout_margin="10sp"
             android:textColor="@color/dark_gray"
             />
 
@@ -140,7 +146,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/selectSize"
             android:layout_below="@+id/view1"
-            android:layout_margin="5sp"
+            android:layout_margin="10sp"
             android:text="Select Size"
             android:textColor="@color/dark_gray"
             />
@@ -167,7 +173,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/des"
             android:layout_below="@+id/view2"
-            android:layout_margin="5sp"
+            android:layout_margin="10sp"
             android:text="Product Details"
             android:textColor="@color/dark_gray"
             />
@@ -177,13 +183,14 @@
             android:layout_height="wrap_content"
             android:id="@+id/description"
             android:layout_below="@+id/des"
-            android:layout_margin="5sp"
+            android:layout_margin="10sp"
             android:textColor="@color/gray"
             />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:layout_below="@+id/description"
             >
             <Button
@@ -213,4 +220,4 @@
 
     </ScrollView>
 
-</LinearLayout>
+</RelativeLayout>

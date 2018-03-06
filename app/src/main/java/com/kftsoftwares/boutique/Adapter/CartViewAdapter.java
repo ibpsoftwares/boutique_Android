@@ -1,6 +1,8 @@
 package com.kftsoftwares.boutique.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.kftsoftwares.boutique.Interface.CartListInterface;
 import com.kftsoftwares.boutique.Models.CartViewModel;
 import com.kftsoftwares.boutique.R;
+import com.kftsoftwares.boutique.activities.Productdetails;
 
 import java.util.ArrayList;
 
@@ -58,29 +61,51 @@ public class CartViewAdapter extends BaseAdapter {
         if (convertView == null)
         {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.new_cartview,null);
-
         }
         ImageView circleImageView = convertView.findViewById(R.id.profile_image);
         TextView price = convertView.findViewById(R.id.price);
+        TextView name = convertView.findViewById(R.id.name);
         final TextView qnt_count = convertView.findViewById(R.id.qnt_count);
+        qnt_count.setText(mCartList.get(position).getCount());
+
+        name.setText(mCartList.get(position).getTitle());
+        if (mCartList.get(position).getOfferPrice() != null &&
+                !mCartList.get(position).getOfferPrice().equalsIgnoreCase("null")) {
+            price.setText(mCartList.get(position).getOfferPrice());
+        } else {
+            price.setText(mCartList.get(position).getPrice());
+        }
         RelativeLayout minus = convertView.findViewById(R.id.minus);
         RelativeLayout add = convertView.findViewById(R.id.add);
         minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mCount == 1)
-                {  }
+                if (Integer.valueOf(mCartList.get(position).getCount()) <= 1)
+                {}
                 else {
-                    mCount--;
-                    qnt_count.setText(String.valueOf(mCount));
+
+                    qnt_count.setText(mCartList.get(position).getCount());
+
+                   int value =  Integer.valueOf(mCartList.get(position).getCount());
+                    mCartList.get(position).setCount(String.valueOf(value));
+
+                    value = value-1;
+                    mCartList.get(position).setCount(String.valueOf(value));
+
+                    mListener.updatePrice(mCartList);
                 }
             }
         });
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCount++;
-                qnt_count.setText(String.valueOf(mCount));
+
+                qnt_count.setText(mCartList.get(position).getCount());
+
+                int value =  Integer.valueOf(mCartList.get(position).getCount());
+                value = value + 1;
+                mCartList.get(position).setCount(String.valueOf(value));
+                mListener.updatePrice(mCartList);
             }
         });
 
@@ -97,7 +122,16 @@ public class CartViewAdapter extends BaseAdapter {
                 mListener.updateCartList(mCartList.get(position).getClothId());
             }
         });
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(mContext, Productdetails.class);
 
+                i.putExtra("id", mCartList.get(position).getClothId());
+
+                mContext.startActivity(i);
+            }
+        });
 
         return convertView;
     }

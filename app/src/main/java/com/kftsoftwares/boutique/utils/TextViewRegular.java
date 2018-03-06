@@ -28,7 +28,7 @@ public class TextViewRegular extends android.support.v7.widget.AppCompatTextView
 
     private void init(Context context) {
         Typeface tf = Typeface.createFromAsset(context.getAssets(),
-                "fonts/whitney_medium.otf");
+                "fonts/whitney_book.otf");
         setTypeface(tf);
     }
 }

@@ -13,7 +13,7 @@
     android:layout_width="30sp"
     android:layout_height="30sp"
     android:contentDescription="@string/app_name"
-    android:src="@mipmap/help"
+    android:src="@mipmap/ic_help"
 
     />
     <com.kftsoftwares.boutique.utils.TextViewRegular
@@ -39,12 +39,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:id="@+id/profile"
         android:padding="10dp">
         <ImageView
             android:layout_width="30sp"
             android:layout_height="30sp"
             android:contentDescription="@string/app_name"
-            android:src="@mipmap/profile_green"
+            android:src="@mipmap/ic_profile_green"
 
             />
         <com.kftsoftwares.boutique.utils.TextViewRegular
@@ -75,7 +76,7 @@
             android:layout_width="30sp"
             android:layout_height="30sp"
             android:contentDescription="@string/app_name"
-            android:src="@mipmap/setting_green"
+            android:src="@mipmap/ic_changepassword"
 
             />
         <com.kftsoftwares.boutique.utils.TextViewRegular
@@ -105,7 +106,7 @@
             android:layout_width="30sp"
             android:layout_height="30sp"
             android:contentDescription="@string/app_name"
-            android:src="@mipmap/history"
+            android:src="@mipmap/ic_history"
 
 
             />
@@ -131,12 +132,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:id="@+id/signOut"
         android:padding="10dp">
         <ImageView
             android:layout_width="30sp"
             android:layout_height="30sp"
             android:contentDescription="@string/app_name"
-            android:src="@mipmap/signout_green"
+            android:src="@mipmap/ic_signout"
 
             />
         <com.kftsoftwares.boutique.utils.TextViewRegular

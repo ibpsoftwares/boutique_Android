@@ -53,6 +53,8 @@ public class Category extends Fragment {
     public void onResume() {
         super.onResume();
         ((MainActivity)getActivity()).mCartView.setVisibility(View.VISIBLE);
+        ((MainActivity)getActivity()).mHeaderText.setText("Category");
+
         if (((MainActivity)getActivity()).mCartCount!=0)
         {
             ((MainActivity)getActivity()).mCartCountText.setVisibility(View.VISIBLE);
@@ -75,7 +77,7 @@ public class Category extends Fragment {
 
         final ProgressDialog pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage("Loading...");
-        pDialog.show();
+            pDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.GET,
                 GET_CATEGORIES, new Response.Listener<String>() {

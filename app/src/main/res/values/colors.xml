@@ -6,12 +6,14 @@
     <color name="dark_blue">#2a7ba9</color>
     <color name="dark_pink">#cc73a9</color>
     <color name="tabLayout">#273d43</color>
+    <color name="green">#2cb99e</color>
     <color name="status_bar">#273d43</color>
     <color name="light_tabLayout">#b0273d43</color>
     <color name="black">#000000</color>
     <color name="border_color">#bebcbc</color>
     <color name="gray">#939191</color>
     <color name="light_gray">#e7e6e6</color>
+    <color name="gray_edit_text">#cecdcd</color>
     <color name="dark_gray">#6b6b6b</color>
     <color name="white">#ffffff</color>
     <color name="red">#ff0000</color>

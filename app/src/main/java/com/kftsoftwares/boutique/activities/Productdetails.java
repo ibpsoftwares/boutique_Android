@@ -2,9 +2,13 @@ package com.kftsoftwares.boutique.activities;
 
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -14,6 +18,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,12 +61,13 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
     private ArrayList<Size> mSingleProductSize;
     private ArrayList<String> mImageString;
     private ViewPager mViewPager;
-    private TextView mDescreption, mPrice, mName;
+    private TextView mDescreption, mPrice, mName,mOldPrice;
     private SharedPreferences mSharedPreferences;
     private LinearLayout mDots;
     private LinearLayout mSizeLinearLayout;
     private TextView mBrandName;
-    private ScrollView mParentScrollView, mChildScrollView;
+    private ScrollView mParentScrollView;
+    private NestedScrollView mChildScrollView;
     private String mSizeDetail = "";
 
     private ImageView[] ivArrayDotsPager;
@@ -81,6 +87,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
         }
         mViewPager = findViewById(R.id.viewPager);
         mPrice = findViewById(R.id.newPrice);
+        mOldPrice = findViewById(R.id.oldPrice);
         mName = findViewById(R.id.name);
         mDots = findViewById(R.id.pager_dots);
         mSizeLinearLayout = findViewById(R.id.linearLayoutForSizes);
@@ -90,9 +97,18 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
         mImageString = new ArrayList<>();
         mSharedPreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         ImageView backButton = findViewById(R.id.backButton);
+        RelativeLayout backLayout  = findViewById(R.id.relativeLayoutBack);
         mParentScrollView = findViewById(R.id.parentScrollView);
         mChildScrollView = findViewById(R.id.childScrollView);
+        mOldPrice.setPaintFlags(mOldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG |Paint.ANTI_ALIAS_FLAG);
+
         backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        backLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -141,6 +157,8 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                 return false;
             }
         });
+
+
     }
 
 
@@ -177,6 +195,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
 
         final ProgressDialog pDialog = new ProgressDialog(Productdetails.this);
         pDialog.setMessage("Loading...");
+        pDialog.setCancelable(false);
         pDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.GET,
@@ -221,7 +240,21 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
 
                     }
                     mDescreption.setText(object.getString("description"));
-                    mPrice.setText(object.getString("original_price"));
+
+                    if (object.getString("offer_price") != null &&
+
+                            !object.getString("offer_price").equalsIgnoreCase("null")) {
+
+                        mOldPrice.setText(object.getString("offer_price"));
+
+                        mOldPrice.setVisibility(View.VISIBLE);
+                        mPrice.setText(object.getString("original_price"));
+                    } else {
+                        mOldPrice.setVisibility(View.GONE);
+                        mPrice.setText(object.getString("original_price"));
+                    }
+
+
                     // mPrice.s
                     //
                     //
@@ -259,7 +292,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
     private void setUpSizes() {
         mSizeLinearLayout.removeAllViews();
         // create two layouts to hold buttons
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(100, 100);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(90, 90);
         params.rightMargin = 10;
         // create buttons in a loop
         for (int i = 0; i < mSingleProductSize.size(); i++) {
@@ -270,7 +303,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
             button.setLayoutParams(params);
             button.setGravity(Gravity.CENTER);
             button.setTextColor(ContextCompat.getColor(this, R.color.black));
-            button.setTextSize(10);
+            button.setTextSize(9);
             if (String.valueOf(mSingleProductSize.get(i).getSize()).equalsIgnoreCase(mSizeDetail)) {
                 button.setBackground(ContextCompat.getDrawable(Productdetails.this, R.drawable.round_button_colored));
                 button.setTextColor(ContextCompat.getColor(this, R.color.white));
@@ -299,6 +332,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
 
         final ProgressDialog pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
+        pDialog.setCancelable(false);
         pDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -310,8 +344,8 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                 pDialog.dismiss();
                 try {
                     JSONObject jsonObject = new JSONObject(response);
+                    Toast.makeText(Productdetails.this, "" + jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
 
-                    Toast.makeText(Productdetails.this, "" + jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                     // new com.kftsoftwares.boutique.Utils.Util().showSingleOkAlert(Productdetails.this,jsonObject.getString("message"),"Success Add to WishList");
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -358,7 +392,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                 pDialog.dismiss();
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    Toast.makeText(Productdetails.this, "" + jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    Toast.makeText(Productdetails.this, "" + jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -377,6 +411,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("user_id", mSharedPreferences.getString(User_ID, ""));
                 params.put("cloth_id", mClotheId);
+                params.put("quantity", "1");
                 return params;
             }
         };
@@ -397,8 +432,9 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
             //ivArrayDotsPager[i].setAlpha(0.4f);
             ivArrayDotsPager[i].setBackground(ContextCompat.getDrawable(Productdetails.this, R.drawable.un_select));
             ivArrayDotsPager[i].setScaleType(ImageView.ScaleType.FIT_CENTER);
-            ivArrayDotsPager[i].setClickable(false);
-            ivArrayDotsPager[i].setFocusable(false);
+            ivArrayDotsPager[i].setClickable(true);
+            ivArrayDotsPager[i].setFocusable(true);
+            ivArrayDotsPager[i].setDuplicateParentStateEnabled(true);
             final int val = i;
             ivArrayDotsPager[i].setOnClickListener(new View.OnClickListener() {
                 @Override

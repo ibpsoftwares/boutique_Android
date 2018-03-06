@@ -22,6 +22,7 @@ import com.kftsoftwares.boutique.Interface.WishListInterface;
 import com.kftsoftwares.boutique.Models.WishListModel;
 import com.kftsoftwares.boutique.R;
 import com.kftsoftwares.boutique.activities.MainActivity;
+import com.kftsoftwares.boutique.utils.Util;
 import com.kftsoftwares.boutique.volly.AppController;
 
 import org.json.JSONArray;
@@ -50,10 +51,11 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity)getActivity()).mCartView.setVisibility(View.VISIBLE);
-        if (((MainActivity)getActivity()).mCartCount!=0)
-        {
-            ((MainActivity)getActivity()).mCartCountText.setVisibility(View.VISIBLE);
+        ((MainActivity) getActivity()).mCartView.setVisibility(View.VISIBLE);
+        ((MainActivity)getActivity()).mHeaderText.setText("Wishlist");
+
+        if (((MainActivity) getActivity()).mCartCount != 0) {
+            ((MainActivity) getActivity()).mCartCountText.setVisibility(View.VISIBLE);
 
         }
 
@@ -83,6 +85,7 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
 
         final ProgressDialog pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage("Loading...");
+        pDialog.setCancelable(false);
         pDialog.show();
 
         String userId = sharedPreferences.getString(User_ID, "");
@@ -96,7 +99,7 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
                 pDialog.dismiss();
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    if (jsonObject.has("message") && jsonObject.getString("message")!=null && jsonObject.getString("message").equalsIgnoreCase("Wishlist Empty")) {
+                    if (jsonObject.has("message") && jsonObject.getString("message") != null && jsonObject.getString("message").equalsIgnoreCase("Wishlist Empty")) {
 
                         mWishListRelativeLayout.setVisibility(View.VISIBLE);
                         mListview.setVisibility(View.GONE);
@@ -116,7 +119,10 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
                             wishListModel.setImage1(object.getString("image1"));
                             wishListModel.setDescreption(object.getString("description"));
                             wishListModel.setTitle(object.getString("title"));
-                            wishListModel.setPrice(object.getString("price"));
+                            wishListModel.setPrice(object.getString("original_price"));
+                            wishListModel.setOfferprice(object.getString("offer_price"));
+                            wishListModel.setBrand(object.getString("brand"));
+
                             mWishListModels.add(wishListModel);
                         }
 
@@ -150,8 +156,8 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
     }
 
     @Override
-    public void  moveToWishList(String wishid, String clothId) {
-        moveToWishListMehtod(wishid,clothId);
+    public void moveToWishList(String wishid, String clothId) {
+        moveToWishListMehtod(wishid, clothId);
     }
 
     //--------------DELETE DATA FROM WISH LIST--------------------------------//
@@ -160,10 +166,11 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
         if (mWishListModels != null) {
             mWishListModels.clear();
         }
-       final String userId = sharedPreferences.getString(User_ID, "");
+        final String userId = sharedPreferences.getString(User_ID, "");
 
         final ProgressDialog pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage("Loading...");
+        pDialog.setCancelable(false);
         pDialog.show();
 
 
@@ -208,11 +215,12 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
     }
 
     //--------------Move To  WISH LIST--------------------------------//
-    private void moveToWishListMehtod(final String WishID , final String clothId) {
+    private void moveToWishListMehtod(final String WishID, final String clothId) {
         String tag_string_req = "string_req";
 
         final ProgressDialog pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage("Loading...");
+        pDialog.setCancelable(false);
         pDialog.show();
         final String userId = sharedPreferences.getString(User_ID, "");
 
@@ -226,7 +234,13 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    getWishList();
+                    if(jsonObject.getString("message").equalsIgnoreCase("Exists in Cart"))
+                    {
+                        Toast.makeText(getActivity(), ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        getWishList();
+                    }
                     ((MainActivity) getActivity()).getWishList();
                     ((MainActivity) getActivity()).getCartList();
                 } catch (JSONException e) {
@@ -249,6 +263,7 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
                 Map<String, String> map = new HashMap<>();
                 map.put("cloth_id", clothId);
                 map.put("user_id", userId);
+                map.put("quantity", "1");
                 return map;
             }
         };

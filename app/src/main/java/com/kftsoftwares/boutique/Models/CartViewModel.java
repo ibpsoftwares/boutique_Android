@@ -20,6 +20,24 @@ public class CartViewModel
     private String deleteStatus;
     private String currency;
     private String image1;
+    private String count;
+    private String offerPrice;
+
+    public String getOfferPrice() {
+        return offerPrice;
+    }
+
+    public void setOfferPrice(String offerPrice) {
+        this.offerPrice = offerPrice;
+    }
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String mCount) {
+        this.count = mCount;
+    }
 
     public String getCartId() {
         return cartId;
