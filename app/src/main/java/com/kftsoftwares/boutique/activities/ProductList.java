@@ -32,9 +32,11 @@ import com.kftsoftwares.boutique.Adapter.GridViewAdapter;
 import com.kftsoftwares.boutique.Adapter.SortListViewAdapter;
 import com.kftsoftwares.boutique.Interface.FilterListView;
 import com.kftsoftwares.boutique.Interface.SortListview;
+import com.kftsoftwares.boutique.Models.CartViewModel;
 import com.kftsoftwares.boutique.Models.FilterDataModel;
 import com.kftsoftwares.boutique.Models.GetAllProductModel;
 import com.kftsoftwares.boutique.R;
+import com.kftsoftwares.boutique.database.DatabaseHandler;
 import com.kftsoftwares.boutique.utils.Util;
 import com.kftsoftwares.boutique.volly.AppController;
 
@@ -46,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -54,8 +57,8 @@ import static com.kftsoftwares.boutique.utils.Constants.GET_ALL_CATEGORIES_BY_ID
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 import static com.kftsoftwares.boutique.utils.Constants.PRICE_RANGE;
 import static com.kftsoftwares.boutique.utils.Constants.REMOVE_FROM_WISHLIST;
-import static com.kftsoftwares.boutique.utils.Constants.SORT_DATA;
 import static com.kftsoftwares.boutique.utils.Constants.TOKEN;
+import static com.kftsoftwares.boutique.utils.Constants.UPDATED_TOKEN;
 import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 
 public class ProductList extends AppCompatActivity implements View.OnClickListener, FilterListView ,SortListview{
@@ -79,11 +82,15 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
     private GridViewAdapter mGridViewAdapter;
     private SharedPreferences sharedPreferences;
     public  AlertDialog mAlert;
+    public ArrayList<String> mUserIdArrayList;
+    private DatabaseHandler mDatabaseHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_details_new);
-
+        mDatabaseHandler = new DatabaseHandler(ProductList.this);
+        mUserIdArrayList = new ArrayList<>();
+        getLocalWishListData();
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             if (bundle.getString("id") != null) {
@@ -104,20 +111,15 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-
             }
-
             @Override
             public void afterTextChanged(Editable s) {
                 String text = searchEditText.getText().toString().toLowerCase(Locale.getDefault());
                 mGridViewAdapter.filter(text);
-
             }
         });
         sharedPreferences = getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
@@ -132,17 +134,36 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
             }
         });
 
-
         mFilterDataModel = new ArrayList<>();
         mIdArrayList = new ArrayList<>();
         mFilterListViewAdapter = new FilterListViewAdapter(ProductList.this, new ArrayList<FilterDataModel>(), mVal, ProductList.this);
         mGridViewAdapter = new GridViewAdapter(ProductList.this, new ArrayList<GetAllProductModel>());
         mGridView.setAdapter(mGridViewAdapter);
-
-
     }
 
 
+    public void getLocalWishListData() {
+
+        List<CartViewModel> list = mDatabaseHandler.getAllDataOfWishlist();
+
+        if (mUserIdArrayList!=null)
+        {
+            mUserIdArrayList.clear();
+        }
+
+        if (list.size()>0)
+        {
+            for (int i = 0;i<list.size();i++)
+            {
+                mUserIdArrayList.add(list.get(i).getClothId());
+            }
+
+        }
+        else {
+
+        }
+
+    }
     //---------------------GET PRODUCT LIST BY CATEGORY -----------------//
 
     private void getProductList() {
@@ -159,7 +180,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         pDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                GET_ALL_CATEGORIES_BY_ID + mId + "/" + TOKEN, new Response.Listener<String>() {
+                GET_ALL_CATEGORIES_BY_ID , new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -193,9 +214,19 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
                             getAllProductModel.setDescription("description");
                             getAllProductModel.setColour("colour");
 
-                            if (jsonObject1.has("Wishlist"))
+                            if (jsonObject1.has("wishlist"))
                             {
-                                getAllProductModel.setWish_list(jsonObject1.getString("Wishlist"));
+
+                                if (sharedPreferences.getString(User_ID,"").equalsIgnoreCase("") && mUserIdArrayList.contains(jsonObject1.getString("id")))
+                                {
+                                    getAllProductModel.setWish_list("1");
+
+                                }
+
+                                else {
+                                    getAllProductModel.setWish_list(jsonObject1.getString("wishlist"));
+
+                                }
 
                             }
                             else {
@@ -224,11 +255,19 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         ){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-
                 Map<String, String> map = new HashMap<>();
+                map.put("category_id", mId);
                 map.put("user_id", userId);
                 return map;
             }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+                return params;
+            }
+
         };
 
 // Adding request to request queue
@@ -309,6 +348,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         alert.show();
     }
 
+
     //-----------------------Show Sort Dialog---------------------------//
     private void showSortDialog() {
         LayoutInflater lf = LayoutInflater.from(this);
@@ -357,8 +397,9 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         // Show the dialog
         mAlert.show();
     }
-    //-------------------GET FILTER LIST--------------------------//
 
+
+    //-------------------GET FILTER LIST--------------------------//
     private void getFilteredList(Double start, Double end) {
 
         if (mGetSortedList != null) {
@@ -398,6 +439,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         }
 
     }
+
 
     //-------------------GET PRICE LIST--------------------------//
 
@@ -593,86 +635,6 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    //---------------------------------- Sort Data --------------------------------------//
-    private void getSortedList(final String id) {
-        if (mGetAllProductModels != null) {
-            mGetAllProductModels.clear();
-        }
-
-        String tag_string_req = "string_req";
-
-        final ProgressDialog pDialog = new ProgressDialog(ProductList.this);
-        pDialog.setMessage("Loading...");
-        pDialog.setCancelable(false);
-        pDialog.show();
-
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                SORT_DATA + TOKEN, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                pDialog.cancel();
-                pDialog.dismiss();
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-
-                    if (jsonObject.has("message") && jsonObject.getString("message") != null && jsonObject.getString("message").equalsIgnoreCase("no match found")) {
-                        Toast.makeText(ProductList.this, "No Data Found", Toast.LENGTH_SHORT).show();
-                        mGridView.setVisibility(View.GONE);
-                        mlinearLayout.setVisibility(View.VISIBLE);
-
-                    } else {
-
-                        JSONArray jsonArray = jsonObject.getJSONArray("cloths");
-                        GetAllProductModel getAllProductModel = null;
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-                            getAllProductModel = new GetAllProductModel();
-                            getAllProductModel.setId(jsonObject1.getString("Cloth_id"));
-                            getAllProductModel.setCategoryId(jsonObject1.getString("category_id"));
-                            getAllProductModel.setTitle(jsonObject1.getString("title"));
-                            getAllProductModel.setPrice(jsonObject1.getString("price"));
-                            // getAllProductModel.setBrandName(jsonObject1.getString("brand"));
-                            getAllProductModel.setCategoryName(jsonObject1.getString("category_name"));
-                            getAllProductModel.setImage1(jsonObject1.getString("image1"));
-                            getAllProductModel.setDescription("description");
-                            getAllProductModel.setColour("colour");
-
-                            mGetAllProductModels.add(getAllProductModel);
-                        }
-                        mlinearLayout.setVisibility(View.GONE);
-                        mGridView.setVisibility(View.VISIBLE);
-                        GridViewAdapter gridViewAdapter = new GridViewAdapter(ProductList.this, mGetAllProductModels);
-                        mGridView.setAdapter(gridViewAdapter);
-                        gridViewAdapter.notifyDataSetChanged();
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                pDialog.cancel();
-                pDialog.dismiss();
-                Toast.makeText(ProductList.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-            }
-        }
-        ) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("category_id", mId);
-                params.put("sort_id", id);
-                return params;
-            }
-        };
-        ;
-// Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-    }
 
     @Override
     public void value(int position) {
@@ -802,7 +764,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
 
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                ADD_WISH_LIST + TOKEN, new Response.Listener<String>() {
+                ADD_WISH_LIST, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -825,7 +787,18 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
             }
         }
 
-        ) {
+        )
+
+            {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+
+                return params;
+            }
+
+
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();

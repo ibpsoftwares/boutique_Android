@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -24,8 +25,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.kftsoftwares.boutique.utils.Constants.GET_CATEGORIES;
+import static com.kftsoftwares.boutique.utils.Constants.UPDATED_TOKEN;
 
 
 public class Category extends Fragment {
@@ -79,7 +83,7 @@ public class Category extends Fragment {
         pDialog.setMessage("Loading...");
             pDialog.show();
 
-        StringRequest strReq = new StringRequest(Request.Method.GET,
+        StringRequest strReq = new StringRequest(Request.Method.POST,
                 GET_CATEGORIES, new Response.Listener<String>() {
 
             @Override
@@ -123,7 +127,15 @@ public class Category extends Fragment {
             }
         }
 
-        );
+        ){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+                return params;
+            }
+
+        };
 
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);

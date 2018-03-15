@@ -85,5 +85,18 @@
         android:background="@drawable/sign_up_button"
         />
 
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10sp"
+            android:textColor="@color/white"
+            android:id="@+id/skip"
+            android:fontFamily="@font/whitney_medium"
+            android:text="@string/skip"
+            android:textAllCaps="false"
+            android:background="@drawable/sign_in_button"
+            />
+
     </LinearLayout>
 </ScrollView>

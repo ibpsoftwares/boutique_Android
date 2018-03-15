@@ -3,8 +3,8 @@ package com.kftsoftwares.boutique.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -26,11 +26,13 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.kftsoftwares.boutique.utils.Constants.DEVICE_UD_ID;
+import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 import static com.kftsoftwares.boutique.utils.Constants.SIGN_UP;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
-   private EditText mUserName, mEmail, mPassword, mConfirmPassword;
+    private EditText mUserName, mEmail, mPassword, mConfirmPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +42,13 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         TextView alreadyHaveAnAccount = findViewById(R.id.alreadyHaveAnAccount);
         Button signUp = findViewById(R.id.signUp);
-        ImageView  imageView = findViewById(R.id.backImage);
+        ImageView imageView = findViewById(R.id.backImage);
         mUserName = findViewById(R.id.input_username);
         mEmail = findViewById(R.id.input_email);
         mPassword = findViewById(R.id.input_password);
         mConfirmPassword = findViewById(R.id.input_confirm_password);
+
+
         alreadyHaveAnAccount.setOnClickListener(this);
         imageView.setOnClickListener(this);
         signUp.setOnClickListener(this);
@@ -57,7 +61,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
                 finish();
                 break;
-                case R.id.backImage:
+            case R.id.backImage:
                 startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
                 finish();
                 break;
@@ -80,7 +84,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 } else if (!mConfirmPassword.getText().toString().equalsIgnoreCase(mPassword.getText().toString())) {
                     Toast.makeText(this, "Password Does not Matched", Toast.LENGTH_SHORT).show();
                 } else {
-                      signUpUser();
+                    signUpUser();
 
                 }
 
@@ -93,6 +97,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     //----------------------------SIGN UP API--------------------//
 
     private void signUpUser() {
+
+
+        final SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
 
         String tag_string_req = "string_req";
 
@@ -111,16 +118,15 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     Toast.makeText(SignUpActivity.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                 if (jsonObject.getString("message").equals("Registered Successfully"))
-                 {
-                     mUserName.setText("");
-                     mEmail.setText("");
-                     mPassword.setText("");
-                     mConfirmPassword.setText("");
-                     Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-                     startActivity(intent);
-                     finish();
-                 }
+                    if (jsonObject.getString("message").equals("Registered Successfully")) {
+                        mUserName.setText("");
+                        mEmail.setText("");
+                        mPassword.setText("");
+                        mConfirmPassword.setText("");
+                        Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();

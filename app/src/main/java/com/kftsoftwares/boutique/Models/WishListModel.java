@@ -14,7 +14,12 @@ public class WishListModel {
             price,
             colour,
             delete_status,
-            currency,image1,offerprice,brand;
+            currency,
+          image1,
+          offerprice,
+          brand;
+
+
 
     public String getOfferprice() {
         return offerprice;

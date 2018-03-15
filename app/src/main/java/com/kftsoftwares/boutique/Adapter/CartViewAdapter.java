@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.kftsoftwares.boutique.Interface.CartListInterface;
 import com.kftsoftwares.boutique.Models.CartViewModel;
+import com.kftsoftwares.boutique.Models.Image;
 import com.kftsoftwares.boutique.R;
 import com.kftsoftwares.boutique.activities.Productdetails;
 
@@ -75,13 +76,15 @@ public class CartViewAdapter extends BaseAdapter {
         } else {
             price.setText(mCartList.get(position).getPrice());
         }
-        RelativeLayout minus = convertView.findViewById(R.id.minus);
-        RelativeLayout add = convertView.findViewById(R.id.add);
+        ImageView minus = convertView.findViewById(R.id.minus);
+        ImageView add = convertView.findViewById(R.id.plus);
         minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Integer.valueOf(mCartList.get(position).getCount()) <= 1)
-                {}
+                {
+
+                }
                 else {
 
                     qnt_count.setText(mCartList.get(position).getCount());

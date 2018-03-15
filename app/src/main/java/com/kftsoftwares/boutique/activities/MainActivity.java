@@ -25,7 +25,9 @@ import com.kftsoftwares.boutique.Fragments.Home;
 import com.kftsoftwares.boutique.Fragments.Profile_Fragment;
 import com.kftsoftwares.boutique.Fragments.Setting_Fragment;
 import com.kftsoftwares.boutique.Fragments.WishList_Fragment;
+import com.kftsoftwares.boutique.Models.CartViewModel;
 import com.kftsoftwares.boutique.R;
+import com.kftsoftwares.boutique.database.DatabaseHandler;
 import com.kftsoftwares.boutique.utils.Util;
 import com.kftsoftwares.boutique.volly.AppController;
 
@@ -33,44 +35,101 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.kftsoftwares.boutique.utils.Constants.ADD_WISH_LIST;
 import static com.kftsoftwares.boutique.utils.Constants.GET_WISH_LIST;
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 import static com.kftsoftwares.boutique.utils.Constants.REMOVE_FROM_WISHLIST;
-import static com.kftsoftwares.boutique.utils.Constants.TOKEN;
+import static com.kftsoftwares.boutique.utils.Constants.UPDATED_TOKEN;
 import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 import static com.kftsoftwares.boutique.utils.Constants.VIEW_CART;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    private RelativeLayout mHome, mCategory, mProfile, mSetting, mWishList;
-    public ImageView mCartView;
+    private RelativeLayout mHome, mCategory, mProfile, mSetting, mWishList, mAccount;
+    public ImageView mCartView, mProfileImageHeader;
     private SharedPreferences sharedPreferences;
-    public TextView mWishCountText , mCartCountText ,mHeaderText;
+    public TextView mWishCountText, mCartCountText, mHeaderText;
     private Util mUtil;
     //testing
     public int mCartCount;
+    private DatabaseHandler mDatabaseHandler;
+    public ArrayList<String> mUserIdArrayList;
+
 
     @Override
     protected void onResume() {
         super.onResume();
-        getWishList();
-        getCartList();
 
-if (!AppController.getInstance().isOnline())
-{
-    mUtil.checkConnection(MainActivity.this,false);
-}
+        if (sharedPreferences.getString(User_ID, "").equalsIgnoreCase("")) {
+            getLocalWishListData();
+            getLocalCartListData();
+            mProfile.setVisibility(View.GONE);
+            mSetting.setVisibility(View.GONE);
+            mProfileImageHeader.setVisibility(View.VISIBLE);
+        } else {
+            getWishList();
+            getCartList();
+            mProfile.setVisibility(View.VISIBLE);
+            mSetting.setVisibility(View.VISIBLE);
+            mProfileImageHeader.setVisibility(View.GONE);
+
+        }
+
+        if (!AppController.getInstance().isOnline()) {
+            mUtil.checkConnection(MainActivity.this, false);
+        }
+    }
+
+    public void getLocalWishListData() {
+
+        List<CartViewModel> list = mDatabaseHandler.getAllDataOfWishlist();
+
+        if (mUserIdArrayList != null) {
+            mUserIdArrayList.clear();
+        }
+
+        if (list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                mUserIdArrayList.add(list.get(i).getClothId());
+            }
+
+            mWishCountText.setVisibility(View.VISIBLE);
+            mWishCountText.setText(String.valueOf(list.size()));
+
+        } else {
+            mWishCountText.setVisibility(View.GONE);
+
+        }
+
+    }
+
+    public void getLocalCartListData() {
+
+        List<CartViewModel> list = mDatabaseHandler.getAllDataOfCart();
+
+        if (list.size() > 0) {
+            mCartCountText.setVisibility(View.VISIBLE);
+            mCartCountText.setText(String.valueOf(list.size()));
+
+        } else {
+            mCartCountText.setVisibility(View.GONE);
+
+        }
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+        mDatabaseHandler = new DatabaseHandler(MainActivity.this);
+
         mUtil = new Util();
 
         mHome = findViewById(R.id.homeRelativeLayout);
@@ -78,10 +137,12 @@ if (!AppController.getInstance().isOnline())
         mProfile = findViewById(R.id.profileRelativeLayout);
         mSetting = findViewById(R.id.settingRelativeLayout);
         mWishList = findViewById(R.id.wishListRelativeLayout);
+        mAccount = findViewById(R.id.accountRelativeLayout);
         mCartView = findViewById(R.id.cartView);
         mWishCountText = findViewById(R.id.wishListCount);
         mHeaderText = findViewById(R.id.headerText);
         mCartCountText = findViewById(R.id.cartCount);
+        mProfileImageHeader = findViewById(R.id.profileHeader);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.
                 beginTransaction().add(R.id.frameLayout, new Home(), "");
@@ -92,7 +153,10 @@ if (!AppController.getInstance().isOnline())
         mProfile.setOnClickListener(this);
         mSetting.setOnClickListener(this);
         mWishList.setOnClickListener(this);
+        mAccount.setOnClickListener(this);
+        mProfileImageHeader.setOnClickListener(this);
         mCartView.setOnClickListener(this);
+        mUserIdArrayList = new ArrayList<>();
         sharedPreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
    /*     Card card = new Card("4242-4242-4242-4242", 12, 2019, "123");
 
@@ -125,41 +189,75 @@ if (!AppController.getInstance().isOnline())
 
     @Override
     public void onClick(View v) {
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.frameLayout);
+
         switch (v.getId()) {
             case R.id.homeRelativeLayout:
-                clearStack();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.
-                        beginTransaction().replace(R.id.frameLayout, new Home(), "");
-                fragmentTransaction.commit();
-                changeColor(0);
+
+                if (f instanceof Home) {
+
+                } else {
+
+                    clearStack();
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.
+                            beginTransaction().replace(R.id.frameLayout, new Home(), "");
+                    fragmentTransaction.commit();
+                    changeColor(0);
+                }
                 break;
 
             case R.id.categoryRelativeLayout:
-                Fragment fragment = new Category();
+                if (f instanceof Category) {
 
-                changeFragment(fragment, "Category",1);
+                } else {
+                    Fragment fragment = new Category();
 
+                    changeFragment(fragment, "Category", 1);
+                }
                 break;
 
             case R.id.profileRelativeLayout:
-                Fragment profile = new Profile_Fragment();
 
-                changeFragment(profile, "Profile",2);
+                if (f instanceof Profile_Fragment) {
+
+                } else {
+                    Fragment profile = new Profile_Fragment();
+
+                    changeFragment(profile, "Profile", 2);
+                }
                 break;
 
             case R.id.settingRelativeLayout:
-                changeFragment(new Setting_Fragment(), "Setting",3);
+
+                if (f instanceof Setting_Fragment) {
+
+                } else {
+                    changeFragment(new Setting_Fragment(), "Setting", 3);
+                }
                 break;
 
             case R.id.cartView:
                 startActivity(new Intent(MainActivity.this, CartView.class));
-
                 break;
 
-            case R.id.wishListRelativeLayout:
-                changeFragment(new WishList_Fragment(), "wishlist",4);
+            case R.id.accountRelativeLayout:
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
+                break;
+            case R.id.profileHeader:
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
+                break;
 
+
+            case R.id.wishListRelativeLayout:
+
+                if (f instanceof WishList_Fragment) {
+
+                } else {
+                    changeFragment(new WishList_Fragment(), "wishlist", 4);
+                }
                 break;
 
         }
@@ -167,7 +265,8 @@ if (!AppController.getInstance().isOnline())
 
 
     //---------------------------Change Fragment----------------------//
-    public void changeFragment(Fragment fragment, String tag,int val) {
+    public void changeFragment(Fragment fragment, String tag, int val) {
+
         clearStack();
         changeColor(val);
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -175,7 +274,6 @@ if (!AppController.getInstance().isOnline())
                 beginTransaction().replace(R.id.frameLayout, fragment, tag);
         fragmentTransaction.commit();
     }
-
 
 
     //---------------------------Change Color on Custom Bar----------------------//
@@ -215,14 +313,12 @@ if (!AppController.getInstance().isOnline())
     }
 
 
-
     //---------------------------For Clear The Stack of Fragment----------------------//
     private void clearStack() {
         for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
             getSupportFragmentManager().popBackStack();
         }
     }
-
 
 
     //----------------GET WISHLIST DATA FROM SERVER-----------//
@@ -236,10 +332,10 @@ if (!AppController.getInstance().isOnline())
         pDialog.setCancelable(false);
         pDialog.show();
 
-        String userId = sharedPreferences.getString(User_ID, "");
+        final String userId = sharedPreferences.getString(User_ID, "");
 
-        StringRequest strReq = new StringRequest(Request.Method.GET,
-                GET_WISH_LIST + userId + "/" + TOKEN, new Response.Listener<String>() {
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                GET_WISH_LIST, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -248,7 +344,7 @@ if (!AppController.getInstance().isOnline())
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    if (jsonObject.has("message") && jsonObject.getString("message")!=null && jsonObject.get("message").toString().equalsIgnoreCase("Wishlist Empty")) {
+                    if (jsonObject.has("message") && jsonObject.getString("message") != null && jsonObject.get("message").toString().equalsIgnoreCase("Wishlist Empty")) {
 
                         mWishCountText.setVisibility(View.GONE);
                     } else {
@@ -270,27 +366,40 @@ if (!AppController.getInstance().isOnline())
                 pDialog.dismiss();
             }
         }
-        );
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("user_id", userId);
+                return params;
+
+            }
+        };
+        ;
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
     }
 
 
-
-
-   //----------------GET WISHLIST DATA FROM SERVER WITHOUT LOADER-----------//
+    //----------------GET WISHLIST DATA FROM SERVER WITHOUT LOADER-----------//
     public void getWishListWithoutLoader() {
 
         String tag_string_req = "string_req";
 
 
+        final String userId = sharedPreferences.getString(User_ID, "");
 
-
-        String userId = sharedPreferences.getString(User_ID, "");
-
-        StringRequest strReq = new StringRequest(Request.Method.GET,
-                GET_WISH_LIST + userId + "/" + TOKEN, new Response.Listener<String>() {
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                GET_WISH_LIST, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -298,7 +407,7 @@ if (!AppController.getInstance().isOnline())
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    if (jsonObject.has("message") && jsonObject.getString("message")!=null && jsonObject.get("message").toString().equalsIgnoreCase("Wishlist Empty")) {
+                    if (jsonObject.has("message") && jsonObject.getString("message") != null && jsonObject.get("message").toString().equalsIgnoreCase("Wishlist Empty")) {
 
                         mWishCountText.setVisibility(View.GONE);
                     } else {
@@ -320,12 +429,27 @@ if (!AppController.getInstance().isOnline())
                 Toast.makeText(MainActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         }
-        );
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("user_id", userId);
+                return params;
+
+            }
+        };
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
     }
-
 
 
     //-----------------GET CART DATA----------//
@@ -338,8 +462,8 @@ if (!AppController.getInstance().isOnline())
         pDialog.setCancelable(false);
         pDialog.show();
         String user_id = sharedPreferences.getString(User_ID, "");
-        StringRequest strReq = new StringRequest(Request.Method.GET,
-                VIEW_CART + "/" + user_id + "/" + TOKEN, new Response.Listener<String>() {
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                VIEW_CART, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -348,7 +472,7 @@ if (!AppController.getInstance().isOnline())
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    if (jsonObject.has("message") && jsonObject.getString("message")!=null && jsonObject.get("message").toString().equalsIgnoreCase("Cart Empty")) {
+                    if (jsonObject.has("message") && jsonObject.getString("message") != null && jsonObject.get("message").toString().equalsIgnoreCase("Cart Empty")) {
 
                         mCartCountText.setVisibility(View.GONE);
                         mCartCount = 0;
@@ -392,34 +516,48 @@ if (!AppController.getInstance().isOnline())
             }
         }
 
-        );
+        ) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("user_id", sharedPreferences.getString(User_ID, ""));
+                return map;
+            }
+        };
 
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
 
-
     //--------------DELETE DATA FROM WISH LIST--------------------------------//
-    public void deleteFromWishList(final String cloth_id ,final String way) {
+    public void deleteFromWishList(final String cloth_id, final String way) {
         String tag_string_req = "string_req";
 
         final String userId = sharedPreferences.getString(User_ID, "");
 
 
-
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                REMOVE_FROM_WISHLIST + "/" + TOKEN, new Response.Listener<String>() {
+                REMOVE_FROM_WISHLIST, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    if (way.equalsIgnoreCase("home"))
-                    {
-                    //    Home fragment = (Home) getSupportFragmentManager().findFragmentById(R.id.frameLayout);
-                   //     fragment.getAllProducts();
+                    if (way.equalsIgnoreCase("home")) {
+                        //    Home fragment = (Home) getSupportFragmentManager().findFragmentById(R.id.frameLayout);
+                        //     fragment.getAllProducts();
 
                     }
 
@@ -436,7 +574,20 @@ if (!AppController.getInstance().isOnline())
                 Toast.makeText(MainActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         }
-        ) {
+        )
+
+
+        {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+
+                return params;
+            }
+
+
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
 
@@ -451,16 +602,15 @@ if (!AppController.getInstance().isOnline())
 
     }
 
-    
+
     //---------------------API FOR GET ADD TO WISH LIST----------------------//
-    public void     addToWishList(final  String clothId,String way) {
+    public void addToWishList(final String clothId, String way) {
 
         String tag_string_req = "string_req";
 
 
-
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                ADD_WISH_LIST + TOKEN, new Response.Listener<String>() {
+                ADD_WISH_LIST, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -484,7 +634,18 @@ if (!AppController.getInstance().isOnline())
             }
         }
 
-        ) {
+        )
+
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+
+                return params;
+            }
+
+
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
@@ -497,6 +658,5 @@ if (!AppController.getInstance().isOnline())
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
-
 
 }

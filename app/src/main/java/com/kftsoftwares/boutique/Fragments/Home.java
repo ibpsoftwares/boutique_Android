@@ -39,6 +39,7 @@ import java.util.TimerTask;
 import static com.kftsoftwares.boutique.utils.Constants.GET_ALL_PRODUCTS;
 import static com.kftsoftwares.boutique.utils.Constants.GET_BANNER_IMAGES;
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
+import static com.kftsoftwares.boutique.utils.Constants.UPDATED_TOKEN;
 import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 
 
@@ -62,7 +63,14 @@ public class Home extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity)getActivity()).getCartList();
+        if (sharedPreferences.getString(User_ID,"").equalsIgnoreCase("")) {
+            ((MainActivity)getActivity()).getLocalWishListData();
+            ((MainActivity)getActivity()).getLocalCartListData();
+        }
+        else {
+            ((MainActivity)getActivity()).getCartList();
+        }
+
         ((MainActivity)getActivity()).mCartView.setVisibility(View.VISIBLE);
         ((MainActivity)getActivity()).mHeaderText.setText("Home");
         if (((MainActivity)getActivity()).mCartCount!=0)
@@ -189,16 +197,25 @@ public class Home extends Fragment implements View.OnClickListener {
                     GetAllProductModel getAllProductModel = null;
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
                         getAllProductModel = new GetAllProductModel();
                         getAllProductModel.setCategoryId(jsonObject1.getString("category_id"));
                         getAllProductModel.setTitle(jsonObject1.getString("title"));
                         getAllProductModel.setPrice(jsonObject1.getString("original_price"));
                         getAllProductModel.setOfferPrice(jsonObject1.getString("offer_price"));
                         getAllProductModel.setId(jsonObject1.getString("id"));
-                        if (jsonObject1.has("Wishlist"))
+                        if (jsonObject1.has("wishlist"))
                         {
-                            getAllProductModel.setWish_list(jsonObject1.getString("Wishlist"));
+                            if (sharedPreferences.getString(User_ID,"").equalsIgnoreCase("") && ((MainActivity)getActivity()).mUserIdArrayList.contains(jsonObject1.getString("id")))
+                            {
+                                getAllProductModel.setWish_list("1");
+
+                            }
+
+                            else {
+                                getAllProductModel.setWish_list(jsonObject1.getString("wishlist"));
+
+                            }
+
 
                         }
                         else {
@@ -232,21 +249,30 @@ public class Home extends Fragment implements View.OnClickListener {
             }
         }
 
-        ){
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+
+                return params;
+            }
+
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("user_id",userId);
+                return params;
 
-                Map<String, String> map = new HashMap<>();
-                map.put("user_id", userId);
-                return map;
             }
         };
-
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
 
     }
+
+    //-------------GET BANNER IMAGES----------------------//
 
     private void getBannerImages() {
 
@@ -291,7 +317,15 @@ public class Home extends Fragment implements View.OnClickListener {
             }
         }
 
-        );
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+                return params;
+            }
+
+        };
 
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
@@ -304,15 +338,10 @@ public class Home extends Fragment implements View.OnClickListener {
         switch (v.getId())
         {
             case R.id.leftArrow:
-                if (mViewPager.getCurrentItem() == mCount)
-                {
-
-                }
+                if (mViewPager.getCurrentItem() == mCount) {}
                 else {
                     mVal++;
-                    mViewPager.setCurrentItem(mVal);
-                }
-
+                    mViewPager.setCurrentItem(mVal);}
                 break;
             case R.id. rightArrow:
                 if (mViewPager.getCurrentItem() != 0)

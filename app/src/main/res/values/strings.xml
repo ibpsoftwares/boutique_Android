@@ -23,4 +23,5 @@
     <string name="title_activity_product_details">ProductDetails</string>
     <string name="add_to_wishlist">ADD TO WISHLIST</string>
     <string name="cart_view">Cart View</string>
+    <string name="skip">Skip</string>
 </resources>

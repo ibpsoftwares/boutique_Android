@@ -3,9 +3,7 @@ package com.kftsoftwares.boutique.activities;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
@@ -23,6 +21,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -33,10 +32,12 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.kftsoftwares.boutique.Adapter.ViewPagerAdapterForSingleProduct;
+import com.kftsoftwares.boutique.Models.CartViewModel;
 import com.kftsoftwares.boutique.Models.Image;
 import com.kftsoftwares.boutique.Models.SingleProduct;
 import com.kftsoftwares.boutique.Models.Size;
 import com.kftsoftwares.boutique.R;
+import com.kftsoftwares.boutique.database.DatabaseHandler;
 import com.kftsoftwares.boutique.volly.AppController;
 
 import org.json.JSONArray;
@@ -45,13 +46,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.kftsoftwares.boutique.utils.Constants.ADD_TO_CART;
 import static com.kftsoftwares.boutique.utils.Constants.ADD_WISH_LIST;
 import static com.kftsoftwares.boutique.utils.Constants.GET_SINGLE_PRODUCT;
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
-import static com.kftsoftwares.boutique.utils.Constants.TOKEN;
+import static com.kftsoftwares.boutique.utils.Constants.UPDATED_TOKEN;
 import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 
 public class Productdetails extends AppCompatActivity implements View.OnClickListener {
@@ -60,8 +62,9 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
     private ArrayList<Image> mSingleProductImage;
     private ArrayList<Size> mSingleProductSize;
     private ArrayList<String> mImageString;
+    private ArrayList<SingleProduct> mSingleModel;
     private ViewPager mViewPager;
-    private TextView mDescreption, mPrice, mName,mOldPrice;
+    private TextView mDescreption, mPrice, mName, mOldPrice;
     private SharedPreferences mSharedPreferences;
     private LinearLayout mDots;
     private LinearLayout mSizeLinearLayout;
@@ -69,6 +72,8 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
     private ScrollView mParentScrollView;
     private NestedScrollView mChildScrollView;
     private String mSizeDetail = "";
+    public ArrayList<String> mUserIdArrayList;
+    private DatabaseHandler mDatabaseHandler;
 
     private ImageView[] ivArrayDotsPager;
 
@@ -78,6 +83,11 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_productdetails);
         mDescreption = findViewById(R.id.description);
 
+        mDatabaseHandler = new DatabaseHandler(Productdetails.this);
+        mUserIdArrayList = new ArrayList<>();
+        mSingleModel = new ArrayList<>();
+
+        getLocalWishListData();
         Bundle b = getIntent().getExtras();
         if (b != null) {
             if (b.getString("id") != null) {
@@ -85,6 +95,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
             }
 
         }
+
         mViewPager = findViewById(R.id.viewPager);
         mPrice = findViewById(R.id.newPrice);
         mOldPrice = findViewById(R.id.oldPrice);
@@ -97,10 +108,11 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
         mImageString = new ArrayList<>();
         mSharedPreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         ImageView backButton = findViewById(R.id.backButton);
-        RelativeLayout backLayout  = findViewById(R.id.relativeLayoutBack);
+        RelativeLayout backLayout = findViewById(R.id.relativeLayoutBack);
         mParentScrollView = findViewById(R.id.parentScrollView);
         mChildScrollView = findViewById(R.id.childScrollView);
-        mOldPrice.setPaintFlags(mOldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG |Paint.ANTI_ALIAS_FLAG);
+        mOldPrice.setPaintFlags(mOldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
+
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,10 +142,8 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
             public void onPageSelected(int position) {
                 for (int i = 0; i < ivArrayDotsPager.length; i++) {
                     ivArrayDotsPager[i].setBackground(ContextCompat.getDrawable(Productdetails.this, R.drawable.un_select));
-
                 }
                 ivArrayDotsPager[position].setBackground(ContextCompat.getDrawable(Productdetails.this, R.drawable.selected_dots));
-
             }
 
             @Override
@@ -161,27 +171,95 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    public void getLocalWishListData() {
+
+        List<CartViewModel> list = mDatabaseHandler.getAllDataOfWishlist();
+
+        if (mUserIdArrayList != null) {
+            mUserIdArrayList.clear();
+        }
+
+        if (list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                mUserIdArrayList.add(list.get(i).getClothId());
+            }
+
+        } else {
+
+        }
+
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addToWishList:
-                if (mSizeDetail.equalsIgnoreCase("")) {
-                    Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
-                            R.anim.bounce);
-                    mSizeLinearLayout.startAnimation(animation);
-                    Toast.makeText(this, "Please Select the size first", Toast.LENGTH_SHORT).show();
+                if (mSharedPreferences.getString(User_ID, "").equalsIgnoreCase("")) {
+                    if (mDatabaseHandler.CheckIsDataAlreadyInWishList(mId)) {
+                        Toast.makeText(this, "Already in wishList", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        if (mSizeDetail.equalsIgnoreCase("")) {
+                            Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                                    R.anim.bounce);
+                            mSizeLinearLayout.startAnimation(animation);
+                            Toast.makeText(this, "Please Select the size first", Toast.LENGTH_SHORT).show();
+                        } else {
+
+                            CartViewModel cartViewModel = new CartViewModel();
+                            cartViewModel.setClothId(mSingleModel.get(0).getId());
+                            cartViewModel.setTitle(mSingleModel.get(0).getTitle());
+                            cartViewModel.setImage1(mSingleProductImage.get(0).getImage());
+                            cartViewModel.setPrice(mSingleModel.get(0).getPrice());
+                            cartViewModel.setCat("wishList");
+                            cartViewModel.setCount("1");
+                            mDatabaseHandler.addContact(cartViewModel);
+                            Toast.makeText(this, "Added in wishList", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 } else {
-                    addToWishList();
+
+                    if (mSizeDetail.equalsIgnoreCase("")) {
+                        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                                R.anim.bounce);
+                        mSizeLinearLayout.startAnimation(animation);
+                        Toast.makeText(this, "Please Select the size first", Toast.LENGTH_SHORT).show();
+                    } else {
+                        addToWishList();
+                    }
                 }
                 break;
 
             case R.id.addToCart:
+                if (mSharedPreferences.getString(User_ID, "").equalsIgnoreCase("")) {
+                    if (mDatabaseHandler.CheckIsDataAlreadyInDBorNot(mId)) {
+                        Toast.makeText(this, "Already in cart", Toast.LENGTH_SHORT).show();
 
-                if (mSizeDetail.equalsIgnoreCase("")) {
-                    Toast.makeText(this, "Please Select the size first", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (mSizeDetail.equalsIgnoreCase("")) {
+                            Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                                    R.anim.bounce);
+                            mSizeLinearLayout.startAnimation(animation);
+                            Toast.makeText(this, "Please Select the size first", Toast.LENGTH_SHORT).show();
+                        } else {
+
+                            CartViewModel cartViewModel = new CartViewModel();
+                            cartViewModel.setClothId(mSingleModel.get(0).getId());
+                            cartViewModel.setTitle(mSingleModel.get(0).getTitle());
+                            cartViewModel.setImage1(mSingleProductImage.get(0).getImage());
+                            cartViewModel.setPrice(mSingleModel.get(0).getPrice());
+                            cartViewModel.setCat("cart");
+                            cartViewModel.setCount("1");
+                            mDatabaseHandler.addContact(cartViewModel);
+                            Toast.makeText(this, "Added in cart", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 } else {
-                    addToCart();
+                    if (mSizeDetail.equalsIgnoreCase("")) {
+                        Toast.makeText(this, "Please Select the size first", Toast.LENGTH_SHORT).show();
+                    } else {
+                        addToCart();
+                    }
                 }
                 break;
         }
@@ -198,8 +276,8 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
         pDialog.setCancelable(false);
         pDialog.show();
 
-        StringRequest strReq = new StringRequest(Request.Method.GET,
-                GET_SINGLE_PRODUCT + mId + "/" + TOKEN, new Response.Listener<String>() {
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                GET_SINGLE_PRODUCT, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -249,9 +327,13 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
 
                         mOldPrice.setVisibility(View.VISIBLE);
                         mPrice.setText(object.getString("original_price"));
+                        singleProduct.setPrice(object.getString("offer_price"));
+
                     } else {
                         mOldPrice.setVisibility(View.GONE);
                         mPrice.setText(object.getString("original_price"));
+                        singleProduct.setPrice(object.getString("original_price"));
+
                     }
 
 
@@ -262,6 +344,9 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                     mName.setText(object.getString("title"));
                     mBrandName.setText(object.getString("brand"));
                     mClotheId = object.getString("id");
+                    singleProduct.setId(object.getString("id"));
+                    singleProduct.setTitle(object.getString("title"));
+                    mSingleModel.add(singleProduct);
                     ViewPagerAdapterForSingleProduct viewPagerAdapter = new ViewPagerAdapterForSingleProduct(Productdetails.this, mSingleProductImage, mImageString);
 
                     mViewPager.setAdapter(viewPagerAdapter);
@@ -281,7 +366,21 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                 Toast.makeText(Productdetails.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         }
-        );
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("cloth_id", mId);
+                return params;
+            }
+        };
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
@@ -336,7 +435,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
         pDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                ADD_WISH_LIST + TOKEN, new Response.Listener<String>() {
+                ADD_WISH_LIST, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -363,6 +462,14 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
 
         ) {
             @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+
+                return params;
+            }
+
+            @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("user_id", mSharedPreferences.getString(User_ID, ""));
@@ -385,7 +492,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
         pDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                ADD_TO_CART + TOKEN, new Response.Listener<String>() {
+                ADD_TO_CART, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 pDialog.cancel();
@@ -406,6 +513,13 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                 Toast.makeText(Productdetails.this, "" + error, Toast.LENGTH_SHORT).show();
             }
         }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+                return params;
+            }
+
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();

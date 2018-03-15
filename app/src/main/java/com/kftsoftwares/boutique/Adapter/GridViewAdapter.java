@@ -2,6 +2,8 @@ package com.kftsoftwares.boutique.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -18,14 +20,19 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.kftsoftwares.boutique.Models.CartViewModel;
 import com.kftsoftwares.boutique.Models.GetAllProductModel;
 import com.kftsoftwares.boutique.R;
 import com.kftsoftwares.boutique.activities.MainActivity;
 import com.kftsoftwares.boutique.activities.ProductList;
 import com.kftsoftwares.boutique.activities.Productdetails;
+import com.kftsoftwares.boutique.database.DatabaseHandler;
 
 import java.util.ArrayList;
 import java.util.Locale;
+
+import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
+import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 
 /**
  * Created by apple on 20/02/18.
@@ -37,12 +44,16 @@ public class GridViewAdapter extends BaseAdapter {
 
     private ArrayList<GetAllProductModel> mArrayList;
     private ArrayList<GetAllProductModel> mSortedList;
+    private DatabaseHandler sqLiteOpenHelper;
+    private SharedPreferences sharedPreferences;
 
     public GridViewAdapter(Context context, ArrayList<GetAllProductModel> arrayList) {
         mContext = context;
         mArrayList = arrayList;
         this.mSortedList = new ArrayList<GetAllProductModel>();
         this.mSortedList.addAll(arrayList);
+        sqLiteOpenHelper = new DatabaseHandler(context);
+        sharedPreferences = context.getSharedPreferences(MyPREFERENCES,Context.MODE_PRIVATE);
     }
 
     @Override
@@ -79,7 +90,7 @@ public class GridViewAdapter extends BaseAdapter {
 
                 !mArrayList.get(position).getOfferPrice().equalsIgnoreCase("null")) {
 
-            oldPrice.setPaintFlags(oldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG |Paint.ANTI_ALIAS_FLAG);
+            oldPrice.setPaintFlags(oldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
 
             oldPrice.setVisibility(View.VISIBLE);
             oldPrice.setText(mArrayList.get(position).getPrice());
@@ -102,36 +113,66 @@ public class GridViewAdapter extends BaseAdapter {
                     mArrayList.get(position).setWish_list("0");
                     imageView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.heartborder));
 
+                    sqLiteOpenHelper.removeDataFromWishList(mArrayList.get(position).getId());
+                    if (sharedPreferences.getString(User_ID,"").equalsIgnoreCase(""))
 
-                    if(mContext instanceof  MainActivity)
                     {
-                        ((MainActivity) mContext).deleteFromWishList(mArrayList.get(position).getId(), "home");
+                        if (mContext instanceof MainActivity) {
+                            ((MainActivity)mContext).getLocalWishListData();
 
 
+                        }
+                        else {
+
+                        }
                     }
                     else {
-                        ((ProductList)mContext).deleteFromWishList(mArrayList.get(position).getId(), "home");
+                        if (mContext instanceof MainActivity) {
+                            ((MainActivity) mContext).deleteFromWishList(mArrayList.get(position).getId(), "home");
+
+
+                        } else {
+                            ((ProductList) mContext).deleteFromWishList(mArrayList.get(position).getId(), "home");
+                        }
                     }
 
                     notifyDataSetChanged();
                 } else {
+                    CartViewModel cartViewModel = new CartViewModel();
+                    cartViewModel.setClothId(mArrayList.get(position).getId());
+                    cartViewModel.setTitle(mArrayList.get(position).getTitle());
+                    cartViewModel.setImage1(mArrayList.get(position).getImage1());
+                    cartViewModel.setPrice(mArrayList.get(position).getPrice());
+                    cartViewModel.setCat("wishList");
+                    cartViewModel.setCount("1");
+                    sqLiteOpenHelper.addContact(cartViewModel);
+
                     mArrayList.get(position).setWish_list("1");
                     imageView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.heart));
+                    if (sharedPreferences.getString(User_ID,"").equalsIgnoreCase(""))
 
-
-                    if(mContext instanceof  MainActivity)
                     {
-                        ((MainActivity)mContext).addToWishList(mArrayList.get(position).getId(), "home");
+                        if (mContext instanceof MainActivity) {
+                            ((MainActivity)mContext).getLocalWishListData();
 
 
+                        } else {
+
+                         //   ((ProductList) mContext).addToWishList(mArrayList.get(position).getId(), "home");
+
+                        }
                     }
                     else {
+                        if (mContext instanceof MainActivity) {
+                            ((MainActivity) mContext).addToWishList(mArrayList.get(position).getId(), "home");
 
-                        ((ProductList)mContext).addToWishList(mArrayList.get(position).getId(), "home");
 
+                        } else {
+
+                            ((ProductList) mContext).addToWishList(mArrayList.get(position).getId(), "home");
+
+                        }
                     }
-
-
 
                     notifyDataSetChanged();
 
@@ -184,14 +225,12 @@ public class GridViewAdapter extends BaseAdapter {
 
     }
 
-    public void update(ArrayList<GetAllProductModel> arrayList){
-        if (mArrayList!=null)
-        {
+    public void update(ArrayList<GetAllProductModel> arrayList) {
+        if (mArrayList != null) {
             mArrayList.clear();
         }
 
-        if (mSortedList!=null)
-        {
+        if (mSortedList != null) {
             mSortedList.clear();
         }
 
@@ -204,23 +243,18 @@ public class GridViewAdapter extends BaseAdapter {
     // Filter method
     public void filter(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());
-       mArrayList.clear();
+        mArrayList.clear();
         if (charText.length() == 0) {
             mArrayList.addAll(mSortedList);
-        }
-        else
-        {
-            for (GetAllProductModel wp : mSortedList)
-            {
-                if (wp.getTitle().toLowerCase(Locale.getDefault()).contains(charText) || wp.getBrandName().toLowerCase(Locale.getDefault()).contains(charText))
-                {
+        } else {
+            for (GetAllProductModel wp : mSortedList) {
+                if (wp.getTitle().toLowerCase(Locale.getDefault()).contains(charText) || wp.getBrandName().toLowerCase(Locale.getDefault()).contains(charText)) {
                     mArrayList.add(wp);
                 }
             }
         }
         notifyDataSetChanged();
     }
-
 
 
 }

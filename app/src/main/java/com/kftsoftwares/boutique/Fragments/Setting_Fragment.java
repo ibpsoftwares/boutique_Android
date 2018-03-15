@@ -28,8 +28,7 @@ public class Setting_Fragment extends Fragment implements View.OnClickListener {
         super.onResume();
         ((MainActivity) getActivity()).mCartView.setVisibility(View.GONE);
         ((MainActivity) getActivity()).mCartCountText.setVisibility(View.GONE);
-        ((MainActivity)getActivity()).mHeaderText.setText("Setting");
-
+        ((MainActivity) getActivity()).mHeaderText.setText("Setting");
 
 
     }
@@ -40,7 +39,6 @@ public class Setting_Fragment extends Fragment implements View.OnClickListener {
         ((MainActivity) getActivity()).mCartView.setVisibility(View.GONE);
         ((MainActivity) getActivity()).mCartCountText.setVisibility(View.GONE);
     }
-
 
 
     @Override
@@ -64,19 +62,24 @@ public class Setting_Fragment extends Fragment implements View.OnClickListener {
 
         switch (v.getId()) {
             case R.id.changePassword:
-             startActivity(new Intent(getActivity(), Change_Password.class));
+                startActivity(new Intent(getActivity(), Change_Password.class));
                 //Toast.makeText(getActivity(), "On Working", Toast.LENGTH_SHORT).show();
                 break;
-                case R.id.profile:
-                    Fragment profile = new Profile_Fragment();
+            case R.id.profile:
+                Fragment profile = new Profile_Fragment();
 
-                    ((MainActivity)getActivity()).changeFragment(profile, "Profile",2);
+                ((MainActivity) getActivity()).changeFragment(profile, "Profile", 2);
                 break;
 
             case R.id.signOut:
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
                 sharedPreferences.edit().clear().apply();
-                startActivity(new Intent(getActivity(), SplashScreen.class));
+
+                Intent intent = new Intent(getActivity(), SplashScreen.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                getActivity().finish();
+
 
                 break;
         }

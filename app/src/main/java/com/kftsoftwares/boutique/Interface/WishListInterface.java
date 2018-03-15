@@ -9,5 +9,5 @@ public interface WishListInterface  {
 
     public void updateWishList(String value);
 
-    public void moveToWishList(String wishid , String clothId);
+    public void moveToWishList( String clothId);
 }

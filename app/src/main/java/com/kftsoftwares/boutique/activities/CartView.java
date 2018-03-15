@@ -2,6 +2,7 @@ package com.kftsoftwares.boutique.activities;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,9 +19,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.kftsoftwares.boutique.Adapter.CartViewAdapter;
+import com.kftsoftwares.boutique.Adapter.WishListAdapter;
+import com.kftsoftwares.boutique.Fragments.WishList_Fragment;
 import com.kftsoftwares.boutique.Interface.CartListInterface;
 import com.kftsoftwares.boutique.Models.CartViewModel;
 import com.kftsoftwares.boutique.R;
+import com.kftsoftwares.boutique.database.DatabaseHandler;
 import com.kftsoftwares.boutique.volly.AppController;
 
 import org.json.JSONArray;
@@ -34,6 +38,7 @@ import java.util.Map;
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 import static com.kftsoftwares.boutique.utils.Constants.REMOVE_FROM_CART;
 import static com.kftsoftwares.boutique.utils.Constants.TOKEN;
+import static com.kftsoftwares.boutique.utils.Constants.UPDATED_TOKEN;
 import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 import static com.kftsoftwares.boutique.utils.Constants.VIEW_CART;
 
@@ -43,14 +48,17 @@ public class CartView extends AppCompatActivity implements CartListInterface {
     private SharedPreferences mSharedPreferences;
     private ArrayList<CartViewModel> mCartViewModel;
     private TextView mTotalItemCount , mAmountCount;
-    private int mAmountCountValue;
+    private int mAmountCountValue = 0;
     private RelativeLayout no_data_image;
+    private DatabaseHandler mDatabaseHandler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart_view);
         mSharedPreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+        mDatabaseHandler = new DatabaseHandler(CartView.this);
 
         mListView = (ListView) findViewById(R.id.cartListView);
         ImageView backButton = findViewById(R.id.backButton);
@@ -64,7 +72,49 @@ public class CartView extends AppCompatActivity implements CartListInterface {
             }
         });
         mCartViewModel = new ArrayList<>();
-        getCartList();
+        if (mSharedPreferences.getString(User_ID,"").equalsIgnoreCase("")) {
+            getLocalCartListData();
+        }
+        else {
+            getCartList();
+
+        }
+    }
+
+    private void getLocalCartListData() {
+
+        if (mCartViewModel != null) {
+            mCartViewModel.clear();
+        }
+
+        mCartViewModel.addAll(mDatabaseHandler.getAllDataOfCart());
+
+        if (mCartViewModel.size()>0)
+        {
+            no_data_image.setVisibility(View.GONE);
+            mListView.setVisibility(View.VISIBLE);
+
+            for (int i =0 ;i<mCartViewModel.size();i++)
+            {
+                mAmountCountValue = mAmountCountValue + Integer.valueOf(mCartViewModel.get(i).getPrice());
+
+                mTotalItemCount.setText("Total("+ mCartViewModel.size() +")");
+
+                mAmountCount.setText("$" + mAmountCountValue);
+            }
+
+        }
+        else {
+            no_data_image.setVisibility(View.VISIBLE);
+            mListView.setVisibility(View.GONE);
+
+        }
+
+
+
+        CartViewAdapter cartViewAdapter = new CartViewAdapter(CartView.this, mCartViewModel, CartView.this);
+
+        mListView.setAdapter(cartViewAdapter);
     }
 
     private void getCartList() {
@@ -78,9 +128,9 @@ public class CartView extends AppCompatActivity implements CartListInterface {
         pDialog.setMessage("Loading...");
         pDialog.setCancelable(false);
         pDialog.show();
-        String user_id = mSharedPreferences.getString(User_ID, "");
-        StringRequest strReq = new StringRequest(Request.Method.GET,
-                VIEW_CART + "/" + user_id + "/" + TOKEN, new Response.Listener<String>() {
+      final  String user_id = mSharedPreferences.getString(User_ID, "");
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                VIEW_CART , new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -139,7 +189,24 @@ no_data_image.setVisibility(View.VISIBLE);
             }
         }
 
-        );
+        ){
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<>();
+                map.put("user_id", user_id);
+                return map;
+            }
+        };
 
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
@@ -147,8 +214,16 @@ no_data_image.setVisibility(View.VISIBLE);
 
     @Override
     public void updateCartList(String value) {
+        if (mSharedPreferences.getString(User_ID,"").equalsIgnoreCase("")) {
 
-        removeFromCart(value);
+            mDatabaseHandler.removeDataFromCart(value);
+            getLocalCartListData();
+
+        }
+        else {
+            removeFromCart(value);
+
+        }
 
     }
 
@@ -190,7 +265,7 @@ no_data_image.setVisibility(View.VISIBLE);
 
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                REMOVE_FROM_CART +"/"+TOKEN , new Response.Listener<String>() {
+                REMOVE_FROM_CART, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -215,6 +290,15 @@ no_data_image.setVisibility(View.VISIBLE);
             }
         }
         ){
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+
+                return params;
+            }
+
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> map = new HashMap<>();

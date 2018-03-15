@@ -4,7 +4,11 @@
     package="com.kftsoftwares.boutique">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+
 
     <application
         android:name=".volly.AppController"
@@ -17,14 +21,18 @@
         <activity
             android:name=".activities.LoginActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden">
+
+        </activity>
         <activity
             android:name=".activities.SignUpActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.MainActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait">
+
+        </activity>
         <activity
             android:name=".activities.SplashScreen"
             android:screenOrientation="portrait">

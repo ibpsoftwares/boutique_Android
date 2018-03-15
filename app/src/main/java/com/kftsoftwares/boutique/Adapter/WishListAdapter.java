@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.kftsoftwares.boutique.Interface.WishListInterface;
+import com.kftsoftwares.boutique.Models.CartViewModel;
 import com.kftsoftwares.boutique.Models.WishListModel;
 import com.kftsoftwares.boutique.R;
 import com.kftsoftwares.boutique.activities.Productdetails;
@@ -28,10 +29,10 @@ import java.util.ArrayList;
 public class WishListAdapter extends BaseAdapter {
 
     private Context mContext;
-    private ArrayList<WishListModel> mWishList;
+    private ArrayList<CartViewModel> mWishList;
     private WishListInterface mListener;
 
-    public WishListAdapter(Context context, ArrayList<WishListModel> wishList, WishListInterface activity) {
+    public WishListAdapter(Context context, ArrayList<CartViewModel> wishList, WishListInterface activity) {
 
         mContext = context;
         mWishList = wishList;
@@ -71,11 +72,11 @@ public class WishListAdapter extends BaseAdapter {
 
         name.setText(mWishList.get(position).getTitle());
 
-        if (mWishList.get(position).getOfferprice() != null &&
+        if (mWishList.get(position).getOfferPrice() != null &&
 
-                !mWishList.get(position).getOfferprice().equalsIgnoreCase("null")) {
+                !mWishList.get(position).getOfferPrice().equalsIgnoreCase("null")) {
 
-            price.setText(mWishList.get(position).getOfferprice());
+            price.setText(mWishList.get(position).getOfferPrice());
         } else {
             price.setText(mWishList.get(position).getPrice());
         }
@@ -91,7 +92,7 @@ public class WishListAdapter extends BaseAdapter {
         moveToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.moveToWishList(mWishList.get(position).getWishListID(), mWishList.get(position).getClothId());
+                mListener.moveToWishList(mWishList.get(position).getClothId());
             }
         });
 

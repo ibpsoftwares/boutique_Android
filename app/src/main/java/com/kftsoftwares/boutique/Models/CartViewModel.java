@@ -22,6 +22,24 @@ public class CartViewModel
     private String image1;
     private String count;
     private String offerPrice;
+    private String brand;
+    private String cat;
+
+    public String getCat() {
+        return cat;
+    }
+
+    public void setCat(String cat) {
+        this.cat = cat;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
 
     public String getOfferPrice() {
         return offerPrice;
