@@ -1,16 +1,24 @@
 package com.kftsoftwares.boutique.activities;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,7 +33,9 @@ import com.kftsoftwares.boutique.Fragments.Home;
 import com.kftsoftwares.boutique.Fragments.Profile_Fragment;
 import com.kftsoftwares.boutique.Fragments.Setting_Fragment;
 import com.kftsoftwares.boutique.Fragments.WishList_Fragment;
+import com.kftsoftwares.boutique.Interface.WishListInterfaceForActivity;
 import com.kftsoftwares.boutique.Models.CartViewModel;
+import com.kftsoftwares.boutique.Models.Size;
 import com.kftsoftwares.boutique.R;
 import com.kftsoftwares.boutique.database.DatabaseHandler;
 import com.kftsoftwares.boutique.utils.Util;
@@ -41,6 +51,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.kftsoftwares.boutique.utils.Constants.ADD_WISH_LIST;
+import static com.kftsoftwares.boutique.utils.Constants.GET_SIZES;
 import static com.kftsoftwares.boutique.utils.Constants.GET_WISH_LIST;
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 import static com.kftsoftwares.boutique.utils.Constants.REMOVE_FROM_WISHLIST;
@@ -48,18 +59,23 @@ import static com.kftsoftwares.boutique.utils.Constants.UPDATED_TOKEN;
 import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 import static com.kftsoftwares.boutique.utils.Constants.VIEW_CART;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,WishListInterfaceForActivity {
 
 
+    private static final String TAG = "MainActiv.BottomSlider";
     private RelativeLayout mHome, mCategory, mProfile, mSetting, mWishList, mAccount;
     public ImageView mCartView, mProfileImageHeader;
     private SharedPreferences sharedPreferences;
     public TextView mWishCountText, mCartCountText, mHeaderText;
     private Util mUtil;
+    private ProgressBar mProgressBar;
     //testing
     public int mCartCount;
     private DatabaseHandler mDatabaseHandler;
     public ArrayList<String> mUserIdArrayList;
+    public BottomSheetBehavior mBottomSheetBehavior;
+    public LinearLayout mBottomContainer;
+    public Button mSubmit;
 
 
     @Override
@@ -69,13 +85,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (sharedPreferences.getString(User_ID, "").equalsIgnoreCase("")) {
             getLocalWishListData();
             getLocalCartListData();
-            mProfile.setVisibility(View.GONE);
-            mSetting.setVisibility(View.GONE);
             mProfileImageHeader.setVisibility(View.VISIBLE);
         } else {
             getWishList();
             getCartList();
-            mProfile.setVisibility(View.VISIBLE);
             mSetting.setVisibility(View.VISIBLE);
             mProfileImageHeader.setVisibility(View.GONE);
 
@@ -142,7 +155,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mWishCountText = findViewById(R.id.wishListCount);
         mHeaderText = findViewById(R.id.headerText);
         mCartCountText = findViewById(R.id.cartCount);
+        mProgressBar = findViewById(R.id.progressBar);
+        mBottomContainer = findViewById(R.id.container);
         mProfileImageHeader = findViewById(R.id.profileHeader);
+        mSubmit = findViewById(R.id.submit);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.
                 beginTransaction().add(R.id.frameLayout, new Home(), "");
@@ -154,10 +170,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSetting.setOnClickListener(this);
         mWishList.setOnClickListener(this);
         mAccount.setOnClickListener(this);
+        mSubmit.setOnClickListener(this);
         mProfileImageHeader.setOnClickListener(this);
         mCartView.setOnClickListener(this);
         mUserIdArrayList = new ArrayList<>();
         sharedPreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+        JSONArray jsonArray = new JSONArray();
+
+
+
+
    /*     Card card = new Card("4242-4242-4242-4242", 12, 2019, "123");
 
         if (!card.validateCard()) {
@@ -183,7 +205,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
             );
         }*/
+//Find bottom Sheet ID
+        View bottomSheet = findViewById(R.id.bottom_sheet);
 
+        ImageView imageView = bottomSheet.findViewById(R.id.imageView);
+        imageView.setOnClickListener(this);
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+        //By default set BottomSheet Behavior as Collapsed and Height 0
+        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        mBottomSheetBehavior.setPeekHeight(0);
+        //If you want to handle callback of Sheet Behavior you can use below code
+        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        Log.d(TAG, "State Collapsed");
+                        break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        Log.d(TAG, "State Dragging");
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        Log.d(TAG, "State Expanded");
+                        break;
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        Log.d(TAG, "State Hidden");
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        Log.d(TAG, "State Settling");
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+            }
+        });
     }
 
 
@@ -230,10 +288,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.settingRelativeLayout:
 
-                if (f instanceof Setting_Fragment) {
+                if (sharedPreferences.getString(User_ID,"").equalsIgnoreCase(""))
+                {
+                    Toast.makeText(this, "Please login first", Toast.LENGTH_SHORT).show();
+                }else {
 
-                } else {
-                    changeFragment(new Setting_Fragment(), "Setting", 3);
+                    if (f instanceof Setting_Fragment) {
+
+                    } else {
+                        changeFragment(new Setting_Fragment(), "Setting", 3);
+                    }
                 }
                 break;
 
@@ -246,8 +310,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 finish();
                 break;
             case R.id.profileHeader:
+            /*    if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
+                    //If state is in collapse mode expand it
+                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                else
+                    //else if state is expanded collapse it
+                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                */
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 finish();
+
+                break;
+
+            case R.id.imageView:
+
+                mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 break;
 
 
@@ -326,11 +403,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         String tag_string_req = "string_req";
 
+        showProgressBar(true);
 
-        final ProgressDialog pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Loading...");
-        pDialog.setCancelable(false);
-        pDialog.show();
 
         final String userId = sharedPreferences.getString(User_ID, "");
 
@@ -339,8 +413,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onResponse(String response) {
-                pDialog.cancel();
-                pDialog.dismiss();
+
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
@@ -357,13 +430,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                } finally {
+                    showProgressBar(false);
+
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                pDialog.cancel();
-                pDialog.dismiss();
+                showProgressBar(false);
+
             }
         }
         ) {
@@ -457,18 +533,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         String tag_string_req = "string_req";
 
-        final ProgressDialog pDialog = new ProgressDialog(MainActivity.this);
-        pDialog.setMessage("Loading...");
-        pDialog.setCancelable(false);
-        pDialog.show();
+        showProgressBar(true);
+
         String user_id = sharedPreferences.getString(User_ID, "");
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 VIEW_CART, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
-                pDialog.cancel();
-                pDialog.dismiss();
+
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
@@ -502,6 +575,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                } finally {
+                    showProgressBar(false);
+
                 }
 
             }
@@ -509,8 +585,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                pDialog.cancel();
-                pDialog.dismiss();
+                showProgressBar(false);
+
                 Toast.makeText(MainActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
 
             }
@@ -658,5 +734,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
+
+    //---------------------ProgressBar-------------------------//
+    public void showProgressBar(boolean show) {
+        if (show) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        } else {
+            mProgressBar.setVisibility(View.GONE);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        }
+    }
+
+    //--------------------Show OR Hide Bottom Sheet------------//
+    public void showBottomSheet() {
+        if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
+            //If state is in collapse mode expand it
+            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        else
+            //else if state is expanded collapse it
+            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
+
+
+    @Override
+    public void moveToWishList(String clothId, int position, ArrayList<CartViewModel> cartViewModels) {
+    }
+
 
 }

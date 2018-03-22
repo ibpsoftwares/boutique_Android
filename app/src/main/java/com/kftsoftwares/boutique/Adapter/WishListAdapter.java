@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.kftsoftwares.boutique.Interface.WishListInterface;
+import com.kftsoftwares.boutique.Interface.WishListInterfaceForActivity;
 import com.kftsoftwares.boutique.Models.CartViewModel;
 import com.kftsoftwares.boutique.Models.WishListModel;
 import com.kftsoftwares.boutique.R;
@@ -34,8 +35,9 @@ public class WishListAdapter extends BaseAdapter {
 
     public WishListAdapter(Context context, ArrayList<CartViewModel> wishList, WishListInterface activity) {
 
+        mWishList = new ArrayList<>();
         mContext = context;
-        mWishList = wishList;
+        mWishList.addAll(wishList);
         mListener = activity;
     }
 
@@ -55,7 +57,7 @@ public class WishListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
 
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.wishlist_adapter, null);
@@ -85,14 +87,16 @@ public class WishListAdapter extends BaseAdapter {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.updateWishList(mWishList.get(position).getClothId());
+                mListener.updateWishList(mWishList.get(position).getClothId(),position,mWishList);
             }
         });
 
         moveToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.moveToWishList(mWishList.get(position).getClothId());
+
+                mListener.moveToWishList(mWishList.get(position).getClothId(),position,mWishList);
+
             }
         });
 
@@ -108,5 +112,15 @@ public class WishListAdapter extends BaseAdapter {
         });
 
         return convertView;
+    }
+
+    public void UpdateData(ArrayList<CartViewModel> wishList)
+    {
+        if (mWishList!=null)
+        {
+            mWishList.clear();
+        }
+        mWishList.addAll(wishList);
+        notifyDataSetChanged();
     }
 }

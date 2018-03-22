@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -26,7 +27,7 @@ import java.util.Map;
 import static com.kftsoftwares.boutique.utils.Constants.CHANGE_PASSWORD;
 import static com.kftsoftwares.boutique.utils.Constants.Email;
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
-import static com.kftsoftwares.boutique.utils.Constants.TOKEN;
+import static com.kftsoftwares.boutique.utils.Constants.UPDATED_TOKEN;
 import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 
 public class Change_Password extends AppCompatActivity {
@@ -83,7 +84,7 @@ public class Change_Password extends AppCompatActivity {
         pDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                CHANGE_PASSWORD + "/" + TOKEN, new Response.Listener<String>() {
+                CHANGE_PASSWORD, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -118,6 +119,14 @@ public class Change_Password extends AppCompatActivity {
                 params.put("old_password", mOldPassword.getText().toString());
                 return params;
             }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+
+                return params;
+            }
+
         };
 
 // Adding request to request queue

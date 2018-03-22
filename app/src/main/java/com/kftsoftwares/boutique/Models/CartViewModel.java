@@ -24,6 +24,16 @@ public class CartViewModel
     private String offerPrice;
     private String brand;
     private String cat;
+    private String size;
+    private String size_id;
+
+    public String getSize_id() {
+        return size_id;
+    }
+
+    public void setSize_id(String size_id) {
+        this.size_id = size_id;
+    }
 
     public String getCat() {
         return cat;
@@ -75,6 +85,14 @@ public class CartViewModel
 
     public String getCategoryId() {
         return categoryId;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 
     public void setCategoryId(String categoryId) {

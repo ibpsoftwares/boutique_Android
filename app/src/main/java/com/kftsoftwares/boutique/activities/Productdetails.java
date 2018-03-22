@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -74,7 +75,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
     private String mSizeDetail = "";
     public ArrayList<String> mUserIdArrayList;
     private DatabaseHandler mDatabaseHandler;
-
+        private String mSizeID;
     private ImageView[] ivArrayDotsPager;
 
     @Override
@@ -197,7 +198,6 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                 if (mSharedPreferences.getString(User_ID, "").equalsIgnoreCase("")) {
                     if (mDatabaseHandler.CheckIsDataAlreadyInWishList(mId)) {
                         Toast.makeText(this, "Already in wishList", Toast.LENGTH_SHORT).show();
-
                     } else {
                         if (mSizeDetail.equalsIgnoreCase("")) {
                             Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
@@ -211,6 +211,8 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                             cartViewModel.setTitle(mSingleModel.get(0).getTitle());
                             cartViewModel.setImage1(mSingleProductImage.get(0).getImage());
                             cartViewModel.setPrice(mSingleModel.get(0).getPrice());
+                            cartViewModel.setSize("noData");
+                            cartViewModel.setSize_id("");
                             cartViewModel.setCat("wishList");
                             cartViewModel.setCount("1");
                             mDatabaseHandler.addContact(cartViewModel);
@@ -232,27 +234,27 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
 
             case R.id.addToCart:
                 if (mSharedPreferences.getString(User_ID, "").equalsIgnoreCase("")) {
-                    if (mDatabaseHandler.CheckIsDataAlreadyInDBorNot(mId)) {
+
+                    if (mSizeDetail.equalsIgnoreCase("")) {
+                        Toast.makeText(this, "Please select the size first", Toast.LENGTH_SHORT).show();
+                        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
+                                R.anim.bounce);
+                        mSizeLinearLayout.startAnimation(animation);
+                    } else if (mDatabaseHandler.CheckIsDataAlreadyInDBorNotWithSize(mId, mSizeDetail)) {
                         Toast.makeText(this, "Already in cart", Toast.LENGTH_SHORT).show();
 
                     } else {
-                        if (mSizeDetail.equalsIgnoreCase("")) {
-                            Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),
-                                    R.anim.bounce);
-                            mSizeLinearLayout.startAnimation(animation);
-                            Toast.makeText(this, "Please Select the size first", Toast.LENGTH_SHORT).show();
-                        } else {
-
-                            CartViewModel cartViewModel = new CartViewModel();
-                            cartViewModel.setClothId(mSingleModel.get(0).getId());
-                            cartViewModel.setTitle(mSingleModel.get(0).getTitle());
-                            cartViewModel.setImage1(mSingleProductImage.get(0).getImage());
-                            cartViewModel.setPrice(mSingleModel.get(0).getPrice());
-                            cartViewModel.setCat("cart");
-                            cartViewModel.setCount("1");
-                            mDatabaseHandler.addContact(cartViewModel);
-                            Toast.makeText(this, "Added in cart", Toast.LENGTH_SHORT).show();
-                        }
+                        CartViewModel cartViewModel = new CartViewModel();
+                        cartViewModel.setClothId(mSingleModel.get(0).getId());
+                        cartViewModel.setTitle(mSingleModel.get(0).getTitle());
+                        cartViewModel.setImage1(mSingleProductImage.get(0).getImage());
+                        cartViewModel.setPrice(mSingleModel.get(0).getPrice());
+                        cartViewModel.setSize(mSizeDetail);
+                        cartViewModel.setSize_id(mSizeID);
+                        cartViewModel.setCat("cart");
+                        cartViewModel.setCount("1");
+                        mDatabaseHandler.addContact(cartViewModel);
+                        Toast.makeText(this, "Added in cart", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     if (mSizeDetail.equalsIgnoreCase("")) {
@@ -293,7 +295,6 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
 
                     JSONObject object = jsonArray.getJSONObject(0);
                     singleProduct = new SingleProduct();
-                    singleProduct.setColour(object.getString("colour"));
                     singleProduct.setDescription(object.getString("description"));
                     singleProduct.setTitle(object.getString("title"));
                     singleProduct.setPrice(object.getString("original_price"));
@@ -314,6 +315,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                         JSONObject object1 = jsonArray2.getJSONObject(j);
                         size = new Size();
                         size.setSize(object1.getString("size"));
+                        size.setSize_id(object1.getString("id"));
                         mSingleProductSize.add(size);
 
                     }
@@ -391,18 +393,19 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
     private void setUpSizes() {
         mSizeLinearLayout.removeAllViews();
         // create two layouts to hold buttons
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(90, 90);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.rightMargin = 10;
+        params.gravity = Gravity.CENTER;
         // create buttons in a loop
         for (int i = 0; i < mSingleProductSize.size(); i++) {
-            final Button button = new Button(this);
+            final TextView button = new TextView(this);
             button.setText(String.valueOf(mSingleProductSize.get(i).getSize()));
             // R.id won't be generated for us, so we need to create one
-            button.setId(i);
+            button.setId(Integer.valueOf(mSingleProductSize.get(i).getSize_id()));
             button.setLayoutParams(params);
             button.setGravity(Gravity.CENTER);
             button.setTextColor(ContextCompat.getColor(this, R.color.black));
-            button.setTextSize(9);
+            button.setTextSize(10);
             if (String.valueOf(mSingleProductSize.get(i).getSize()).equalsIgnoreCase(mSizeDetail)) {
                 button.setBackground(ContextCompat.getDrawable(Productdetails.this, R.drawable.round_button_colored));
                 button.setTextColor(ContextCompat.getColor(this, R.color.white));
@@ -415,6 +418,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                 @Override
                 public void onClick(View v) {
                     mSizeDetail = button.getText().toString();
+                    mSizeID = String.valueOf(button.getId());
                     setUpSizes();
                 }
             });
@@ -526,6 +530,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                 params.put("user_id", mSharedPreferences.getString(User_ID, ""));
                 params.put("cloth_id", mClotheId);
                 params.put("quantity", "1");
+                params.put("size_id", mSizeID);
                 return params;
             }
         };

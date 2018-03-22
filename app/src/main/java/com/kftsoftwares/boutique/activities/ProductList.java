@@ -57,7 +57,6 @@ import static com.kftsoftwares.boutique.utils.Constants.GET_ALL_CATEGORIES_BY_ID
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 import static com.kftsoftwares.boutique.utils.Constants.PRICE_RANGE;
 import static com.kftsoftwares.boutique.utils.Constants.REMOVE_FROM_WISHLIST;
-import static com.kftsoftwares.boutique.utils.Constants.TOKEN;
 import static com.kftsoftwares.boutique.utils.Constants.UPDATED_TOKEN;
 import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 
@@ -455,7 +454,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         pDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.GET,
-                PRICE_RANGE + "/" + TOKEN, new Response.Listener<String>() {
+                PRICE_RANGE, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -492,7 +491,17 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
                 Toast.makeText(ProductList.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         }
-        );
+        )
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+
+                return params;
+            }
+
+        };
 
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
@@ -713,7 +722,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
 
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                REMOVE_FROM_WISHLIST + "/" + TOKEN, new Response.Listener<String>() {
+                REMOVE_FROM_WISHLIST, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -727,7 +736,6 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
 
                     }
 
-                   // getWishListWithoutLoader();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -749,6 +757,14 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
                 map.put("cloth_id", cloth_id);
                 return map;
             }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+
+                return params;
+            }
+
         };
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);

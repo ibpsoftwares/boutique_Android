@@ -12,13 +12,15 @@
         android:id="@+id/productImage"
         android:layout_width="match_parent"
         android:layout_height="220sp"
+        android:src="@mipmap/placeholder"
         android:adjustViewBounds="true"
         android:contentDescription="@string/app_name"
-        android:scaleType="fitXY" />
+        android:scaleType="fitCenter" />
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/progrss_bar"
+            android:visibility="gone"
             android:layout_centerInParent="true"
             />
 
@@ -53,8 +55,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/name"
             android:layout_marginTop="3dp"
-
-            android:text="233$"
             android:textColor="@color/black"
             android:textSize="14sp" />
 
@@ -65,7 +65,6 @@
             android:layout_marginStart="10sp"
             android:layout_marginTop="3dp"
             android:layout_toEndOf="@+id/price"
-            android:text="233$"
             android:id="@+id/oldPrice"
             android:textColor="@android:color/holo_red_dark"
             android:textSize="14sp" />
@@ -77,7 +76,6 @@
             android:layout_below="@+id/price"
             android:layout_marginTop="3dp"
             android:lines="1"
-            android:text="Men Tailored Fit Formal Shirt"
             android:textColor="@color/gray"
             android:textSize="14sp" />
     </RelativeLayout>

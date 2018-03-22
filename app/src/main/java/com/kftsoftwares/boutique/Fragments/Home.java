@@ -1,5 +1,6 @@
 package com.kftsoftwares.boutique.Fragments;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -48,34 +50,45 @@ public class Home extends Fragment implements View.OnClickListener {
     private ArrayList<GetAllProductModel> mGetAllProductModels;
     private GridView mGridView;
     private ArrayList<String> mBannerImages;
+    private ArrayList<String> mNewBannerImages;
     private ViewPagerAdapter mViewPagerAdapter;
-    private ImageView mRightImage ,mLeftImage;
+    private ImageView mRightImage, mLeftImage;
     private ViewPager mViewPager;
     private int mCount;
-    private int mVal=0;
+    private int mVal = 0;
     int currentPage = 0;
     private SharedPreferences sharedPreferences;
     private Timer timer;
-    final long DELAY_MS = 500;//delay in milliseconds before task is to be executed
-    final long PERIOD_MS = 1500; // time in milliseconds between successive task executions.
+    final long DELAY_MS = 800;//delay in milliseconds before task is to be executed
+    final long PERIOD_MS = 1800; // time in milliseconds between successive task executions.
+    private int n = 0;
+    private int totalsize = 0;
+    int mMaxVal = 360;
+    private MainActivity mContext;
+    private TextView mNoDataFound;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = ((MainActivity)context);
+    }
+
 
 
     @Override
     public void onResume() {
         super.onResume();
-        if (sharedPreferences.getString(User_ID,"").equalsIgnoreCase("")) {
-            ((MainActivity)getActivity()).getLocalWishListData();
-            ((MainActivity)getActivity()).getLocalCartListData();
-        }
-        else {
-            ((MainActivity)getActivity()).getCartList();
+        if (sharedPreferences.getString(User_ID, "").equalsIgnoreCase("")) {
+             mContext.getLocalWishListData();
+          mContext.getLocalCartListData();
+        } else {
+            mContext.getCartList();
         }
 
-        ((MainActivity)getActivity()).mCartView.setVisibility(View.VISIBLE);
-        ((MainActivity)getActivity()).mHeaderText.setText("Home");
-        if (((MainActivity)getActivity()).mCartCount!=0)
-        {
-            ((MainActivity)getActivity()).mCartCountText.setVisibility(View.VISIBLE);
+       mContext.mCartView.setVisibility(View.VISIBLE);
+         mContext.mHeaderText.setText("Home");
+        if ( mContext.mCartCount != 0) {
+             mContext.mCartCountText.setVisibility(View.VISIBLE);
 
         }
         getAllProducts();
@@ -90,42 +103,40 @@ public class Home extends Fragment implements View.OnClickListener {
 
         mViewPager = view.findViewById(R.id.viewPager);
 
-        mViewPagerAdapter = new ViewPagerAdapter(getActivity(),new ArrayList<String>());
+        mViewPagerAdapter = new ViewPagerAdapter(mContext, new ArrayList<String>());
         mViewPager.setAdapter(mViewPagerAdapter);
 
         mGridView = view.findViewById(R.id.gridView);
 
         mRightImage = view.findViewById(R.id.rightArrow);
         mLeftImage = view.findViewById(R.id.leftArrow);
-
+mNoDataFound = view.findViewById(R.id.noDataFound);
         mRightImage.setOnClickListener(this);
         mLeftImage.setOnClickListener(this);
 
         mGetAllProductModels = new ArrayList<>();
         mBannerImages = new ArrayList<>();
+        mNewBannerImages = new ArrayList<>();
         getBannerImages();
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                if (position + 1 == mCount)
-                {
+                if (position == mMaxVal) {
                     mLeftImage.setVisibility(View.GONE);
-                }
-                else {
+                } else {
                     mLeftImage.setVisibility(View.VISIBLE);
 
                 }
-                if (position == 0)
-                {
+                if (position == 0) {
                     mRightImage.setVisibility(View.GONE);
-                }
-                else {
+                } else {
                     mRightImage.setVisibility(View.VISIBLE);
 
                 }
 
                 currentPage = position;
+                mVal = currentPage;
             }
 
             @Override
@@ -143,31 +154,82 @@ public class Home extends Fragment implements View.OnClickListener {
         final Handler handler = new Handler();
         final Runnable Update = new Runnable() {
             public void run() {
-                if (currentPage == mCount) {
+                if (currentPage == mMaxVal) {
                     currentPage = 0;
                 }
+
+
                 mViewPager.setCurrentItem(currentPage++, true);
-                mVal = currentPage;
             }
         };
 
         timer = new Timer(); // This will create a new Thread
-        timer .schedule(new TimerTask() { // task to be scheduled
+        timer.schedule(new TimerTask() { // task to be scheduled
 
             @Override
             public void run() {
+
+
                 handler.post(Update);
             }
         }, DELAY_MS, PERIOD_MS);
 
-        sharedPreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        sharedPreferences = mContext.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         return view;
 
     }
 
 
-    //---------------GET ALL PRODUCTS---------------------------//
+    private void getArray(ArrayList<String> bannner, int val) {
+        if (val == bannner.size()) {
+            n = 0;
+        }
 
+        if(totalsize<=mMaxVal)
+
+        {
+            totalsize++;
+            if (n < bannner.size()) {
+                mNewBannerImages.add(bannner.get(n));
+                n++;
+                getArray(mBannerImages, n);
+
+            }
+        }
+        else {
+
+            mViewPagerAdapter.update(mNewBannerImages);
+
+
+        }
+
+
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.leftArrow:
+                if (mViewPager.getCurrentItem() == mMaxVal) {
+                } else {
+                    mVal++;
+                    mViewPager.setCurrentItem(mVal);
+                }
+                break;
+            case R.id.rightArrow:
+                if (mViewPager.getCurrentItem() != 0) {
+                    mVal--;
+                    mViewPager.setCurrentItem(mVal);
+                }
+                break;
+        }
+
+    }
+
+
+
+    //---------------GET ALL PRODUCTS---------------------------//
     public void getAllProducts() {
 
         if (mGetAllProductModels != null) {
@@ -176,11 +238,8 @@ public class Home extends Fragment implements View.OnClickListener {
 
         String tag_string_req = "string_req";
 
-        final ProgressDialog pDialog = new ProgressDialog(getActivity());
-        pDialog.setMessage("Loading...");
-        pDialog.setCancelable(false);
 
-        pDialog.show();
+        mContext.showProgressBar(true);
         final String userId = sharedPreferences.getString(User_ID, "");
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -188,54 +247,57 @@ public class Home extends Fragment implements View.OnClickListener {
 
             @Override
             public void onResponse(String response) {
-                pDialog.cancel();
-                pDialog.dismiss();
+
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
                     JSONArray jsonArray = jsonObject.getJSONArray("data1");
                     GetAllProductModel getAllProductModel = null;
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        getAllProductModel = new GetAllProductModel();
-                        getAllProductModel.setCategoryId(jsonObject1.getString("category_id"));
-                        getAllProductModel.setTitle(jsonObject1.getString("title"));
-                        getAllProductModel.setPrice(jsonObject1.getString("original_price"));
-                        getAllProductModel.setOfferPrice(jsonObject1.getString("offer_price"));
-                        getAllProductModel.setId(jsonObject1.getString("id"));
-                        if (jsonObject1.has("wishlist"))
-                        {
-                            if (sharedPreferences.getString(User_ID,"").equalsIgnoreCase("") && ((MainActivity)getActivity()).mUserIdArrayList.contains(jsonObject1.getString("id")))
-                            {
-                                getAllProductModel.setWish_list("1");
+
+                    if (jsonArray.length()>0) {
+                        mNoDataFound.setVisibility(View.GONE);
+                        mGridView.setVisibility(View.VISIBLE);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                            getAllProductModel = new GetAllProductModel();
+                            getAllProductModel.setCategoryId(jsonObject1.getString("category_id"));
+                            getAllProductModel.setTitle(jsonObject1.getString("title"));
+                            getAllProductModel.setPrice(jsonObject1.getString("original_price"));
+                            getAllProductModel.setOfferPrice(jsonObject1.getString("offer_price"));
+                            getAllProductModel.setId(jsonObject1.getString("id"));
+                            if (jsonObject1.has("wishlist")) {
+                                if (sharedPreferences.getString(User_ID, "").equalsIgnoreCase("") && mContext.mUserIdArrayList.contains(jsonObject1.getString("id"))) {
+                                    getAllProductModel.setWish_list("1");
+                                } else {
+                                    getAllProductModel.setWish_list(jsonObject1.getString("wishlist"));
+                                }
+                            } else {
+                                getAllProductModel.setWish_list("0");
 
                             }
+                            getAllProductModel.setBrandName(jsonObject1.getString("brand"));
+                            getAllProductModel.setCategoryName(jsonObject1.getString("category_name"));
+                            getAllProductModel.setImage1(jsonObject1.getString("image1"));
 
-                            else {
-                                getAllProductModel.setWish_list(jsonObject1.getString("wishlist"));
-
-                            }
-
-
-                        }
-                        else {
-                            getAllProductModel.setWish_list("0");
+                            mGetAllProductModels.add(getAllProductModel);
 
                         }
-                          getAllProductModel.setBrandName(jsonObject1.getString("brand"));
-                        getAllProductModel.setCategoryName(jsonObject1.getString("category_name"));
-                        getAllProductModel.setImage1(jsonObject1.getString("image1"));
 
-                        mGetAllProductModels.add(getAllProductModel);
 
+                        GridViewAdapter gridViewAdapter = new GridViewAdapter(mContext, mGetAllProductModels);
+                        mGridView.setAdapter(gridViewAdapter);
                     }
+                    else {
 
-
-                    GridViewAdapter gridViewAdapter = new GridViewAdapter(getActivity(), mGetAllProductModels);
-                    mGridView.setAdapter(gridViewAdapter);
+                        mGridView.setVisibility(View.GONE);
+                        mNoDataFound.setVisibility(View.VISIBLE);
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                }
+                finally {
+                    mContext.showProgressBar(false);
                 }
 
             }
@@ -243,9 +305,8 @@ public class Home extends Fragment implements View.OnClickListener {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                pDialog.cancel();
-                pDialog.dismiss();
-                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                mContext.showProgressBar(false);
+                Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -261,7 +322,7 @@ public class Home extends Fragment implements View.OnClickListener {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("user_id",userId);
+                params.put("user_id", userId);
                 return params;
 
             }
@@ -272,48 +333,47 @@ public class Home extends Fragment implements View.OnClickListener {
 
     }
 
-    //-------------GET BANNER IMAGES----------------------//
 
+
+    //-------------GET BANNER IMAGES----------------------//
     private void getBannerImages() {
 
         String tag_string_req = "string_req";
-
-        final ProgressDialog pDialog = new ProgressDialog(getActivity());
-        pDialog.setMessage("Loading...");
-        pDialog.setCancelable(false);
-        pDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.GET,
                 GET_BANNER_IMAGES, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
-                pDialog.cancel();
-                pDialog.dismiss();
+
                 try {
+
                     JSONObject jsonObject = new JSONObject(response);
 
                     JSONArray jsonArray = jsonObject.getJSONArray("bannerImages");
+
+
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
                         mBannerImages.add(jsonObject1.getString("image"));
 
                     }
+
+
                     mCount = jsonArray.length();
-                    mViewPagerAdapter.update(mBannerImages);
+                    getArray(mBannerImages,0);
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                pDialog.cancel();
-                pDialog.dismiss();
-                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -333,24 +393,5 @@ public class Home extends Fragment implements View.OnClickListener {
 
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId())
-        {
-            case R.id.leftArrow:
-                if (mViewPager.getCurrentItem() == mCount) {}
-                else {
-                    mVal++;
-                    mViewPager.setCurrentItem(mVal);}
-                break;
-            case R.id. rightArrow:
-                if (mViewPager.getCurrentItem() != 0)
-                {
-                    mVal--;
-                    mViewPager.setCurrentItem(mVal);
-                }
-                break;
-        }
 
-    }
 }

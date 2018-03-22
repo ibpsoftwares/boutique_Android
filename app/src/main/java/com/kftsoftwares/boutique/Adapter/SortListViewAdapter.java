@@ -38,7 +38,6 @@ public class SortListViewAdapter extends BaseAdapter {
         mDataModel = modelArrayList;
         mSortInterfaceListener = sortListener;
        sharedPreferences = mContext.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-
     }
 
     @Override

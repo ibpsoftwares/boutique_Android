@@ -2,20 +2,17 @@ package com.kftsoftwares.boutique.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.kftsoftwares.boutique.Interface.CartListInterface;
 import com.kftsoftwares.boutique.Models.CartViewModel;
-import com.kftsoftwares.boutique.Models.Image;
 import com.kftsoftwares.boutique.R;
 import com.kftsoftwares.boutique.activities.Productdetails;
 
@@ -66,6 +63,7 @@ public class CartViewAdapter extends BaseAdapter {
         ImageView circleImageView = convertView.findViewById(R.id.profile_image);
         TextView price = convertView.findViewById(R.id.price);
         TextView name = convertView.findViewById(R.id.name);
+        TextView size = convertView.findViewById(R.id.size);
         final TextView qnt_count = convertView.findViewById(R.id.qnt_count);
         qnt_count.setText(mCartList.get(position).getCount());
 
@@ -118,11 +116,12 @@ public class CartViewAdapter extends BaseAdapter {
                 .into(circleImageView);
 
         price.setText(mCartList.get(position).getPrice());
+        size.setText("Size : "+ mCartList.get(position).getSize());
         ImageView delete= convertView.findViewById(R.id.delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.updateCartList(mCartList.get(position).getClothId());
+                mListener.updateCartList(mCartList.get(position).getClothId(),mCartList.get(position).getSize(), position,mCartList.get(position).getSize_id());
             }
         });
         convertView.setOnClickListener(new View.OnClickListener() {
@@ -137,5 +136,15 @@ public class CartViewAdapter extends BaseAdapter {
         });
 
         return convertView;
+    }
+
+    public void updateData(ArrayList<CartViewModel> cartViewModels)
+    {
+        if (mCartList!=null)
+        {
+            mCartList.clear();
+        }
+        mCartList.addAll(cartViewModels);
+        notifyDataSetChanged();
     }
 }

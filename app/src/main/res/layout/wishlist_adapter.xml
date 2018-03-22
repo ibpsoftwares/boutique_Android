@@ -1,42 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="10dp">
 
     <com.kftsoftwares.boutique.utils.CircularImageView
+        android:id="@+id/profile_image"
         android:layout_width="66dp"
         android:layout_height="66dp"
         app:civ_border_color="#EEEEEE"
         app:civ_border_width="1dp"
         app:civ_shadow="true"
-        android:id="@+id/profile_image"
-        app:civ_shadow_radius="1"
-        app:civ_shadow_color="#8BC34A"/>
+        app:civ_shadow_color="#8BC34A"
+        app:civ_shadow_radius="1" />
+
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:id="@+id/delete"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentEnd="true"
         android:contentDescription="@string/app_name"
-        android:src="@mipmap/close" />
+        android:src="@mipmap/orange_cancle" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginStart="10sp"
-        android:layout_toStartOf="@+id/move_to_cart"
         android:layout_toEndOf="@+id/profile_image"
+        android:layout_toStartOf="@+id/move_to_cart"
         android:orientation="vertical">
 
         <com.kftsoftwares.boutique.utils.TextViewRegular
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
             android:lines="1"
+            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <com.kftsoftwares.boutique.utils.TextViewRegular
@@ -47,18 +49,20 @@
             android:textSize="16sp" />
 
 
-
     </LinearLayout>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_toStartOf="@+id/delete"
-        android:text=" Move to cart "
-        android:gravity="center"
 
+    <Button
         android:id="@+id/move_to_cart"
-        android:textSize="10sp"
+        android:layout_width="wrap_content"
+        android:layout_height="25sp"
         android:layout_marginEnd="10sp"
+        android:layout_toStartOf="@+id/delete"
+        android:background="@drawable/sign_in_button"
+        android:gravity="center"
+        android:paddingEnd="5dp"
+        android:paddingStart="7dp"
+        android:text=" Move to cart "
         android:textColor="@color/white"
-        android:background="@color/tabLayout"
-        android:layout_height="20sp" />
+        android:textSize="12sp"
+        tools:ignore="RtlHardcoded" />
 </RelativeLayout>

@@ -9,6 +9,7 @@ public class Constants {
     public static final String User_Name = "nameKey";
     public static final String Phone = "phoneKey";
     public static final String User_ID = "idKey";
+    public static final String User_ID_FOR_UPDATE_PROFILE = "idKey";
     public static final String Email = "emailKey";
     public static final String Checked = "check";
     public static final String DEVICE_UD_ID = "deviceUID";
@@ -17,6 +18,7 @@ public class Constants {
 
 
     public static final String TOKEN = "ZWNvbW1lcmNl";
+
     public static final String UPDATED_TOKEN = "Bearer ZWNvbW1lcmNl";
 
 
@@ -25,7 +27,7 @@ public class Constants {
 
     public static final String LOGIN = HOST_URL + "login";
 
-    public static final String FORGET_PASSWORD = HOST_URL + "forget/"+TOKEN;
+    public static final String FORGET_PASSWORD = HOST_URL + "forget";
 
     public static final String GET_CATEGORIES = HOST_URL + "viewCategories";
 
@@ -37,21 +39,29 @@ public class Constants {
 
      public static final String ADD_WISH_LIST = HOST_URL + "addToWishList";
 
-     public static final String REMOVE_FROM_WISHLIST = HOST_URL + "rmWishlist/";
+     public static final String REMOVE_FROM_WISHLIST = HOST_URL + "rmWishlist";
 
      public static final String GET_SINGLE_PRODUCT = HOST_URL + "getCloth";
 
-     public static final String ADD_TO_CART = HOST_URL + "addToCart/";
+     public static final String ADD_TO_CART = HOST_URL + "addToCart";
 
-     public static final String VIEW_CART = HOST_URL + "ViewCart/";
+     public static final String VIEW_CART = HOST_URL + "viewCart";
 
-     public static final String REMOVE_FROM_CART = HOST_URL + "rmCart/";
+     public static final String REMOVE_FROM_CART = HOST_URL + "rmCart";
 
-     public static final String PRICE_RANGE = HOST_URL + "getPriceRange/";
+     public static final String PRICE_RANGE = HOST_URL + "getPriceRange";
 
-     public static final String MOVETOWISHLIST = HOST_URL + "moveToCart/";
+     public static final String MOVETOCART = HOST_URL + "moveToCart";
 
-     public static final String CHANGE_PASSWORD = HOST_URL + "changePassword/";
+     public static final String CHANGE_PASSWORD = HOST_URL + "changePassword";
 
      public static final String GET_BANNER_IMAGES = HOST_URL + "getBannerImages";
+
+     public static final String UPLOAD_LOCAL_DATA = HOST_URL + "sendmewishlistdatafortesting";
+
+     public static final String GET_SIZES = HOST_URL + "getSize";
+
+     public static final String CHECKOUT = HOST_URL + "checkout";
+
+     public static final String UPDATE_PROFILE = HOST_URL + "updateProfile";
 }

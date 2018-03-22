@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="none"
     android:orientation="vertical"
+    android:scrollbars="none"
     tools:context="com.kftsoftwares.boutique.activities.Productdetails">
+
     <RelativeLayout
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
@@ -13,18 +14,19 @@
         android:background="@color/tabLayout">
 
         <RelativeLayout
-            android:layout_width="wrap_content"
             android:id="@+id/relativeLayoutBack"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent">
-        <ImageView
-            android:id="@+id/backButton"
-            android:layout_width="25sp"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:layout_margin="5sp"
-            android:contentDescription="@string/app_name"
-            android:scaleType="fitCenter"
-            android:src="@drawable/arrow_left" />
+
+            <ImageView
+                android:id="@+id/backButton"
+                android:layout_width="25sp"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_margin="5sp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitCenter"
+                android:src="@drawable/arrow_left" />
         </RelativeLayout>
 
         <com.kftsoftwares.boutique.utils.TextViewRegular
@@ -43,180 +45,175 @@
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_marginEnd="5dp"
-            android:visibility="gone"
             android:contentDescription="@string/app_name"
             android:scaleType="centerCrop"
-            android:src="@drawable/cart" />
-
+            android:src="@drawable/cart"
+            android:visibility="gone" />
 
 
     </RelativeLayout>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:fillViewport="true"
-        android:layout_below="@+id/action_bar"
-        android:id="@+id/parentScrollView"
 
-        android:layout_height="match_parent">
+    <ScrollView
+        android:id="@+id/parentScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/action_bar"
+
+        android:fillViewport="true">
 
         <RelativeLayout
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="0dp">
-        
-        <android.support.v4.view.ViewPager
             android:layout_width="match_parent"
-            android:layout_height="440dp"
-            android:background="@color/white"
-            android:id="@+id/viewPager"
-            android:contentDescription="@string/app_name"
-            />
+            android:layout_height="0dp"
+            android:orientation="vertical">
 
-<android.support.v4.widget.NestedScrollView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignStart="@+id/viewPager"
-    android:layout_alignBottom="@+id/viewPager"
-    android:layout_alignParentTop="true"
-    android:layout_alignParentStart="true"
-    android:id="@+id/childScrollView"
-    android:focusableInTouchMode="true"
-    android:scrollbars="none"
-    android:fillViewport="true"
-    >
-            <LinearLayout
-                android:id="@+id/pager_dots"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewPager"
                 android:layout_width="match_parent"
+                android:layout_height="440dp"
+                android:background="@color/white"
+                android:contentDescription="@string/app_name" />
+
+            <android.support.v4.widget.NestedScrollView
+                android:id="@+id/childScrollView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:clickable="false"
-                android:background="@android:color/transparent"
-                android:gravity="start"
-                android:orientation="vertical"/>
-</android.support.v4.widget.NestedScrollView>
-<com.kftsoftwares.boutique.utils.TextViewRegular
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/brandName"
-    android:layout_below="@+id/viewPager"
-    android:layout_margin="10sp"
-    android:textColor="@color/black"
+                android:layout_alignBottom="@+id/viewPager"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/viewPager"
+                android:fillViewport="true"
+                android:focusableInTouchMode="true"
+                android:scrollbars="none">
 
-    />
+                <LinearLayout
+                    android:id="@+id/pager_dots"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    android:background="@android:color/transparent"
+                    android:clickable="false"
+                    android:gravity="start"
+                    android:orientation="vertical" />
+            </android.support.v4.widget.NestedScrollView>
 
-        <com.kftsoftwares.boutique.utils.TextViewRegular
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/oldPrice"
-            android:layout_below="@+id/newPrice"
-            android:layout_marginStart="10sp"
-            android:textColor="@color/red"
-            android:text="$999"
-            />
-        <com.kftsoftwares.boutique.utils.TextViewRegular
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/newPrice"
-            android:layout_toEndOf="@+id/oldPrice"
-            android:layout_below="@+id/brandName"
-            android:layout_marginStart="10sp"
-            android:textColor="@color/black"
-            />
-
-        <com.kftsoftwares.boutique.utils.TextViewRegular
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/name"
-            android:layout_below="@+id/oldPrice"
-            android:layout_margin="10sp"
-            android:textColor="@color/dark_gray"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/name"
-            android:background="@color/dark_gray"
-            android:layout_margin="5sp"
-            android:id="@+id/view1"
-            />
-
-        <com.kftsoftwares.boutique.utils.TextViewRegular
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/selectSize"
-            android:layout_below="@+id/view1"
-            android:layout_margin="10sp"
-            android:text="Select Size"
-            android:textColor="@color/dark_gray"
-            />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/linearLayoutForSizes"
-            android:layout_margin="5dp"
-
-            android:layout_below="@+id/selectSize"
-
-            />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/linearLayoutForSizes"
-            android:background="@color/dark_gray"
-            android:layout_margin="5sp"
-            android:id="@+id/view2"
-            />
-        <com.kftsoftwares.boutique.utils.TextViewRegular
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/des"
-            android:layout_below="@+id/view2"
-            android:layout_margin="10sp"
-            android:text="Product Details"
-            android:textColor="@color/dark_gray"
-            />
-
-        <com.kftsoftwares.boutique.utils.TextViewRegular
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/description"
-            android:layout_below="@+id/des"
-            android:layout_margin="10sp"
-            android:textColor="@color/gray"
-            />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_below="@+id/description"
-            >
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#2cb99e"
-                android:id="@+id/addToWishList"
-                android:text="@string/add_to_wishlist"
-                android:textColor="@color/white"
-                android:fontFamily="@font/whitney_medium"
-               />
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="ADD TO CART"
-                android:id="@+id/addToCart"
-                android:textColor="@color/white"
-                android:fontFamily="@font/whitney_medium"
-                android:background="@color/tabLayout"
+            <com.kftsoftwares.boutique.utils.TextViewRegular
+                android:id="@+id/brandName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/viewPager"
+                android:layout_margin="10sp"
+                android:textColor="@color/black"
 
                 />
 
-        </LinearLayout>
-    </RelativeLayout>
+            <com.kftsoftwares.boutique.utils.TextViewRegular
+                android:id="@+id/oldPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/brandName"
+                android:layout_marginStart="10sp"
+                android:textColor="@color/red" />
+
+            <com.kftsoftwares.boutique.utils.TextViewRegular
+                android:id="@+id/newPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/brandName"
+                android:layout_marginStart="10sp"
+                android:layout_toEndOf="@+id/oldPrice"
+                android:textColor="@color/black" />
+
+            <com.kftsoftwares.boutique.utils.TextViewRegular
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/oldPrice"
+                android:layout_marginStart="10sp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/dark_gray" />
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/name"
+                android:layout_margin="5sp"
+                android:background="@color/dark_gray" />
+
+            <com.kftsoftwares.boutique.utils.TextViewRegular
+                android:id="@+id/selectSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view1"
+                android:layout_margin="10sp"
+                android:text="Select Size"
+                android:textColor="@color/dark_gray" />
+
+            <LinearLayout
+                android:id="@+id/linearLayoutForSizes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/selectSize"
+                android:layout_margin="5dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" />
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/linearLayoutForSizes"
+                android:layout_margin="5sp"
+                android:background="@color/dark_gray" />
+
+            <com.kftsoftwares.boutique.utils.TextViewRegular
+                android:id="@+id/des"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/view2"
+                android:layout_margin="10sp"
+                android:text="Product Details"
+                android:textColor="@color/dark_gray" />
+
+            <com.kftsoftwares.boutique.utils.TextViewRegular
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/des"
+                android:layout_margin="10sp"
+                android:textColor="@color/gray" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/description"
+                android:layout_marginTop="5dp">
+
+                <Button
+                    android:id="@+id/addToWishList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#2cb99e"
+                    android:fontFamily="@font/whitney_medium"
+                    android:text="@string/add_to_wishlist"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/addToCart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/tabLayout"
+                    android:fontFamily="@font/whitney_medium"
+                    android:text="ADD TO CART"
+                    android:textColor="@color/white"
+
+                    />
+
+            </LinearLayout>
+        </RelativeLayout>
 
     </ScrollView>
 

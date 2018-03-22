@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Paint;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +55,7 @@ public class GridViewAdapter extends BaseAdapter {
         this.mSortedList = new ArrayList<GetAllProductModel>();
         this.mSortedList.addAll(arrayList);
         sqLiteOpenHelper = new DatabaseHandler(context);
-        sharedPreferences = context.getSharedPreferences(MyPREFERENCES,Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
     }
 
     @Override
@@ -86,7 +88,7 @@ public class GridViewAdapter extends BaseAdapter {
         final TextView oldPrice = convertView.findViewById(R.id.oldPrice);
         final ProgressBar progressBar = convertView.findViewById(R.id.progrss_bar);
 
-        if (mArrayList.get(position).getOfferPrice() != null &&
+        if (mArrayList!=null && mArrayList.get(position).getOfferPrice() != null &&
 
                 !mArrayList.get(position).getOfferPrice().equalsIgnoreCase("null")) {
 
@@ -100,7 +102,7 @@ public class GridViewAdapter extends BaseAdapter {
             price.setText(mArrayList.get(position).getPrice());
         }
 
-        if (mArrayList.get(position).getWish_list() != null && mArrayList.get(position).getWish_list().equalsIgnoreCase("1")) {
+        if (mArrayList!=null && mArrayList.get(position).getWish_list() != null && mArrayList.get(position).getWish_list().equalsIgnoreCase("1")) {
             imageView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.heart));
         } else {
             imageView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.heartborder));
@@ -114,28 +116,19 @@ public class GridViewAdapter extends BaseAdapter {
                     imageView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.heartborder));
 
                     sqLiteOpenHelper.removeDataFromWishList(mArrayList.get(position).getId());
-                    if (sharedPreferences.getString(User_ID,"").equalsIgnoreCase(""))
-
+                    if (sharedPreferences.getString(User_ID, "").equalsIgnoreCase(""))
                     {
                         if (mContext instanceof MainActivity) {
-                            ((MainActivity)mContext).getLocalWishListData();
-
-
+                            ((MainActivity) mContext).getLocalWishListData();
+                        } else {
                         }
-                        else {
-
-                        }
-                    }
-                    else {
+                    } else {
                         if (mContext instanceof MainActivity) {
                             ((MainActivity) mContext).deleteFromWishList(mArrayList.get(position).getId(), "home");
-
-
                         } else {
                             ((ProductList) mContext).deleteFromWishList(mArrayList.get(position).getId(), "home");
                         }
                     }
-
                     notifyDataSetChanged();
                 } else {
                     CartViewModel cartViewModel = new CartViewModel();
@@ -143,26 +136,27 @@ public class GridViewAdapter extends BaseAdapter {
                     cartViewModel.setTitle(mArrayList.get(position).getTitle());
                     cartViewModel.setImage1(mArrayList.get(position).getImage1());
                     cartViewModel.setPrice(mArrayList.get(position).getPrice());
+                    cartViewModel.setSize("noData");
+                    cartViewModel.setSize_id("");
                     cartViewModel.setCat("wishList");
                     cartViewModel.setCount("1");
                     sqLiteOpenHelper.addContact(cartViewModel);
 
                     mArrayList.get(position).setWish_list("1");
                     imageView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.heart));
-                    if (sharedPreferences.getString(User_ID,"").equalsIgnoreCase(""))
+                    if (sharedPreferences.getString(User_ID, "").equalsIgnoreCase(""))
 
                     {
                         if (mContext instanceof MainActivity) {
-                            ((MainActivity)mContext).getLocalWishListData();
+                            ((MainActivity) mContext).getLocalWishListData();
 
 
                         } else {
 
-                         //   ((ProductList) mContext).addToWishList(mArrayList.get(position).getId(), "home");
+                            //   ((ProductList) mContext).addToWishList(mArrayList.get(position).getId(), "home");
 
                         }
-                    }
-                    else {
+                    } else {
                         if (mContext instanceof MainActivity) {
                             ((MainActivity) mContext).addToWishList(mArrayList.get(position).getId(), "home");
 
@@ -189,19 +183,18 @@ public class GridViewAdapter extends BaseAdapter {
         Glide.with(mContext).load(mArrayList.get(position).getImage1())
                 .crossFade()
                 .fitCenter()
+                .placeholder(R.mipmap.placeholder)
                 .dontTransform()
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                        progressBar.setVisibility(View.GONE);
 
                         return false;
                     }
 
                     @Override
                     public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        progressBar.setVisibility(View.GONE);
-
+                        productImage.setScaleType(ImageView.ScaleType.FIT_XY);
                         return false;
                     }
                 })
@@ -211,12 +204,14 @@ public class GridViewAdapter extends BaseAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(mContext, Productdetails.class);
+                if (mArrayList!=null && mArrayList.size()>0) {
+                    Intent i = new Intent(mContext, Productdetails.class);
 
-                i.putExtra("id", mArrayList.get(position).getId());
+                    Log.e("datawhenclick",mArrayList.get(position).getId());
+                    i.putExtra("id", mArrayList.get(position).getId());
 
-                mContext.startActivity(i);
-
+                    mContext.startActivity(i);
+                }
             }
         });
 

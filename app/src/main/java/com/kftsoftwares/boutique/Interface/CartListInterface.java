@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public interface CartListInterface {
 
 
-    public void updateCartList(String value);
+    public void updateCartList(String value, String size , int position, String size_id);
 
     void updatePrice(ArrayList<CartViewModel> arrayList);
 }

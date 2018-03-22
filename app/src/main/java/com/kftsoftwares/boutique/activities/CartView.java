@@ -4,8 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -19,8 +19,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.kftsoftwares.boutique.Adapter.CartViewAdapter;
-import com.kftsoftwares.boutique.Adapter.WishListAdapter;
-import com.kftsoftwares.boutique.Fragments.WishList_Fragment;
 import com.kftsoftwares.boutique.Interface.CartListInterface;
 import com.kftsoftwares.boutique.Models.CartViewModel;
 import com.kftsoftwares.boutique.R;
@@ -35,9 +33,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.kftsoftwares.boutique.utils.Constants.CHECKOUT;
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 import static com.kftsoftwares.boutique.utils.Constants.REMOVE_FROM_CART;
-import static com.kftsoftwares.boutique.utils.Constants.TOKEN;
 import static com.kftsoftwares.boutique.utils.Constants.UPDATED_TOKEN;
 import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 import static com.kftsoftwares.boutique.utils.Constants.VIEW_CART;
@@ -47,11 +45,12 @@ public class CartView extends AppCompatActivity implements CartListInterface {
     private ListView mListView;
     private SharedPreferences mSharedPreferences;
     private ArrayList<CartViewModel> mCartViewModel;
-    private TextView mTotalItemCount , mAmountCount;
+    private TextView mTotalItemCount, mAmountCount;
     private int mAmountCountValue = 0;
     private RelativeLayout no_data_image;
     private DatabaseHandler mDatabaseHandler;
-
+    private CartViewAdapter mCartAdapter;
+    private RelativeLayout mCheckOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,20 +64,117 @@ public class CartView extends AppCompatActivity implements CartListInterface {
         mTotalItemCount = findViewById(R.id.totalItemCount);
         mAmountCount = findViewById(R.id.amountCount);
         no_data_image = findViewById(R.id.no_data_image);
+        mCheckOut = findViewById(R.id.checkOut);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+
         mCartViewModel = new ArrayList<>();
-        if (mSharedPreferences.getString(User_ID,"").equalsIgnoreCase("")) {
+
+        mCartAdapter = new CartViewAdapter(CartView.this, new ArrayList<CartViewModel>(), CartView.this);
+        mListView.setAdapter(mCartAdapter);
+
+        if (mSharedPreferences.getString(User_ID, "").equalsIgnoreCase("")) {
             getLocalCartListData();
-        }
-        else {
+        } else {
             getCartList();
 
         }
+
+        mCheckOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mSharedPreferences.getString(User_ID, "").equalsIgnoreCase("")) {
+                    Toast.makeText(CartView.this, "Please login first", Toast.LENGTH_SHORT).show();
+
+                    Intent i = new Intent(CartView.this, LoginActivity.class);
+                    startActivity(i);
+                } else {
+                    checkOutApi();
+                }
+            }
+        });
+
+    }
+
+    private void checkOutApi() {
+
+        JSONObject jsonObject = null;
+        final JSONArray jsonArray = new JSONArray();
+        for (int i = 0; i < mCartViewModel.size(); i++) {
+            jsonObject = new JSONObject();
+            try {
+                jsonObject.put("cart_id", mCartViewModel.get(i).getCartId());
+                jsonObject.put("quantity", mCartViewModel.get(i).getCount());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            jsonArray.put(jsonObject);
+        }
+
+        final String checkOutData = jsonArray.toString();
+        String tag_string_req = "string_req";
+
+        final String user_id = mSharedPreferences.getString(User_ID, "");
+
+        final ProgressDialog pDialog = new ProgressDialog(CartView.this);
+        pDialog.setMessage("Loading...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                CHECKOUT, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                pDialog.cancel();
+                pDialog.dismiss();
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    //  Toast.makeText(CartView.this, ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+
+                    Intent i = new Intent(CartView.this, ShippingDetails.class);
+                    startActivity(i);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pDialog.cancel();
+                pDialog.dismiss();
+                Toast.makeText(CartView.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+            }
+        }
+        ) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("checkout_data", checkOutData);
+                map.put("user_id", user_id);
+                return map;
+            }
+        };
+// Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
     }
 
     private void getLocalCartListData() {
@@ -89,27 +185,23 @@ public class CartView extends AppCompatActivity implements CartListInterface {
 
         mCartViewModel.addAll(mDatabaseHandler.getAllDataOfCart());
 
-        if (mCartViewModel.size()>0)
-        {
+        if (mCartViewModel.size() > 0) {
             no_data_image.setVisibility(View.GONE);
             mListView.setVisibility(View.VISIBLE);
 
-            for (int i =0 ;i<mCartViewModel.size();i++)
-            {
+            for (int i = 0; i < mCartViewModel.size(); i++) {
                 mAmountCountValue = mAmountCountValue + Integer.valueOf(mCartViewModel.get(i).getPrice());
 
-                mTotalItemCount.setText("Total("+ mCartViewModel.size() +")");
+                mTotalItemCount.setText("Total(" + mCartViewModel.size() + ")");
 
                 mAmountCount.setText("$" + mAmountCountValue);
             }
 
-        }
-        else {
+        } else {
             no_data_image.setVisibility(View.VISIBLE);
             mListView.setVisibility(View.GONE);
 
         }
-
 
 
         CartViewAdapter cartViewAdapter = new CartViewAdapter(CartView.this, mCartViewModel, CartView.this);
@@ -128,9 +220,9 @@ public class CartView extends AppCompatActivity implements CartListInterface {
         pDialog.setMessage("Loading...");
         pDialog.setCancelable(false);
         pDialog.show();
-      final  String user_id = mSharedPreferences.getString(User_ID, "");
+        final String user_id = mSharedPreferences.getString(User_ID, "");
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                VIEW_CART , new Response.Listener<String>() {
+                VIEW_CART, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -139,9 +231,9 @@ public class CartView extends AppCompatActivity implements CartListInterface {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    if (jsonObject.has("message") && jsonObject.getString("message")!=null && jsonObject.get("message").toString().equalsIgnoreCase("Cart Empty")) {
+                    if (jsonObject.has("message") && jsonObject.getString("message") != null && jsonObject.get("message").toString().equalsIgnoreCase("Cart Empty")) {
 
-no_data_image.setVisibility(View.VISIBLE);
+                        no_data_image.setVisibility(View.VISIBLE);
                         mListView.setVisibility(View.GONE);
                     } else {
 
@@ -153,7 +245,6 @@ no_data_image.setVisibility(View.VISIBLE);
                             JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                             cartViewModel = new CartViewModel();
                             cartViewModel.setDeleteStatus(jsonObject1.getString("delete_status"));
-                            cartViewModel.setColour(jsonObject1.getString("colour"));
                             cartViewModel.setPrice(jsonObject1.getString("original_price"));
                             cartViewModel.setOfferPrice(jsonObject1.getString("offer_price"));
                             mAmountCountValue += Integer.valueOf(jsonObject1.getString("original_price"));
@@ -162,20 +253,24 @@ no_data_image.setVisibility(View.VISIBLE);
                             cartViewModel.setTitle(jsonObject1.getString("title"));
                             cartViewModel.setCategoryId(jsonObject1.getString("category_name"));
                             cartViewModel.setImage1(jsonObject1.getString("image1"));
-                            cartViewModel.setClothId(jsonObject1.getString("Cloth_id"));
+                            cartViewModel.setClothId(jsonObject1.getString("cloth_id"));
+                            cartViewModel.setCartId(jsonObject1.getString("cart_id"));
                             cartViewModel.setCount("1");
+                            JSONObject jsonObject2 = jsonObject1.getJSONObject("size");
+                            cartViewModel.setSize(jsonObject2.getString("size"));
+                            cartViewModel.setSize_id(jsonObject2.getString("id"));
                             mCartViewModel.add(cartViewModel);
                         }
-                        mTotalItemCount.setText("Total("+ jsonArray.length() +")");
+                        mTotalItemCount.setText("Total(" + jsonArray.length() + ")");
                         mAmountCount.setText("$" + mAmountCountValue);
 
-                        CartViewAdapter cartViewAdapter = new CartViewAdapter(CartView.this, mCartViewModel, CartView.this);
+                        mCartAdapter.updateData(mCartViewModel);
 
-                        mListView.setAdapter(cartViewAdapter);
-                        cartViewAdapter.notifyDataSetChanged();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    no_data_image.setVisibility(View.VISIBLE);
+                    mListView.setVisibility(View.GONE);
                 }
 
             }
@@ -189,7 +284,7 @@ no_data_image.setVisibility(View.VISIBLE);
             }
         }
 
-        ){
+        ) {
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -208,20 +303,19 @@ no_data_image.setVisibility(View.VISIBLE);
             }
         };
 
-// Adding request to request queue
+        // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
     @Override
-    public void updateCartList(String value) {
-        if (mSharedPreferences.getString(User_ID,"").equalsIgnoreCase("")) {
+    public void updateCartList(String value, String size, int position, String size_id) {
+        if (mSharedPreferences.getString(User_ID, "").equalsIgnoreCase("")) {
 
-            mDatabaseHandler.removeDataFromCart(value);
+            mDatabaseHandler.removeDataFromCart(value, size);
             getLocalCartListData();
 
-        }
-        else {
-            removeFromCart(value);
+        } else {
+            removeFromCart(value, position, size_id);
 
         }
 
@@ -230,10 +324,9 @@ no_data_image.setVisibility(View.VISIBLE);
     @SuppressLint("SetTextI18n")
     @Override
     public void updatePrice(ArrayList<CartViewModel> arrayList) {
-        mAmountCountValue =0;
+        mAmountCountValue = 0;
 
-        for (CartViewModel cartViewModel : arrayList)
-        {
+        for (CartViewModel cartViewModel : arrayList) {
 
             mAmountCountValue = mAmountCountValue + Integer.valueOf(cartViewModel.getPrice()) * Integer.valueOf(cartViewModel.getCount());
 
@@ -245,18 +338,15 @@ no_data_image.setVisibility(View.VISIBLE);
         mListView.setAdapter(cartViewAdapter);
         cartViewAdapter.notifyDataSetChanged();
 
-            mAmountCount.setText("$" + mAmountCountValue);
+        mAmountCount.setText("$" + mAmountCountValue);
 
 
     }
 
-    private void removeFromCart(final String value) {
+    private void removeFromCart(final String value, final int position, final String sizeId) {
         String tag_string_req = "string_req";
-        if(mCartViewModel!=null)
-        {
-            mCartViewModel.clear();
-        }
-      final  String user_id = mSharedPreferences.getString(User_ID, "");
+
+        final String user_id = mSharedPreferences.getString(User_ID, "");
 
         final ProgressDialog pDialog = new ProgressDialog(CartView.this);
         pDialog.setMessage("Loading...");
@@ -274,9 +364,8 @@ no_data_image.setVisibility(View.VISIBLE);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    getCartList();
-                }
-                catch (JSONException e) {
+                    setDataWhileLocalRemoveArry(position);
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
@@ -289,7 +378,7 @@ no_data_image.setVisibility(View.VISIBLE);
                 Toast.makeText(CartView.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         }
-        ){
+        ) {
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -301,13 +390,30 @@ no_data_image.setVisibility(View.VISIBLE);
 
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<>();
-                map.put("cloth_id",value);
-                map.put("user_id",user_id);
+                Map<String, String> map = new HashMap<>();
+                map.put("cloth_id", value);
+                map.put("user_id", user_id);
+                map.put("size_id", sizeId);
                 return map;
             }
         };
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+
+    private void setDataWhileLocalRemoveArry(int position) {
+
+        mCartViewModel.remove(position);
+        if (mCartViewModel.size() > 0) {
+            no_data_image.setVisibility(View.GONE);
+            mListView.setVisibility(View.VISIBLE);
+
+            mCartAdapter.updateData(mCartViewModel);
+        } else {
+            no_data_image.setVisibility(View.VISIBLE);
+            mListView.setVisibility(View.GONE);
+
+        }
+
     }
 }

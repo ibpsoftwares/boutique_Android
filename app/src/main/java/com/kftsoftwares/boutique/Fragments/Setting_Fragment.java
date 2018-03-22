@@ -75,11 +75,10 @@ public class Setting_Fragment extends Fragment implements View.OnClickListener {
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
                 sharedPreferences.edit().clear().apply();
 
-                Intent intent = new Intent(getActivity(), SplashScreen.class);
+                Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 getActivity().finish();
-
 
                 break;
         }

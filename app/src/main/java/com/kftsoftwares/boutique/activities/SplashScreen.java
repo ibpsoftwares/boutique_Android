@@ -35,7 +35,7 @@ public class SplashScreen extends AppCompatActivity {
                 if (sharedPreferences.getString(User_ID,"").equalsIgnoreCase("")) {
 
 
-                    Intent i = new Intent(SplashScreen.this, LoginActivity.class);
+                    Intent i = new Intent(SplashScreen.this, MainActivity.class);
                     startActivity(i);
 
                     // close this activity

@@ -1,8 +1,10 @@
 package com.kftsoftwares.boutique.Fragments;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +40,14 @@ public class Category extends Fragment {
     private ArrayList<String> mCategoryNameList;
     private ArrayList<String> mCategoryNameId;
     private RelativeLayout mNoDataFound;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private MainActivity mContext;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = ((MainActivity)context);
+    }
 
 
     @Override
@@ -49,6 +59,14 @@ public class Category extends Fragment {
         mCategoryNameList = new ArrayList<>();
         mCategoryNameId = new ArrayList<>();
         mNoDataFound = view.findViewById(R.id.no_data_image);
+        swipeRefreshLayout = view.findViewById(R.id.swipeToRefresh);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getCategories();
+            }
+        });
         getCategories();
 
         return view;
@@ -56,12 +74,12 @@ public class Category extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity)getActivity()).mCartView.setVisibility(View.VISIBLE);
-        ((MainActivity)getActivity()).mHeaderText.setText("Category");
+        mContext.mCartView.setVisibility(View.VISIBLE);
+        mContext.mHeaderText.setText("Category");
 
-        if (((MainActivity)getActivity()).mCartCount!=0)
+        if (mContext.mCartCount!=0)
         {
-            ((MainActivity)getActivity()).mCartCountText.setVisibility(View.VISIBLE);
+            mContext.mCartCountText.setVisibility(View.VISIBLE);
 
         }
     }
@@ -70,27 +88,26 @@ public class Category extends Fragment {
     //---------------------GET CATEGORIES FROM SERVER------------------------//
     private void getCategories() {
 
-        if (mCategoryNameList != null) {
-            mCategoryNameList.clear();
-        }
-        if (mCategoryNameId != null) {
-            mCategoryNameId.clear();
-        }
+
 
         String tag_string_req = "string_req";
 
-        final ProgressDialog pDialog = new ProgressDialog(getActivity());
-        pDialog.setMessage("Loading...");
-            pDialog.show();
+        mContext.showProgressBar(true);
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 GET_CATEGORIES, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
-                pDialog.cancel();
-                pDialog.dismiss();
+
                 try {
+                    if (mCategoryNameList != null) {
+                        mCategoryNameList.clear();
+                    }
+                    if (mCategoryNameId != null) {
+                        mCategoryNameId.clear();
+                    }
+                    swipeRefreshLayout.setRefreshing(false);
                     JSONObject jsonObject = new JSONObject(response);
 
                     if (jsonObject.has("message") && jsonObject.getString("message") != null && jsonObject.getString("message").equalsIgnoreCase("No Data Found")) {
@@ -108,12 +125,16 @@ public class Category extends Fragment {
                         mCategoryNameId.add(jsonObject1.getString("id"));
 
                     }
-                    ListViewAdapter listViewAdapter = new ListViewAdapter(getActivity(),mCategoryNameList,mCategoryNameId);
+                    ListViewAdapter listViewAdapter = new ListViewAdapter(mContext,mCategoryNameList,mCategoryNameId);
 
                     mListView.setAdapter(listViewAdapter);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                }
+                finally {
+                    mContext.showProgressBar(false);
+
                 }
 
             }
@@ -121,9 +142,9 @@ public class Category extends Fragment {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                pDialog.cancel();
-                pDialog.dismiss();
-                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
+                mContext.showProgressBar(true);
+
             }
         }
 
