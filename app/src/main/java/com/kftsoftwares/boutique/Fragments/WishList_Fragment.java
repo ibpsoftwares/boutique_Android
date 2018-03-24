@@ -310,7 +310,7 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
                     JSONObject jsonObject = new JSONObject(response);
                     setDataWhileLocalRemoveArry(cartViewModels, positon);
 
-                   // mContext.getWishList();
+                    mContext.getWishListWithoutLoader();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } finally {
@@ -368,8 +368,10 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
                     } else {
                         setDataWhileLocalRemoveArry(cartViewModels, position);
 
+
                     }
                     mContext.getCartList();
+                    mContext.getWishListWithoutLoader();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } finally {

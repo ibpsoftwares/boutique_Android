@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <com.kftsoftwares.boutique.utils.TextViewBold
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kulbir"
+            android:textColor="@color/tabLayout"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="60dp"
+            android:layout_height="20dp"
+            android:text="Home"
+            android:background="@drawable/home_or_office"
+            android:textSize="12sp"
+            android:layout_alignParentEnd="true" />
+        <Button
+            android:id="@+id/buttonEdit"
+            android:layout_width="60dp"
+            android:layout_height="20dp"
+            android:layout_alignParentBottom="true"
+            android:text="Edit"
+            android:background="@color/tabLayout"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:layout_alignParentEnd="true" />
+
+        <com.kftsoftwares.boutique.utils.TextViewRegular
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userName"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toStartOf="@+id/button"
+            android:text="3271,Sector 71 ,mohali ,123456 "
+            android:textSize="16sp" />
+
+        <com.kftsoftwares.boutique.utils.TextViewRegular
+            android:id="@+id/mobileText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/address"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="10dp"
+            android:text="Mobile:"
+            android:textSize="16sp" />
+
+        <com.kftsoftwares.boutique.utils.TextViewRegular
+            android:id="@+id/mobileNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/address"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/mobileText"
+            android:layout_toStartOf="@+id/button"
+            android:text="90909090909"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/dark_gray"
+        android:visibility="gone"
+        android:layout_below="@+id/relativeLayout"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="1dp"
+            android:text="Edit"
+            android:textColor="@color/dark_blue"
+            android:background="@color/white"
+            android:layout_marginEnd="1dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_marginTop="1dp"
+            android:text="Add new address"
+            android:textColor="@color/dark_blue"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white"
+
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

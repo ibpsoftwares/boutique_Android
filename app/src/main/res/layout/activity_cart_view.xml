@@ -130,14 +130,23 @@
         android:layout_below="@+id/action_bar"
         android:visibility="gone"
         >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/cart_empty"
+            android:id="@+id/image"
+            />
 
         <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="No Data Found"
+            android:text="Cart Empty"
+            android:layout_margin="5dp"
             android:textColor="@color/black"
-            android:textSize="30dp"
+            android:textSize="20sp"
+            android:layout_below="@+id/image"
 
             />
     </RelativeLayout>

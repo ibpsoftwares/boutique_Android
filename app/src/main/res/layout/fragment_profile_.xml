@@ -1,10 +1,59 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    tools:context="com.kftsoftwares.boutique.Fragments.Profile_Fragment">
+    tools:context="com.kftsoftwares.boutique.activities.Profile_Activity">
+    <RelativeLayout
+        android:id="@+id/action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/tabLayout">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutBack"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/backButton"
+                android:layout_width="25sp"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_margin="5sp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitCenter"
+                android:src="@drawable/arrow_left" />
+        </RelativeLayout>
+
+        <com.kftsoftwares.boutique.utils.TextViewRegular
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/profile"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:ignore="RelativeOverlap" />
+
+        <ImageView
+            android:id="@+id/cart"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop"
+            android:src="@drawable/cart"
+            android:visibility="gone" />
+
+
+    </RelativeLayout>
+   <ScrollView
+       android:layout_width="match_parent"
+       android:layout_below="@+id/action_bar"
+       android:fillViewport="true"
+       android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -29,6 +78,7 @@
                 android:scaleType="centerCrop"
                 android:src="@mipmap/ic_profile_image"
                 app:civ_border="true"
+                android:id="@+id/profileImage"
                 app:civ_border_color="@color/tabLayout"
                 app:civ_border_width="2dp" />
 
@@ -37,6 +87,7 @@
                 android:layout_height="25sp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="8dp"
+                android:id="@+id/edit_image"
                 android:background="@mipmap/phche"
                 android:contentDescription="@string/app_name" />
         </RelativeLayout>
@@ -223,17 +274,17 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white" />
         </LinearLayout>
-
+    </RelativeLayout>
+   </ScrollView>
         <ImageButton
             android:id="@+id/editButton"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
+            android:layout_margin="10dp"
             android:background="@drawable/round_button_colored"
             android:contentDescription="@string/app_name"
             android:padding="2dp"
             android:src="@mipmap/edit" />
-
-    </RelativeLayout>
-</ScrollView>
+</RelativeLayout>

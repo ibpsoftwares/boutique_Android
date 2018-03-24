@@ -9,12 +9,14 @@ public class Constants {
     public static final String User_Name = "nameKey";
     public static final String Phone = "phoneKey";
     public static final String User_ID = "idKey";
-    public static final String User_ID_FOR_UPDATE_PROFILE = "idKey";
+    public static final String User_ID_FOR_UPDATE_PROFILE = "userdetailID";
     public static final String Email = "emailKey";
-    public static final String Checked = "check";
+    public static final String Dob = "dob";
+    public static final String Gender = "gender";
+    public static final String Image_Link = "image";
     public static final String DEVICE_UD_ID = "deviceUID";
 
-    private static final String HOST_URL = "http://kftsoftwares.com/ecom/recipes/";
+    private static final String HOST_URL = "http://kftsoftwares.com/ecomm/recipes/";
 
 
     public static final String TOKEN = "ZWNvbW1lcmNl";
@@ -64,4 +66,6 @@ public class Constants {
      public static final String CHECKOUT = HOST_URL + "checkout";
 
      public static final String UPDATE_PROFILE = HOST_URL + "updateProfile";
+
+     public static final String SHIPPING_DETAIL = HOST_URL + "shippingDetail";
 }

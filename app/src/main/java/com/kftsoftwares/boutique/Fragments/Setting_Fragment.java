@@ -9,13 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.kftsoftwares.boutique.R;
 import com.kftsoftwares.boutique.activities.Change_Password;
-import com.kftsoftwares.boutique.activities.LoginActivity;
 import com.kftsoftwares.boutique.activities.MainActivity;
-import com.kftsoftwares.boutique.activities.SplashScreen;
+import com.kftsoftwares.boutique.activities.Profile_Activity;
 
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 
@@ -66,9 +64,7 @@ public class Setting_Fragment extends Fragment implements View.OnClickListener {
                 //Toast.makeText(getActivity(), "On Working", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.profile:
-                Fragment profile = new Profile_Fragment();
-
-                ((MainActivity) getActivity()).changeFragment(profile, "Profile", 2);
+               startActivity(new Intent(getActivity(),Profile_Activity.class));
                 break;
 
             case R.id.signOut:

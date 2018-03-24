@@ -18,16 +18,25 @@
 
 
      >
-
   <com.kftsoftwares.boutique.utils.TextViewRegular
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_centerInParent="true"
-      android:text="No Data Found"
-      android:textColor="@color/black"
-      android:textSize="30dp"
+      android:text="WishList Empty"
+      android:textColor="@color/tabLayout"
+      android:layout_below="@+id/bag_image"
+      android:textSize="20sp"
+      android:layout_marginTop="5dp"
 
       />
+<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@mipmap/empty_bag"
+    android:id="@+id/bag_image"
+    android:layout_centerInParent="true"
+    />
+
  </RelativeLayout>
 
 </FrameLayout>

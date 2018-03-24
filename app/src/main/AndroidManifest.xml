@@ -19,7 +19,7 @@
         <activity
             android:name=".activities.LoginActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.SignUpActivity"
             android:screenOrientation="portrait"
@@ -27,16 +27,17 @@
         <activity
             android:name=".activities.MainActivity"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
         <activity
             android:name=".activities.SplashScreen"
             android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
         <activity
@@ -59,20 +60,29 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.ShippingDetails"
-            android:screenOrientation="portrait" >
-
+            android:screenOrientation="portrait">
 
 
         </activity>
         <activity
             android:name=".activities.Payment"
             android:screenOrientation="portrait" />
-        <activity android:name=".activities.OrderDetails"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".activities.PriceDetailScreen"
-            android:screenOrientation="portrait"
-            />
+        <activity
+            android:name=".activities.OrderDetails"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.PriceDetailScreen"
+            android:screenOrientation="portrait" >
+
+
+        </activity>
+        <activity
+            android:name=".activities.Profile_Activity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activities.Demo_Activity">
+
+
+        </activity>
     </application>
 
 </manifest>

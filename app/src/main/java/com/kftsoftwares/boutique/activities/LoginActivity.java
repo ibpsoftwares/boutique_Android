@@ -16,7 +16,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -45,8 +44,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.kftsoftwares.boutique.utils.Constants.DEVICE_UD_ID;
+import static com.kftsoftwares.boutique.utils.Constants.Dob;
 import static com.kftsoftwares.boutique.utils.Constants.Email;
 import static com.kftsoftwares.boutique.utils.Constants.FORGET_PASSWORD;
+import static com.kftsoftwares.boutique.utils.Constants.Gender;
+import static com.kftsoftwares.boutique.utils.Constants.Image_Link;
 import static com.kftsoftwares.boutique.utils.Constants.LOGIN;
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 import static com.kftsoftwares.boutique.utils.Constants.Phone;
@@ -234,6 +236,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         editor.putString(Email, jsonObject1.getString("email"));
                         editor.putString(User_ID, jsonObject1.getString("userid"));
                         editor.putString(Phone, jsonObject1.getString("contact"));
+                        editor.putString(Gender, jsonObject1.getString("gender"));
+                        editor.putString(Dob, jsonObject1.getString("dob"));
+                        editor.putString(Image_Link, jsonObject1.getString("image"));
                         editor.putString(User_ID_FOR_UPDATE_PROFILE, jsonObject1.getString("userdetail_id"));
 
                         editor.commit();
@@ -430,8 +435,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

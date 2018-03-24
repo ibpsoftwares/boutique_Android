@@ -11,9 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,12 +28,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.kftsoftwares.boutique.Fragments.Category;
 import com.kftsoftwares.boutique.Fragments.Home;
-import com.kftsoftwares.boutique.Fragments.Profile_Fragment;
 import com.kftsoftwares.boutique.Fragments.Setting_Fragment;
 import com.kftsoftwares.boutique.Fragments.WishList_Fragment;
 import com.kftsoftwares.boutique.Interface.WishListInterfaceForActivity;
 import com.kftsoftwares.boutique.Models.CartViewModel;
-import com.kftsoftwares.boutique.Models.Size;
 import com.kftsoftwares.boutique.R;
 import com.kftsoftwares.boutique.database.DatabaseHandler;
 import com.kftsoftwares.boutique.utils.Util;
@@ -51,7 +47,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.kftsoftwares.boutique.utils.Constants.ADD_WISH_LIST;
-import static com.kftsoftwares.boutique.utils.Constants.GET_SIZES;
 import static com.kftsoftwares.boutique.utils.Constants.GET_WISH_LIST;
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 import static com.kftsoftwares.boutique.utils.Constants.REMOVE_FROM_WISHLIST;
@@ -277,13 +272,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.profileRelativeLayout:
 
-                if (f instanceof Profile_Fragment) {
 
-                } else {
-                    Fragment profile = new Profile_Fragment();
-
-                    changeFragment(profile, "Profile", 2);
-                }
                 break;
 
             case R.id.settingRelativeLayout:
@@ -291,6 +280,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (sharedPreferences.getString(User_ID,"").equalsIgnoreCase(""))
                 {
                     Toast.makeText(this, "Please login first", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(MainActivity.this,LoginActivity.class));
                 }else {
 
                     if (f instanceof Setting_Fragment) {
@@ -557,10 +547,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         // add your code here
                         if (f instanceof Setting_Fragment) {
                             mCartCountText.setVisibility(View.GONE);
-
-                        } else if (f instanceof Profile_Fragment) {
-                            mCartCountText.setVisibility(View.GONE);
-
 
                         } else {
                             mCartCountText.setVisibility(View.VISIBLE);

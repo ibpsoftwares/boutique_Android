@@ -28,7 +28,7 @@ public class TextViewBold extends android.support.v7.widget.AppCompatTextView {
 
     private void init(Context context) {
         Typeface tf = Typeface.createFromAsset(context.getAssets(),
-                "fonts/whitney_bold.otf");
+                "fonts/whitney_medium.otf");
         setTypeface(tf);
     }
 }

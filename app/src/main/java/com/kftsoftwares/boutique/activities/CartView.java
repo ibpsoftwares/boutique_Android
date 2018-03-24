@@ -136,6 +136,8 @@ public class CartView extends AppCompatActivity implements CartListInterface {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
+
+
                     //  Toast.makeText(CartView.this, ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
 
                     Intent i = new Intent(CartView.this, ShippingDetails.class);
@@ -363,7 +365,6 @@ public class CartView extends AppCompatActivity implements CartListInterface {
                 pDialog.dismiss();
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-
                     setDataWhileLocalRemoveArry(position);
                 } catch (JSONException e) {
                     e.printStackTrace();
