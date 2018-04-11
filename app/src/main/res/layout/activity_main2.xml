@@ -1,329 +1,328 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
     android:clickable="true"
-    android:focusable="true"
-    android:layout_height="match_parent">
+    android:focusable="true">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <RelativeLayout
-        android:id="@+id/action_bar"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:background="@color/tabLayout">
-
-        <ImageView
-            android:layout_width="70sp"
-            android:layout_height="match_parent"
-            android:scaleType="fitStart"
-            android:layout_margin="5dp"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_splash_screen_logo" />
-
-<com.kftsoftwares.boutique.utils.TextViewRegular
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/home"
-            android:textColor="#fff"
-    android:id="@+id/headerText"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            tools:ignore="RelativeOverlap" />
-
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            >
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginEnd="10dp"
-                android:contentDescription="@string/app_name"
-                android:scaleType="centerCrop"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:id="@+id/cartView"
-                android:src="@mipmap/ic_cart" />
-
-            <ImageView
-                android:id="@+id/profileHeader"
-                android:layout_width="25sp"
-                android:layout_height="25sp"
-                android:layout_toStartOf="@+id/cartView"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10sp"
-                android:src="@mipmap/single_user"
-                android:contentDescription="@string/app_name" />
-
-            <TextView
-                android:layout_width="14dp"
-                android:layout_height="14dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginTop="1dp"
-                android:text=""
-                android:textSize="10dp"
-                android:visibility="gone"
-
-                android:layout_alignParentEnd="true"
-
-                android:id="@+id/cartCount"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:background="@drawable/red_circle"
-                />
-
-        </RelativeLayout>
-
-
-    </RelativeLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/tablayout"
-        android:id="@+id/frameLayout"
-        android:layout_below="@+id/action_bar"
-        android:background="@android:color/transparent" />
-
-    <LinearLayout
-        android:id="@+id/tablayout"
-        android:layout_width="match_parent"
-        android:layout_height="55sp"
-        android:layout_alignParentBottom="true"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-   >
-
-        <RelativeLayout
-            android:id="@+id/homeRelativeLayout"
+            android:id="@+id/action_bar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/tabLayout"
-            android:layout_weight="1">
+            android:layout_height="@dimen/_40sdp"
+            android:background="@color/tabLayout">
 
             <ImageView
-                android:id="@+id/homeImage"
-                android:layout_width="25sp"
-                android:layout_centerHorizontal="true"
-                android:layout_height="25sp"
-                android:scaleType="fitXY"
-                android:layout_marginTop="5sp"
-                android:src="@mipmap/ic_home" />
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitStart"
+                android:src="@mipmap/appicon_withouttext" />
 
-            <com.kftsoftwares.boutique.utils.TextViewRegular
+            <com.kftsoftwares.boutique.utils.TextViewBold
+                android:id="@+id/headerText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/homeImage"
                 android:layout_centerInParent="true"
                 android:text="@string/home"
                 android:textColor="#fff"
-                android:textSize="14sp"
-
-                />
-
-
-        </RelativeLayout>
+                android:textSize="@dimen/_16ssp"
+                android:textStyle="bold"
+                tools:ignore="RelativeOverlap" />
 
 
-        <RelativeLayout
-            android:id="@+id/categoryRelativeLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/tabLayout"
-
-            android:layout_weight="1">
-
-            <ImageView
-                android:id="@+id/category"
-                android:layout_width="25sp"
-                android:layout_height="25sp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
-                android:src="@mipmap/ic_product_white"
-                android:contentDescription="@string/app_name" />
-
-            <com.kftsoftwares.boutique.utils.TextViewRegular
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/category"
-                android:layout_centerInParent="true"
-                android:text="@string/category"
-                android:textColor="#fff"
-                android:textSize="14sp"
-
-                />
-
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/profileRelativeLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/tabLayout"
-android:visibility="gone"
-            android:layout_weight="1">
-
-            <ImageView
-                android:id="@+id/profile"
-                android:layout_width="25sp"
-                android:layout_height="25sp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
-
-                android:contentDescription="@string/app_name"
-                android:src="@mipmap/ic_profile"
-                />
-
-            <com.kftsoftwares.boutique.utils.TextViewRegular
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/profile"
-                android:layout_centerInParent="true"
-                android:text="@string/profile"
-                android:textColor="#fff"
-                android:textSize="14sp"
-
-                />
-
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/settingRelativeLayout"
-            android:layout_width="match_parent"
-            android:background="@color/tabLayout"
-
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageView
-                android:id="@+id/setting"
-                android:layout_width="25sp"
-                android:layout_height="25sp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
-                android:contentDescription="@string/app_name"
-                android:src="@mipmap/ic_setting"
-                />
-
-            <com.kftsoftwares.boutique.utils.TextViewRegular
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/setting"
-                android:layout_centerInParent="true"
-                android:text="@string/setting"
-                android:textColor="#fff"
-                android:textSize="14sp"
-
-                />
-
-
-        </RelativeLayout>
-
-
-        <RelativeLayout
-            android:id="@+id/wishListRelativeLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/tabLayout"
-            android:layout_weight="1">
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_centerHorizontal="true"
-                android:id="@+id/wishList"
+                android:layout_centerVertical="true">
 
-                >
+                <ImageView
+                    android:id="@+id/cartView"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/ic_cart" />
 
-            <ImageView
-                android:layout_width="25sp"
-                android:layout_height="25sp"
-                android:layout_marginTop="5dp"
-                android:src="@mipmap/ic_heart"
-                android:contentDescription="@string/app_name" />
+                <ImageView
+                    android:id="@+id/profileHeader"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:layout_toStartOf="@+id/cartView"
+                    android:contentDescription="@string/app_name"
+                    android:src="@mipmap/single_user" />
+
                 <TextView
-                    android:layout_width="14dp"
-                    android:layout_height="13dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="2dp"
-                    android:text=""
-                    android:textSize="10dp"
-                    android:id="@+id/wishListCount"
-                    android:gravity="center"
-                    android:visibility="gone"
-                    android:textColor="@color/white"
+                    android:id="@+id/cartCount"
+                    android:layout_width="@dimen/_11sdp"
+                    android:layout_height="@dimen/_11sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/_6sdp"
                     android:background="@drawable/red_circle"
-                    />
+                    android:text=""
+            android:visibility="gone"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_8ssp"
+                />
 
             </RelativeLayout>
-            <com.kftsoftwares.boutique.utils.TextViewRegular
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/wishList"
-                android:layout_centerInParent="true"
-                android:text="@string/wishlist"
-                android:textColor="#fff"
-                android:textSize="14sp"
-                />
+
 
         </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/accountRelativeLayout"
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
             android:layout_width="match_parent"
-            android:background="@color/tabLayout"
-android:visibility="gone"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_above="@+id/tablayout"
+            android:layout_below="@+id/action_bar"
+            android:background="@android:color/transparent" />
 
-            <ImageView
-                android:id="@+id/account"
-                android:layout_width="25sp"
-                android:layout_height="25sp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
-                android:contentDescription="@string/app_name"
-                android:src="@mipmap/ic_profile"
-                />
+        <LinearLayout
+            android:id="@+id/tablayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_alignParentBottom="true"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
-            <com.kftsoftwares.boutique.utils.TextViewRegular
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/account"
-                android:layout_centerInParent="true"
-                android:text="Account"
-                android:textColor="#fff"
-                android:textSize="14sp"
+            <RelativeLayout
+                android:id="@+id/homeRelativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/tabLayout">
 
-                />
+                <ImageView
+                    android:id="@+id/homeImage"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:scaleType="fitXY"
+                    android:contentDescription="@string/app_name"
+                    android:src="@mipmap/ic_home" />
+
+                <com.kftsoftwares.boutique.utils.TextViewRegular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/homeImage"
+                    android:layout_centerInParent="true"
+                    android:text="@string/home"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/_12ssp"
+
+                    />
 
 
-        </RelativeLayout>
+            </RelativeLayout>
 
-    </LinearLayout>
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:id="@+id/progressBar"
-        android:clickable="false"
-        android:focusable="false"
-        android:longClickable="false"
-        android:indeterminateOnly="true"
-        android:indeterminate="true"
-        android:visibility="gone"
-        />
+            <RelativeLayout
+                android:id="@+id/categoryRelativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+
+                android:background="@color/tabLayout">
+
+                <ImageView
+                    android:id="@+id/category"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@mipmap/ic_product_white" />
+
+                <com.kftsoftwares.boutique.utils.TextViewRegular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/category"
+                    android:layout_centerInParent="true"
+                    android:text="@string/category"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/_12ssp"
+
+                    />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/profileRelativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/tabLayout"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/profile"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_3sdp"
+
+                    android:contentDescription="@string/app_name"
+                    android:src="@mipmap/ic_profile" />
+
+                <com.kftsoftwares.boutique.utils.TextViewRegular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/profile"
+                    android:layout_centerInParent="true"
+                    android:text="@string/profile"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/_12ssp"
+
+                    />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settingRelativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:layout_weight="1"
+                android:background="@color/tabLayout">
+
+                <ImageView
+                    android:id="@+id/setting"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@mipmap/ic_setting" />
+
+                <com.kftsoftwares.boutique.utils.TextViewRegular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/setting"
+                    android:layout_centerInParent="true"
+                    android:text="@string/setting"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/_12ssp"
+
+                    />
+
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/wishListRelativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/tabLayout">
+
+                <RelativeLayout
+                    android:id="@+id/wishList"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+
+                    >
+
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:contentDescription="@string/app_name"
+                        android:src="@mipmap/ic_heart" />
+
+                    <TextView
+                        android:id="@+id/wishListCount"
+                        android:layout_width="@dimen/_11sdp"
+                        android:layout_height="@dimen/_11sdp"
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:background="@drawable/red_circle"
+                        android:gravity="center"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_8ssp"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+                <com.kftsoftwares.boutique.utils.TextViewRegular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/wishList"
+                    android:layout_centerInParent="true"
+                    android:text="@string/wishlist"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/_12ssp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/accountRelativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/tabLayout"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/account"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@mipmap/ic_profile" />
+
+                <com.kftsoftwares.boutique.utils.TextViewRegular
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/account"
+                    android:layout_centerInParent="true"
+                    android:text="@string/account"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/_14ssp"
+
+                    />
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:clickable="false"
+            android:focusable="false"
+            android:indeterminate="true"
+            android:indeterminateOnly="true"
+            android:longClickable="false"
+            android:visibility="gone" />
     </RelativeLayout>
+
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
@@ -333,8 +332,7 @@ android:visibility="gone"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
 
-        <include layout="@layout/bottom_sheet_content"
-            />
+        <include layout="@layout/bottom_sheet_content" />
 
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

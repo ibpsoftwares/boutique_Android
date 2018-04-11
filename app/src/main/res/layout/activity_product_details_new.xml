@@ -9,14 +9,14 @@
     <LinearLayout
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="@dimen/_42sdp"
         android:background="@color/tabLayout">
 
         <ImageView
             android:id="@+id/backButton"
-            android:layout_width="25sp"
+            android:layout_width="@dimen/_20sdp"
             android:layout_height="match_parent"
-            android:layout_margin="5sp"
+            android:layout_margin="@dimen/_5sdp"
             android:clickable="true"
             android:focusable="true"
             android:contentDescription="@string/app_name"
@@ -28,7 +28,7 @@
             android:id="@+id/searchEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_margin="@dimen/_10sdp"
             android:hint="Search..."
             android:background="@drawable/searchbar_background"
             android:drawableStart="@mipmap/search"
@@ -40,7 +40,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100sp"
+        android:layout_height="@dimen/_100sdp"
         android:layout_below="@+id/linearLayout"
         android:id="@+id/linearLayout1"
         android:orientation="horizontal"
@@ -75,9 +75,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="No Data Found"
+            android:text="@string/no_data_found"
             android:textColor="@color/black"
-            android:textSize="30dp"
+            android:textSize="@dimen/_25ssp"
 
             />
     </RelativeLayout>
@@ -85,7 +85,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="40sp"
+        android:layout_height="@dimen/_35sdp"
         android:background="@color/white"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
@@ -106,16 +106,16 @@
             <com.kftsoftwares.boutique.utils.TextViewRegular
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Filter"
+                android:text="@string/filter"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="@dimen/_16ssp"
                 />
             <ImageView
-                android:layout_width="20sp"
-                android:layout_height="20sp"
-                android:layout_marginStart="10sp"
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:layout_marginStart="@dimen/_10sdp"
                 android:contentDescription="@string/app_name"
                 android:src="@mipmap/filter"
                 />
@@ -141,29 +141,28 @@
             <com.kftsoftwares.boutique.utils.TextViewRegular
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sort"
+                android:text="@string/sort"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="@dimen/_16sdp"
                 />
             <ImageView
-                android:layout_width="20sp"
-                android:layout_height="20sp"
-                android:layout_marginStart="10sp"
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:layout_marginStart="@dimen/_10sdp"
                 android:contentDescription="@string/app_name"
                 android:src="@mipmap/sort"
                 />
-
 
         </LinearLayout>
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="35sp"
+            android:layout_height="@dimen/_35sdp"
             android:layout_weight="1"
-            android:layout_marginEnd="3sp"
-            android:text="Filter"
+            android:layout_marginEnd="@dimen/_3ssp"
+            android:text="@string/filter"
             android:visibility="gone"
             android:textAllCaps="false"
             android:textColor="@color/white"
@@ -172,9 +171,9 @@
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="35sp"
+            android:layout_height="@dimen/_35sdp"
             android:layout_weight="1"
-            android:text="Sort"
+            android:text="@string/sort"
             android:visibility="gone"
             android:textColor="@color/white"
             android:textAllCaps="false"

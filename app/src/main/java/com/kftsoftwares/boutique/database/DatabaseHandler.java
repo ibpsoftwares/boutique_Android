@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.kftsoftwares.boutique.Models.CartViewModel;
-import com.kftsoftwares.boutique.Models.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -219,7 +218,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public void DeleteAllData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String deleteQuery = " DELETE * FROM " + TABLE_BOUTIQUE;
+        String deleteQuery = "delete from " + TABLE_BOUTIQUE;
         db.execSQL(deleteQuery);
         db.close();
     }

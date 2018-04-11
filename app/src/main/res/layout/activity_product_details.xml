@@ -9,14 +9,14 @@
     <LinearLayout
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="@dimen/_55sdp"
         android:background="@color/tabLayout">
 
         <ImageView
             android:id="@+id/backButton"
-            android:layout_width="25sp"
+            android:layout_width="@dimen/_25sdp"
             android:layout_height="match_parent"
-            android:layout_margin="5sp"
+            android:layout_margin="@dimen/_5sdp"
             android:clickable="true"
             android:focusable="true"
             android:contentDescription="@string/app_name"
@@ -28,7 +28,7 @@
             android:id="@+id/searchEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_margin="@dimen/_10sdp"
             android:hint="Search..."
             android:background="@drawable/searchbar_background"
             android:drawableStart="@mipmap/search"
@@ -46,10 +46,10 @@
         android:orientation="horizontal">
         <Button
             android:layout_width="match_parent"
-            android:layout_height="35sp"
+            android:layout_height="@dimen/_35sdp"
             android:layout_weight="1"
-            android:layout_marginEnd="3sp"
-            android:text="Filter"
+            android:layout_marginEnd="@dimen/_3sdp"
+            android:text="@string/filter"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:background="@color/tabLayout"
@@ -59,9 +59,9 @@
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="35sp"
+            android:layout_height="@dimen/_35sdp"
             android:layout_weight="1"
-            android:text="Sort"
+            android:text="@string/sort"
             android:id="@+id/sort"
             android:textColor="@color/white"
             android:textAllCaps="false"
@@ -75,7 +75,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100sp"
+        android:layout_height="@dimen/_100sdp"
         android:layout_below="@+id/linearLayout"
         android:id="@+id/linearLayout1"
         android:orientation="horizontal"
@@ -109,9 +109,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="No Data Found"
+            android:text="@string/no_data_found"
             android:textColor="@color/black"
-            android:textSize="30dp"
+            android:textSize="@dimen/_20ssp"
 
             />
     </RelativeLayout>

@@ -9,9 +9,9 @@
         android:text=""
         android:id="@+id/categoryName"
         android:lines="1"
-        android:layout_margin="13dp"
+        android:layout_margin="@dimen/_10sdp"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="@dimen/_14ssp"
         />
 
 </LinearLayout>

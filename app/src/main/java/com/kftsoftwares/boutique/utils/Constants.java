@@ -15,6 +15,7 @@ public class Constants {
     public static final String Gender = "gender";
     public static final String Image_Link = "image";
     public static final String DEVICE_UD_ID = "deviceUID";
+    public static final String Symbol = "symbol";
 
     private static final String HOST_URL = "http://kftsoftwares.com/ecomm/recipes/";
 
@@ -59,7 +60,7 @@ public class Constants {
 
      public static final String GET_BANNER_IMAGES = HOST_URL + "getBannerImages";
 
-     public static final String UPLOAD_LOCAL_DATA = HOST_URL + "sendmewishlistdatafortesting";
+     public static final String UPLOAD_LOCAL_DATA = HOST_URL + "localData";
 
      public static final String GET_SIZES = HOST_URL + "getSize";
 
@@ -68,4 +69,11 @@ public class Constants {
      public static final String UPDATE_PROFILE = HOST_URL + "updateProfile";
 
      public static final String SHIPPING_DETAIL = HOST_URL + "shippingDetail";
+
+     public static final String ORDER_DETAIL = HOST_URL + "orderDetail";
+
+
+     public static final String PAYMENT = HOST_URL + "payment";
+
+     public static final String HISTORY = HOST_URL + "orderHistory";
 }

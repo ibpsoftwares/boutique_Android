@@ -128,12 +128,10 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
         if (mCartViewModels.size() > 0) {
             mWishListRelativeLayout.setVisibility(View.GONE);
             mListview.setVisibility(View.VISIBLE);
-
             for (int i = 0; i < mCartViewModels.size(); i++) {
                 mClothIds.add(mCartViewModels.get(i).getClothId());
             }
             mWishListAdapter.UpdateData(mCartViewModels);
-
         } else {
             mWishListRelativeLayout.setVisibility(View.VISIBLE);
             mListview.setVisibility(View.GONE);

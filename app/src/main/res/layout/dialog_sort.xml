@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/listView"
-        android:padding="10sp"
+        android:padding="@dimen/_10sdp"
         />
 
 <LinearLayout
@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="#2cb99e"
-        android:text="Cancel"
+        android:text="@string/cancel"
         android:id="@+id/cancel"
             android:textColor="@color/white"
         />
@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="OK"
+        android:text="@string/ok"
         android:visibility="gone"
         android:id="@+id/ok_Button"
         android:background="@color/tabLayout"

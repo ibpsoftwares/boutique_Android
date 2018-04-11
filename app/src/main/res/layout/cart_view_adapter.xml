@@ -3,11 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="10dp">
+    android:padding="@dimen/_10sdp">
 
     <com.mikhaellopez.circularimageview.CircularImageView
-        android:layout_width="66dp"
-        android:layout_height="66dp"
+        android:layout_width="@dimen/_66sdp"
+        android:layout_height="@dimen/_66sdp"
         app:civ_border_color="#EEEEEE"
         app:civ_border_width="1dp"
         app:civ_shadow="true"
@@ -28,12 +28,12 @@
         android:layout_alignParentEnd="true"
         android:textColor="@color/dark_gray"
         android:layout_alignParentBottom="true"
-        android:textSize="16sp" />
+        android:textSize="@dimen/_16ssp" />
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginStart="10sp"
+        android:layout_marginStart="@dimen/_10sdp"
         android:layout_toEndOf="@+id/profile_image"
         android:orientation="vertical">
 
@@ -42,8 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="sjdhahjhh"
-            android:textSize="16sp" />
+            android:textSize="@dimen/_16ssp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -57,10 +56,9 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:background="@color/light_gray"
-                android:text="Size: 7"
-                android:padding="5sp"
+                android:padding="@dimen/_5sdp"
 
-                android:textSize="14sp" />
+                android:textSize="@dimen/_14ssp" />
 
             <com.kftsoftwares.boutique.utils.TextViewRegular
                 android:id="@+id/Quantity"
@@ -68,12 +66,11 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:background="@color/light_gray"
-                android:text="X 2"
                 android:textAllCaps="false"
-                android:layout_marginStart="10sp"
-                android:padding="5sp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:padding="@dimen/_5sdp"
 
-                android:textSize="14sp" />
+                android:textSize="@dimen/_14ssp" />
         </LinearLayout>
 
 

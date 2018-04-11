@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Paint;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
+import static com.kftsoftwares.boutique.utils.Constants.Symbol;
 import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 
 /**
@@ -76,10 +78,13 @@ public class GridViewAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
+
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.grid_single, null);
+
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.grid_single, null);
 
         }
+
         final ImageView imageView = convertView.findViewById(R.id.imageHeart);
         final ImageView productImage = convertView.findViewById(R.id.productImage);
         final TextView name = convertView.findViewById(R.id.name);
@@ -95,11 +100,18 @@ public class GridViewAdapter extends BaseAdapter {
             oldPrice.setPaintFlags(oldPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
 
             oldPrice.setVisibility(View.VISIBLE);
-            oldPrice.setText(mArrayList.get(position).getPrice());
-            price.setText(mArrayList.get(position).getOfferPrice());
+            String priceText= Html.fromHtml(
+                    sharedPreferences.getString(Symbol,""))+" "+mArrayList.get(position).getOfferPrice();
+            String oldPriceText= Html.fromHtml(
+                    sharedPreferences.getString(Symbol,""))+" "+mArrayList.get(position).getPrice();
+
+            oldPrice.setText(oldPriceText);
+            price.setText(priceText);
         } else {
             oldPrice.setVisibility(View.GONE);
-            price.setText(mArrayList.get(position).getPrice());
+            String priceText= Html.fromHtml(sharedPreferences.getString(Symbol,""))+" "+mArrayList.get(position).getPrice();
+
+            price.setText(priceText);
         }
 
         if (mArrayList!=null && mArrayList.get(position).getWish_list() != null && mArrayList.get(position).getWish_list().equalsIgnoreCase("1")) {
@@ -175,8 +187,8 @@ public class GridViewAdapter extends BaseAdapter {
 
         });
 
-        name.setText(mArrayList.get(position).getBrandName());
-        title.setText(mArrayList.get(position).getTitle());
+       // name.setText(mArrayList.get(position).getBrandName());
+        name.setText(mArrayList.get(position).getTitle());
         final LinearLayout linearLayout = convertView.findViewById(R.id.linearLayout);
 
 
@@ -250,6 +262,5 @@ public class GridViewAdapter extends BaseAdapter {
         }
         notifyDataSetChanged();
     }
-
 
 }

@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -43,9 +45,11 @@ import com.kftsoftwares.boutique.volly.AppController;
 import com.kftsoftwares.boutique.volly.SingletonRequestQueue;
 import com.kftsoftwares.boutique.volly.VolleyMultipartRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -115,17 +119,19 @@ public class Profile_Activity extends Activity implements View.OnClickListener {
         mMobileNumber.setText(mSharedPreferences.getString(Phone, ""));
         email.setText(mSharedPreferences.getString(Email, ""));
 
-        if (!mSharedPreferences.getString(Dob,"").equalsIgnoreCase(""))
+        if (!mSharedPreferences.getString(Dob,"").equalsIgnoreCase("null"))
         {
             mDataOfBirth.setText(mSharedPreferences.getString(Dob,""));
         }
 
-        if (!mSharedPreferences.getString(Gender,"").equalsIgnoreCase(""))
+        if (!mSharedPreferences.getString(Gender,"").equalsIgnoreCase("null"))
         {
             int pos = new ArrayList<String>(Arrays.asList(mGender)).indexOf(mSharedPreferences.getString(Gender,""));
             mGenderSpinner.setSelection(pos);
         }
-         if (!mSharedPreferences.getString(Image_Link,"").equalsIgnoreCase(""))
+        String str = mSharedPreferences.getString(Image_Link,"");
+
+        if (!mSharedPreferences.getString(Image_Link,"").equalsIgnoreCase("null"))
         {
             String image = mSharedPreferences.getString(Image_Link,"");
 
@@ -350,8 +356,13 @@ public class Profile_Activity extends Activity implements View.OnClickListener {
                 Log.i("Image Path : ", "Image Path : " + path);
                 // Set the image in ImageView
                 try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), selectedImageUri);
-                    mProfileImage.setImageBitmap(bitmap);
+                    File sd = Environment.getExternalStorageDirectory();
+                    File image = new File(sd+path);
+                    BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                    Bitmap bitmap1 = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
+                  //  bitmap1 = Bitmap.createScaledBitmap(bitmap1, mProfileImage.getWidth(),mProfileImage.getHeight(),true);
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
+                    mProfileImage.setImageURI(selectedImageUri);
                     mSelected = true;
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -381,7 +392,18 @@ public class Profile_Activity extends Activity implements View.OnClickListener {
 
                 try {
                     JSONObject jsonObject = new JSONObject(resultResponse);
+                    JSONArray jsonArray = jsonObject.getJSONArray("user");
 
+                    JSONObject jsonObject1 = jsonArray.getJSONObject(0);
+
+                    SharedPreferences.Editor editor = mSharedPreferences.edit();
+
+                    editor.putString(Phone, jsonObject1.getString("contact"));
+                    editor.putString(Gender, jsonObject1.getString("gender"));
+                    editor.putString(Dob, jsonObject1.getString("dob"));
+                    editor.putString(Image_Link, jsonObject1.getString("image"));
+
+                    editor.commit();
                     Toast.makeText(mContext, ""+jsonObject.getString("message" ), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -392,7 +414,7 @@ public class Profile_Activity extends Activity implements View.OnClickListener {
                 mGenderSpinner.setEnabled(false);
                 mDataOfBirth.setEnabled(false);
                 mFloatButton.setVisibility(View.VISIBLE);
-                //     textView.setText(resultResponse);
+ //     textView.setText(resultResponse);
 //                Toast.makeText(AfterLogin.this, resultResponse, Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
@@ -438,7 +460,7 @@ public class Profile_Activity extends Activity implements View.OnClickListener {
                 Map<String, String> params = new HashMap<>();
                 params.put("id", mSharedPreferences.getString(User_ID, ""));
                 params.put("userdetail_id", mSharedPreferences.getString(User_ID_FOR_UPDATE_PROFILE, ""));
-                params.put("dob", mDataOfBirth.getText().toString());
+                params.put("dob", mServerDate);
                 params.put("contact", mMobileNumber.getText().toString());
                 params.put("username", mUserName.getText().toString());
                 params.put("gender", mGender[mSelectedPosition]);
@@ -464,4 +486,7 @@ public class Profile_Activity extends Activity implements View.OnClickListener {
         };
         SingletonRequestQueue.getInstance(mContext).addToRequestQueue(multipartRequest);
     }
+
+
+
 }

@@ -26,10 +26,7 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.MainActivity"
-            android:screenOrientation="portrait">
-
-
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.SplashScreen"
             android:screenOrientation="portrait">
@@ -38,7 +35,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".activities.ProductList"
@@ -60,10 +56,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.ShippingDetails"
-            android:screenOrientation="portrait">
-
-
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.Payment"
             android:screenOrientation="portrait" />
@@ -72,17 +65,14 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.PriceDetailScreen"
-            android:screenOrientation="portrait" >
-
-
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.Profile_Activity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activities.Demo_Activity">
-
-
-        </activity>
+        <activity android:name=".activities.Demo_Activity" />
+        <activity android:name=".activities.Main3Activity" />
+        <activity android:name=".activities.PaymentSuccessScreen" />
+        <activity android:name=".activities.History" />
     </application>
 
 </manifest>

@@ -11,7 +11,7 @@
     <ImageView
         android:id="@+id/productImage"
         android:layout_width="match_parent"
-        android:layout_height="220sp"
+        android:layout_height="@dimen/_180sdp"
         android:src="@mipmap/placeholder"
         android:adjustViewBounds="true"
         android:contentDescription="@string/app_name"
@@ -30,20 +30,21 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:padding="@dimen/_5sdp">
 
         <com.kftsoftwares.boutique.utils.TextViewRegular
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginEnd="@dimen/_18sdp"
             android:lines="1"
-            android:textColor="@color/gray"
-            android:textSize="12sp" />
+            android:textSize="@dimen/_12ssp" />
 
         <ImageView
             android:id="@+id/imageHeart"
-            android:layout_width="20sp"
-            android:layout_height="20sp"
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
             android:layout_alignEnd="@+id/name"
             android:layout_alignParentEnd="true"
             android:contentDescription="@string/app_name"
@@ -54,30 +55,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/name"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:lines="1"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="@dimen/_12ssp" />
 
         <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/name"
-            android:layout_marginStart="10sp"
-            android:layout_marginTop="3dp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_3sdp"
             android:layout_toEndOf="@+id/price"
             android:id="@+id/oldPrice"
+            android:lines="1"
             android:textColor="@android:color/holo_red_dark"
-            android:textSize="14sp" />
+            android:textSize="@dimen/_12ssp" />
 
         <com.kftsoftwares.boutique.utils.TextViewRegular
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/price"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="@dimen/_3sdp"
             android:lines="1"
+            android:visibility="gone"
             android:textColor="@color/gray"
-            android:textSize="14sp" />
+            android:textSize="@dimen/_14ssp" />
     </RelativeLayout>
 
 

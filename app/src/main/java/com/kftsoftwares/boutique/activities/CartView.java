@@ -40,7 +40,7 @@ import static com.kftsoftwares.boutique.utils.Constants.UPDATED_TOKEN;
 import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 import static com.kftsoftwares.boutique.utils.Constants.VIEW_CART;
 
-public class CartView extends AppCompatActivity implements CartListInterface {
+public class    CartView extends AppCompatActivity implements CartListInterface {
 
     private ListView mListView;
     private SharedPreferences mSharedPreferences;
@@ -84,6 +84,8 @@ public class CartView extends AppCompatActivity implements CartListInterface {
 
         }
 
+
+
         mCheckOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,12 +93,14 @@ public class CartView extends AppCompatActivity implements CartListInterface {
                     Toast.makeText(CartView.this, "Please login first", Toast.LENGTH_SHORT).show();
 
                     Intent i = new Intent(CartView.this, LoginActivity.class);
+                    i.putExtra("value","cart");
                     startActivity(i);
                 } else {
                     checkOutApi();
                 }
             }
         });
+
 
     }
 
@@ -135,13 +139,27 @@ public class CartView extends AppCompatActivity implements CartListInterface {
                 pDialog.dismiss();
                 try {
                     JSONObject jsonObject = new JSONObject(response);
+                    JSONArray jsonArray1 = jsonObject.getJSONArray("shippingDetails");
+
+                    if (jsonArray1.length()>0)
+                    {
+                        Intent i = new Intent(CartView.this, PriceDetailScreen.class);
+                        i.putExtra("response_value", response);
+                        startActivity(i);
+
+                    }
+                    else {
+                        Intent i = new Intent(CartView.this, ShippingDetails.class);
+                        i.putExtra("response_value", response);
+                        startActivity(i);
+
+                    }
 
 
 
                     //  Toast.makeText(CartView.this, ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
 
-                    Intent i = new Intent(CartView.this, ShippingDetails.class);
-                    startActivity(i);
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();

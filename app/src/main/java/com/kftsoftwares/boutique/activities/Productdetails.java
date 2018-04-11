@@ -121,6 +121,8 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                 finish();
             }
         });
+
+
         backLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -544,7 +546,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
         ivArrayDotsPager = new ImageView[mSingleProductImage.size()];
         for (int i = 0; i < ivArrayDotsPager.length; i++) {
             ivArrayDotsPager[i] = new ImageView(Productdetails.this);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(180, 230);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(150, 200);
             params.setMargins(10, 10, 10, 10);
             ivArrayDotsPager[i].setLayoutParams(params);
             //   ivArrayDotsPager[i].setBackground(ContextCompat.getDrawable(this,R.drawable.un_select));

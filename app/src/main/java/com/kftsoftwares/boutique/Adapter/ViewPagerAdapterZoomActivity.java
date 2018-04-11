@@ -1,7 +1,6 @@
 package com.kftsoftwares.boutique.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.kftsoftwares.boutique.Models.Image;
 import com.kftsoftwares.boutique.R;
-import com.kftsoftwares.boutique.activities.ZoomActivity;
 
 import java.util.ArrayList;
 

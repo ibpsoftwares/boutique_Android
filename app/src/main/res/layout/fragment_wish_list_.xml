@@ -22,7 +22,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_centerInParent="true"
-      android:text="WishList Empty"
+      android:text="@string/wishlist_empty"
       android:textColor="@color/tabLayout"
       android:layout_below="@+id/bag_image"
       android:textSize="20sp"

@@ -1,13 +1,12 @@
 package com.kftsoftwares.boutique.Fragments;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +40,7 @@ import java.util.TimerTask;
 import static com.kftsoftwares.boutique.utils.Constants.GET_ALL_PRODUCTS;
 import static com.kftsoftwares.boutique.utils.Constants.GET_BANNER_IMAGES;
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
+import static com.kftsoftwares.boutique.utils.Constants.Symbol;
 import static com.kftsoftwares.boutique.utils.Constants.UPDATED_TOKEN;
 import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 
@@ -91,8 +91,18 @@ public class Home extends Fragment implements View.OnClickListener {
              mContext.mCartCountText.setVisibility(View.VISIBLE);
 
         }
-        getAllProducts();
+      getAllProducts();
 
+//        if (mContext.mGetAllProductModels.size()>0) {
+//            mNoDataFound.setVisibility(View.GONE);
+//            mGridView.setVisibility(View.VISIBLE);
+//            GridViewAdapter gridViewAdapter = new GridViewAdapter(mContext, mContext.mGetAllProductModels);
+//            mGridView.setAdapter(gridViewAdapter);
+//        }
+//        else {
+//            mGridView.setVisibility(View.GONE);
+//            mNoDataFound.setVisibility(View.VISIBLE);
+//        }
     }
 
     @Override
@@ -275,6 +285,12 @@ mNoDataFound = view.findViewById(R.id.noDataFound);
                                 getAllProductModel.setWish_list("0");
 
                             }
+
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString(Symbol,jsonObject1.getString("symbol"));
+                            editor.commit();
+                            editor.apply();
+
                             getAllProductModel.setBrandName(jsonObject1.getString("brand"));
                             getAllProductModel.setCategoryName(jsonObject1.getString("category_name"));
                             getAllProductModel.setImage1(jsonObject1.getString("image1"));
@@ -328,7 +344,7 @@ mNoDataFound = view.findViewById(R.id.noDataFound);
             }
         };
 // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req,mContext);
 
 
     }
@@ -388,7 +404,7 @@ mNoDataFound = view.findViewById(R.id.noDataFound);
         };
 
 // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req, mContext);
 
 
     }

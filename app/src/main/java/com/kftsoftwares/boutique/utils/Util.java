@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.kftsoftwares.boutique.R;
+import com.kftsoftwares.boutique.volly.AppController;
 
 /**
  * Created by apple on 23/02/18.
@@ -20,8 +21,12 @@ import com.kftsoftwares.boutique.R;
 public class Util {
 
 
-    public void showSingleOkAlert(Context context, String message, String title)
+    public void showSingleOkAlert(final Context context, String message, String title)
     {
+        if(!AppController.getInstance().mShowDialog)
+        {
+
+            AppController.getInstance().mShowDialog= true;
         AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
         builder1.setMessage(message);
         builder1.setTitle(title);
@@ -32,12 +37,17 @@ public class Util {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
+                        AppController.getInstance().mShowDialog= false;
                     }
                 });
 
 
         AlertDialog alert11 = builder1.create();
         alert11.show();
+        }
+        else {
+
+        }
     }
 
     public void showAlert(Context context, String message, String title)

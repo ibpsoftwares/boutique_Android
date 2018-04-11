@@ -2,7 +2,8 @@ package com.kftsoftwares.boutique.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Paint;
+import android.content.SharedPreferences;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +15,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.kftsoftwares.boutique.Interface.WishListInterface;
-import com.kftsoftwares.boutique.Interface.WishListInterfaceForActivity;
 import com.kftsoftwares.boutique.Models.CartViewModel;
-import com.kftsoftwares.boutique.Models.WishListModel;
 import com.kftsoftwares.boutique.R;
 import com.kftsoftwares.boutique.activities.Productdetails;
 
 import java.util.ArrayList;
+
+import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
+import static com.kftsoftwares.boutique.utils.Constants.Symbol;
 
 
 /**
@@ -32,6 +34,7 @@ public class WishListAdapter extends BaseAdapter {
     private Context mContext;
     private ArrayList<CartViewModel> mWishList;
     private WishListInterface mListener;
+    private SharedPreferences mSharedPreference;
 
     public WishListAdapter(Context context, ArrayList<CartViewModel> wishList, WishListInterface activity) {
 
@@ -39,6 +42,7 @@ public class WishListAdapter extends BaseAdapter {
         mContext = context;
         mWishList.addAll(wishList);
         mListener = activity;
+        mSharedPreference= context.getSharedPreferences(MyPREFERENCES,Context.MODE_PRIVATE);
     }
 
     @Override
@@ -78,16 +82,15 @@ public class WishListAdapter extends BaseAdapter {
 
                 !mWishList.get(position).getOfferPrice().equalsIgnoreCase("null")) {
 
-            price.setText(mWishList.get(position).getOfferPrice());
+            price.setText(Html.fromHtml(mSharedPreference.getString(Symbol,""))+" "+mWishList.get(position).getOfferPrice());
         } else {
-            price.setText(mWishList.get(position).getPrice());
+            price.setText(Html.fromHtml(mSharedPreference.getString(Symbol,""))+" "+mWishList.get(position).getPrice());
         }
-        price.setText(mWishList.get(position).getPrice());
         ImageView delete = convertView.findViewById(R.id.delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.updateWishList(mWishList.get(position).getClothId(),position,mWishList);
+                mListener.updateWishList(mWishList.get(position).getClothId(), position, mWishList);
             }
         });
 
@@ -95,7 +98,7 @@ public class WishListAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-                mListener.moveToWishList(mWishList.get(position).getClothId(),position,mWishList);
+                mListener.moveToWishList(mWishList.get(position).getClothId(), position, mWishList);
 
             }
         });
@@ -114,10 +117,8 @@ public class WishListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void UpdateData(ArrayList<CartViewModel> wishList)
-    {
-        if (mWishList!=null)
-        {
+    public void UpdateData(ArrayList<CartViewModel> wishList) {
+        if (mWishList != null) {
             mWishList.clear();
         }
         mWishList.addAll(wishList);

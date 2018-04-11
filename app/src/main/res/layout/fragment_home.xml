@@ -9,7 +9,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.6">
+            android:layout_weight="0.65">
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/viewPager"
@@ -22,6 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:visibility="gone"
                 android:contentDescription="@string/app_name"
                 android:src="@mipmap/arrow_right" />
 
@@ -30,6 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:visibility="gone"
                 android:layout_centerVertical="true"
                 android:contentDescription="@string/app_name"
                 android:src="@mipmap/leftarrow" />
@@ -40,19 +42,27 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.4"
+            android:layout_weight="0.35"
             android:orientation="vertical"
+            android:background="@color/border_color"
 
             >
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                >
             <com.kftsoftwares.boutique.utils.TextViewRegular
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/_5sdp"
                 android:text="@string/our_popular_products"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="@dimen/_14ssp"
                 android:textStyle="bold" />
+
+            </LinearLayout>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -74,7 +84,7 @@
                     android:layout_centerInParent="true"
                     android:text="No Product Found"
                     android:textColor="@color/black"
-                    android:textSize="18dp"
+                    android:textSize="@dimen/_16ssp"
                     />
             </RelativeLayout>
 

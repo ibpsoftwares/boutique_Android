@@ -9,20 +9,20 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="@dimen/_20sdp">
 
         <ImageView
             android:id="@+id/backImage"
-            android:layout_width="30sp"
-            android:layout_height="30sp"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/arrow_blue"
 
             />
 
         <ImageView
-            android:layout_width="140dp"
-            android:layout_height="140dp"
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_120sdp"
             android:layout_gravity="center_horizontal"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_update_green_logo" />
@@ -32,7 +32,7 @@
             android:id="@+id/input_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawablePadding="10dp"
+            android:drawablePadding="@dimen/_8sdp"
             android:drawableStart="@mipmap/username_new"
             android:fontFamily="@font/whitney_medium"
             android:hint="@string/enter_userName"
@@ -43,17 +43,17 @@
             android:id="@+id/input_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawablePadding="10dp"
+            android:drawablePadding="@dimen/_8sdp"
             android:drawableStart="@mipmap/email_new"
             android:fontFamily="@font/whitney_medium"
-            android:hint="@string/enter_email"
+            android:hint="Enter email"
             android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/input_mobile_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawablePadding="10dp"
+            android:drawablePadding="@dimen/_8sdp"
             android:drawableStart="@mipmap/phone"
             android:fontFamily="@font/whitney_medium"
             android:maxLength="10"
@@ -65,7 +65,7 @@
             android:id="@+id/input_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawablePadding="10dp"
+            android:drawablePadding="@dimen/_8sdp"
             android:drawableStart="@mipmap/password_new"
             android:fontFamily="@font/whitney_medium"
             android:hint="@string/enter_password"
@@ -75,8 +75,8 @@
         <Button
             android:id="@+id/signUp"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="10sp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:background="@drawable/sign_in_button"
             android:fontFamily="@font/whitney_medium"
             android:text="@string/sign_up"
@@ -89,11 +89,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:gravity="center"
             android:text="@string/already_account"
             android:textColor="@color/tabLayout"
-            android:textSize="18sp"
+            android:textSize="@dimen/_16ssp"
             android:textStyle="bold" />
     </LinearLayout>
 </ScrollView>

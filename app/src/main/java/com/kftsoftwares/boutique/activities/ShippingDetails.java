@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -49,19 +50,37 @@ public class ShippingDetails extends AppCompatActivity implements View.OnClickLi
 
     private Spinner mSpinner;
 
-    private EditText mName, mAddress, mLocality, mTownCity, mZipCode, mPhoneNumber;
+    private EditText mName, mAddress, mLocality, mTownCity, mZipCode, mPhoneNumber, mState;
 
     private SharedPreferences mSharedPreference;
 
     private CheckBox mSaturday, mSunday;
     private Button mSubmit;
     private int mAddressSelectedValue = -1;
+    private String mResponse = "", mResponse_Schedule = "";
+    private JSONArray mJsonArray;
+
+    private String mCountryName="";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shipping_details);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            if (bundle.getString("response_value") != null) {
+                mResponse = bundle.getString("response_value");
+
+            }
+            if (bundle.getString("jsonData") != null) {
+                mResponse_Schedule = bundle.getString("jsonData");
+
+            }
+        }
+
+
         mSpinner = findViewById(R.id.spinner);
 
         mName = findViewById(R.id.name);
@@ -72,6 +91,7 @@ public class ShippingDetails extends AppCompatActivity implements View.OnClickLi
         mPhoneNumber = findViewById(R.id.phoneNumber);
         mSaturday = findViewById(R.id.saturday);
         mSunday = findViewById(R.id.sunday);
+        mState = findViewById(R.id.state);
         mSubmit = findViewById(R.id.next);
         final LinearLayout officeDetailLayout = findViewById(R.id.officeDetailLayout);
         final RadioButton home = findViewById(R.id.home);
@@ -95,15 +115,78 @@ public class ShippingDetails extends AppCompatActivity implements View.OnClickLi
 
         mSpinner.setAdapter(arrayAdapter);
 
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                mCountryName = COUNTRY[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         mName.setText(mSharedPreference.getString(User_Name, ""));
 
         mSubmit.setOnClickListener(this);
+        if (!mResponse.equalsIgnoreCase("")) {
+            try {
+                JSONObject jsonObject = new JSONObject(mResponse);
+                for (int i = 0; i < jsonObject.length(); i++) {
+
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (!mResponse_Schedule.equalsIgnoreCase("")) {
+
+            try {
+                JSONObject jsonObject = new JSONObject(mResponse_Schedule);
+                JSONArray jsonArray = jsonObject.getJSONArray("shippingDetails");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                    mLocality.setText(jsonObject1.getString("locality"));
+                    mAddress.setText(jsonObject1.getString("address"));
+                    mTownCity.setText(jsonObject1.getString("city"));
+                    mZipCode.setText(jsonObject1.getString("zip_code"));
+                    mState.setText(jsonObject1.getString("state"));
+
+                    if (jsonObject1.getString("addressType").equalsIgnoreCase("office")) {
+                        office.setChecked(true);
+                        officeDetailLayout.setVisibility(View.VISIBLE);
+                    } else {
+                        home.setChecked(true);
+                        officeDetailLayout.setVisibility(View.GONE);
+                    }
+
+                    if (jsonObject1.getString("availability").equalsIgnoreCase("saturday,sunday")) {
+                        mSaturday.setChecked(true);
+                        mSunday.setChecked(true);
+                    } else if (jsonObject1.getString("availability").equalsIgnoreCase("saturday")) {
+                        mSaturday.setChecked(true);
+                    } else if (jsonObject1.getString("availability").equalsIgnoreCase("sunday")) {
+                        mSunday.setChecked(true);
+                    }
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
 
     }
 
     @Override
     public void onClick(View v) {
-        if (mName.getText().toString().equalsIgnoreCase("")) {
+        if (mCountryName.equalsIgnoreCase("")) {
+            Toast.makeText(this, "Please select country", Toast.LENGTH_SHORT).show();
+        }else if (mName.getText().toString().equalsIgnoreCase("")) {
             Toast.makeText(this, "Enter name", Toast.LENGTH_SHORT).show();
         } else if (mAddress.getText().toString().equalsIgnoreCase("")) {
             Toast.makeText(this, "Enter address", Toast.LENGTH_SHORT).show();
@@ -113,6 +196,9 @@ public class ShippingDetails extends AppCompatActivity implements View.OnClickLi
 
         } else if (mTownCity.getText().toString().equalsIgnoreCase("")) {
             Toast.makeText(this, "Enter city/district", Toast.LENGTH_SHORT).show();
+
+        } else if (mState.getText().toString().equalsIgnoreCase("")) {
+            Toast.makeText(this, "Enter state", Toast.LENGTH_SHORT).show();
 
         } else if (mZipCode.getText().toString().equalsIgnoreCase("")) {
             Toast.makeText(this, "Enter zip code", Toast.LENGTH_SHORT).show();
@@ -152,9 +238,13 @@ public class ShippingDetails extends AppCompatActivity implements View.OnClickLi
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
-                    Intent i = new Intent(ShippingDetails.this,PriceDetailScreen.class);
 
+                    Intent i = new Intent(ShippingDetails.this, PriceDetailScreen.class);
+
+                    i.putExtra("response_value", mResponse);
+                    i.putExtra("shipping_value", response);
                     startActivity(i);
+                    finish();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -180,9 +270,11 @@ public class ShippingDetails extends AppCompatActivity implements View.OnClickLi
                 params.put("address", mAddress.getText().toString());
                 params.put("zip_code", mZipCode.getText().toString());
                 params.put("username", mName.getText().toString());
-                params.put("contact", mPhoneNumber.getText().toString());
+                params.put("city", mTownCity.getText().toString());
+                params.put("contact1", mPhoneNumber.getText().toString());
+                params.put("country", mCountryName);
                 params.put("userdetail_id", mSharedPreference.getString(User_ID_FOR_UPDATE_PROFILE, ""));
-                params.put("state", mTownCity.getText().toString());
+                params.put("state", mState.getText().toString());
 
                 if (mAddressSelectedValue == 1) {
                     params.put("addressType", "home");

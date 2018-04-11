@@ -2,6 +2,8 @@ package com.kftsoftwares.boutique.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,9 @@ import com.kftsoftwares.boutique.activities.Productdetails;
 
 import java.util.ArrayList;
 
+import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
+import static com.kftsoftwares.boutique.utils.Constants.Symbol;
+
 
 /**
  * Created by apple on 21/02/18.
@@ -28,13 +33,15 @@ public class CartViewAdapter extends BaseAdapter {
     private Context mContext;
     private ArrayList<CartViewModel> mCartList;
     private CartListInterface mListener;
-    private int mCount=1;
+    private int mCount = 1;
+    private SharedPreferences mSharedPreference;
 
     public CartViewAdapter(Context context, ArrayList<CartViewModel> wishList, CartListInterface activity) {
 
         mContext = context;
         mCartList = wishList;
         mListener= activity;
+        mSharedPreference= context.getSharedPreferences(MyPREFERENCES,Context.MODE_PRIVATE);
 
     }
 
@@ -70,9 +77,10 @@ public class CartViewAdapter extends BaseAdapter {
         name.setText(mCartList.get(position).getTitle());
         if (mCartList.get(position).getOfferPrice() != null &&
                 !mCartList.get(position).getOfferPrice().equalsIgnoreCase("null")) {
-            price.setText(mCartList.get(position).getOfferPrice());
+            price.setText(Html.fromHtml(mSharedPreference.getString(Symbol,""))+" "+mCartList.get(position).getOfferPrice());
+
         } else {
-            price.setText(mCartList.get(position).getPrice());
+            price.setText(Html.fromHtml(mSharedPreference.getString(Symbol,""))+" "+mCartList.get(position).getPrice());
         }
         ImageView minus = convertView.findViewById(R.id.minus);
         ImageView add = convertView.findViewById(R.id.plus);
@@ -115,7 +123,6 @@ public class CartViewAdapter extends BaseAdapter {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(circleImageView);
 
-        price.setText(mCartList.get(position).getPrice());
         size.setText("Size : "+ mCartList.get(position).getSize());
         ImageView delete= convertView.findViewById(R.id.delete);
         delete.setOnClickListener(new View.OnClickListener() {

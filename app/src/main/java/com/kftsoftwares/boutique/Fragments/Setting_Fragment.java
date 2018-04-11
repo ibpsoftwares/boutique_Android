@@ -12,8 +12,10 @@ import android.widget.LinearLayout;
 
 import com.kftsoftwares.boutique.R;
 import com.kftsoftwares.boutique.activities.Change_Password;
+import com.kftsoftwares.boutique.activities.History;
 import com.kftsoftwares.boutique.activities.MainActivity;
 import com.kftsoftwares.boutique.activities.Profile_Activity;
+import com.kftsoftwares.boutique.database.DatabaseHandler;
 
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 
@@ -48,9 +50,11 @@ public class Setting_Fragment extends Fragment implements View.OnClickListener {
         LinearLayout changePassword = view.findViewById(R.id.changePassword);
         LinearLayout signOut = view.findViewById(R.id.signOut);
         LinearLayout profile = view.findViewById(R.id.profile);
+        LinearLayout history = view.findViewById(R.id.history);
         changePassword.setOnClickListener(this);
         profile.setOnClickListener(this);
         signOut.setOnClickListener(this);
+        history.setOnClickListener(this);
         return view;
     }
 
@@ -66,8 +70,14 @@ public class Setting_Fragment extends Fragment implements View.OnClickListener {
             case R.id.profile:
                startActivity(new Intent(getActivity(),Profile_Activity.class));
                 break;
+                case R.id.history:
+               startActivity(new Intent(getActivity(),History.class));
+                break;
 
             case R.id.signOut:
+                DatabaseHandler handler = new DatabaseHandler(getActivity());
+             //   handler.DeleteAllData();
+
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
                 sharedPreferences.edit().clear().apply();
 

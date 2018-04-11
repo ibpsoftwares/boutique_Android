@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="@dimen/_42sdp"
         android:background="@color/tabLayout">
 
         <RelativeLayout
@@ -19,10 +19,10 @@
 
             <ImageView
                 android:id="@+id/backButton"
-                android:layout_width="25sp"
+                android:layout_width="@dimen/_20sdp"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
-                android:layout_margin="5sp"
+                android:layout_margin="@dimen/_5sdp"
                 android:contentDescription="@string/app_name"
                 android:scaleType="fitCenter"
                 android:src="@drawable/arrow_left" />
@@ -32,18 +32,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Price Detail"
+            android:text="@string/price_detail"
             android:textColor="#fff"
-            android:textSize="18sp"
+            android:textSize="@dimen/_16ssp"
             android:textStyle="bold"
             tools:ignore="RelativeOverlap" />
 
         <ImageView
             android:id="@+id/cart"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="@dimen/_5sdp"
             android:contentDescription="@string/app_name"
             android:scaleType="centerCrop"
             android:src="@drawable/cart"
@@ -57,8 +57,8 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/action_bar"
         android:fillViewport="true"
-
-        android:padding="5dp"
+android:layout_above="@+id/linearLayout"
+        android:padding="@dimen/_5sdp"
         android:scrollbars="none">
 
         <LinearLayout
@@ -69,10 +69,10 @@
             <com.kftsoftwares.boutique.utils.TextViewBold
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="@dimen/_5sdp"
                 android:text="PRICE DETAILS"
                 android:textColor="@color/tabLayout"
-                android:textSize="14sp"
+                android:textSize="@dimen/_14ssp"
                 android:textStyle="bold" />
 
             <RelativeLayout
@@ -80,16 +80,16 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:orientation="vertical"
-                android:padding="5dp">
+                android:padding="@dimen/_5sdp">
 
                 <com.kftsoftwares.boutique.utils.TextViewBold
                     android:id="@+id/itemCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_margin="@dimen/_5sdp"
                     android:text="1 ITEM"
                     android:textColor="@color/tabLayout"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/_14ssp"
                     android:textStyle="bold" />
 
                 <View
@@ -97,9 +97,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_below="@+id/itemCount"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
                     android:background="@color/black" />
 
                 <com.kftsoftwares.boutique.utils.TextViewRegular
@@ -107,88 +107,89 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/view1"
-                    android:layout_margin="5dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"
-                    android:text="Order Total"
-                    android:textSize="14sp" />
+                    android:layout_margin="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:text="@string/order_total"
+                    android:textSize="@dimen/_14ssp" />
 
                 <com.kftsoftwares.boutique.utils.TextViewRegular
-                    android:id="@+id/orderTotalCount"
+                    android:id="@+id/orderTotalAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_below="@+id/view1"
-                    android:layout_margin="5dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
                     android:text="Rs 320"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/_16sdp" />
 
                 <com.kftsoftwares.boutique.utils.TextViewRegular
                     android:id="@+id/delivery"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/orderTotal"
-                    android:layout_margin="5dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"
-                    android:text="Delivery"
-                    android:textSize="14sp" />
+                    android:layout_margin="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:text="@string/delivery_charges"
+                    android:textSize="@dimen/_14ssp" />
 
                 <com.kftsoftwares.boutique.utils.TextViewRegular
-                    android:id="@+id/deliveryCount"
+                    android:id="@+id/deliveryAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_below="@+id/orderTotal"
-                    android:layout_margin="5dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
                     android:text="Rs 320"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/_16ssp" />
 
                 <View
                     android:id="@+id/view2"
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_below="@+id/deliveryCount"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"
+                    android:layout_below="@+id/deliveryAmount"
+                    android:layout_marginBottom="@dimen/_5ssp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
                     android:background="@color/black" />
 
                 <com.kftsoftwares.boutique.utils.TextViewBold
                     android:id="@+id/total"
                     android:layout_width="wrap_content"
+
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/view2"
-                    android:layout_margin="5dp"
-                    android:text="Total Payable"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:text="@string/total_payable"
                     android:textColor="@color/tabLayout"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/_14ssp"
                     android:textStyle="bold" />
 
                 <com.kftsoftwares.boutique.utils.TextViewBold
-                    android:id="@+id/totalCount"
+                    android:id="@+id/totalPayableAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_below="@+id/view2"
-                    android:layout_margin="5dp"
+                    android:layout_margin="@dimen/_5sdp"
                     android:text="Rs 540"
                     android:textColor="@color/tabLayout"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/_14ssp"
                     android:textStyle="bold" />
             </RelativeLayout>
 
             <com.kftsoftwares.boutique.utils.TextViewBold
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="@dimen/_5sdp"
                 android:text="PAYMENT METHOD"
                 android:textColor="@color/tabLayout"
-                android:textSize="14sp"
+                android:textSize="@dimen/_14ssp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -200,16 +201,20 @@
 
                 <RadioGroup
                     android:layout_width="match_parent"
+                    android:id="@+id/radioGroup"
                     android:layout_height="match_parent">
 
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" Credit / Debit Card"
+                        android:id="@+id/creditCard"
+                        android:text="@string/credit_debit_card"
                         /> <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=" Cash on Delivery"
+                    android:id="@+id/cashOnDelivery"
+
+                    android:text="@string/cash_on_delivery"
                         />
                 </RadioGroup>
             </LinearLayout>
@@ -217,16 +222,16 @@
             <com.kftsoftwares.boutique.utils.TextViewBold
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_margin="@dimen/_5sdp"
                 android:text="SELECT ADDRESS"
                 android:textColor="@color/tabLayout"
-                android:textSize="14sp"
+                android:textSize="@dimen/_14ssp"
                 android:textStyle="bold" />
             <ListView
                 android:id="@+id/listView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:divider="@null"
                 android:background="@color/white" />
 
@@ -237,28 +242,29 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/linearLayout"
 
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="@dimen/_5sdp">
 
         <Button
-            android:id="@+id/addToWishList"
+            android:id="@+id/cancel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="#2cb99e"
             android:fontFamily="@font/whitney_medium"
-            android:text="CANCEL"
+            android:text="@string/cancel"
             android:textColor="@color/white" />
 
         <Button
-            android:id="@+id/addToCart"
+            android:id="@+id/confirmOrder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/tabLayout"
             android:fontFamily="@font/whitney_medium"
-            android:text="CONFIRM ORDER"
+            android:text="@string/confirm_order"
             android:textColor="@color/white"
 
             />

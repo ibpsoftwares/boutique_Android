@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_margin="@dimen/_2sdp"
+                android:layout_below="@+id/orderId"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@mipmap/checked_icon"
+                 />
+
+            <com.kftsoftwares.boutique.utils.TextViewRegular
+                android:id="@+id/orderId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_centerHorizontal="true"
+                android:layout_toEndOf="@+id/imageView"
+                android:text="Order Id"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12ssp" />
+
+            <com.kftsoftwares.boutique.utils.TextViewRegular
+                android:id="@+id/orderStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_toEndOf="@+id/imageView"
+                android:textColor="@color/black"
+                android:text="In Progress"
+                android:layout_below="@+id/orderId"
+                android:layout_marginTop="@dimen/_5sdp"
+
+                android:textSize="@dimen/_12ssp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <com.kftsoftwares.boutique.utils.TextViewRegular
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:text="Order Date"
+                android:id="@+id/orderDate"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12ssp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <com.kftsoftwares.boutique.utils.TextViewRegular
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:text="Amount"
+                android:id="@+id/amount"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12ssp" />
+
+        </RelativeLayout>
+
+</LinearLayout>

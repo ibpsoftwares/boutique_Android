@@ -10,15 +10,22 @@ import com.kftsoftwares.boutique.R;
 
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 import static com.kftsoftwares.boutique.utils.Constants.User_ID;
+import static com.kftsoftwares.boutique.utils.Constants.User_ID_FOR_UPDATE_PROFILE;
 
 public class SplashScreen extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
         sharedPreferences = getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
+
+        String str =sharedPreferences.getString(User_ID_FOR_UPDATE_PROFILE, "");
+
 
         new Handler().postDelayed(new Runnable() {
 

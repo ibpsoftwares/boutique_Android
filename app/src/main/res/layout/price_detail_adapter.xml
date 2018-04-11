@@ -7,32 +7,31 @@
         android:id="@+id/relativeLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="15dp">
+        android:padding="@dimen/_15sdp">
 
         <com.kftsoftwares.boutique.utils.TextViewBold
             android:id="@+id/userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kulbir"
             android:textColor="@color/tabLayout"
-            android:textSize="16sp" />
+            android:textSize="@dimen/_16ssp" />
 
         <Button
             android:id="@+id/button"
-            android:layout_width="60dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_20sdp"
             android:text="Home"
             android:background="@drawable/home_or_office"
-            android:textSize="12sp"
+            android:textSize="@dimen/_12ssp"
             android:layout_alignParentEnd="true" />
         <Button
             android:id="@+id/buttonEdit"
-            android:layout_width="60dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_20sdp"
             android:layout_alignParentBottom="true"
             android:text="Edit"
             android:background="@color/tabLayout"
-            android:textSize="12sp"
+            android:textSize="@dimen/_12sdp"
             android:textColor="@color/white"
             android:layout_alignParentEnd="true" />
 
@@ -41,33 +40,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/userName"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_toStartOf="@+id/button"
-            android:text="3271,Sector 71 ,mohali ,123456 "
-            android:textSize="16sp" />
+            android:textSize="@dimen/_16ssp" />
 
         <com.kftsoftwares.boutique.utils.TextViewRegular
             android:id="@+id/mobileText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/address"
-            android:layout_marginEnd="5dp"
-            android:layout_marginTop="10dp"
-            android:text="Mobile:"
-            android:textSize="16sp" />
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_16ssp" />
 
         <com.kftsoftwares.boutique.utils.TextViewRegular
             android:id="@+id/mobileNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/address"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:layout_toEndOf="@+id/mobileText"
             android:layout_toStartOf="@+id/button"
-            android:text="90909090909"
-            android:textSize="16sp" />
+            android:textSize="@dimen/_16ssp" />
     </RelativeLayout>
 
 
@@ -83,7 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="1dp"
-            android:text="Edit"
+            android:text="@string/edit"
             android:textColor="@color/dark_blue"
             android:background="@color/white"
             android:layout_marginEnd="1dp"
@@ -92,7 +88,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_marginTop="1dp"
-            android:text="Add new address"
+            android:text="@string/add_new_address"
             android:textColor="@color/dark_blue"
             android:layout_height="match_parent"
             android:layout_weight="1"

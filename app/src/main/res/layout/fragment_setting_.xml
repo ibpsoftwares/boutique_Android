@@ -8,20 +8,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:layout_gravity="center_vertical"
+android:gravity="center_vertical"
+    android:padding="@dimen/_10sdp">
 <ImageView
-    android:layout_width="30sp"
-    android:layout_height="30sp"
+    android:layout_width="@dimen/_20sdp"
+    android:layout_height="@dimen/_20sdp"
     android:contentDescription="@string/app_name"
     android:src="@mipmap/ic_help"
+    android:layout_gravity="center_vertical"
 
     />
     <com.kftsoftwares.boutique.utils.TextViewRegular
         android:layout_width="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="@dimen/_10sdp"
         android:text="Help"
-        android:textSize="20sp"
+        android:textSize="@dimen/_16ssp"
         android:textColor="@color/black"
+        android:gravity="center_vertical"
+        android:layout_gravity="center_vertical"
         android:layout_height="wrap_content" />
 
 
@@ -32,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/border_color"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="@dimen/_20sdp"
         />
 
     <LinearLayout
@@ -40,10 +45,10 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/profile"
-        android:padding="10dp">
+        android:padding="@dimen/_10sdp">
         <ImageView
-            android:layout_width="30sp"
-            android:layout_height="30sp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
             android:contentDescription="@string/app_name"
             android:src="@mipmap/ic_profile_green"
 
@@ -52,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_marginStart="10dp"
             android:text="Profile"
-            android:textSize="20sp"
+            android:textSize="@dimen/_16ssp"
             android:textColor="@color/black"
             android:layout_height="wrap_content" />
 
@@ -64,17 +69,17 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/border_color"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="@dimen/_20sdp"
         />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/changePassword"
-        android:padding="10dp">
+        android:padding="@dimen/_10sdp">
         <ImageView
-            android:layout_width="30sp"
-            android:layout_height="30sp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
             android:contentDescription="@string/app_name"
             android:src="@mipmap/ic_changepassword"
 
@@ -83,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_marginStart="10dp"
             android:text="Change Password"
-            android:textSize="20sp"
+            android:textSize="@dimen/_16ssp"
             android:textColor="@color/black"
             android:layout_height="wrap_content" />
 
@@ -95,16 +100,17 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/border_color"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="@dimen/_20sdp"
         />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:id="@+id/history"
+        android:padding="@dimen/_10sdp">
         <ImageView
-            android:layout_width="30sp"
-            android:layout_height="30sp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
             android:contentDescription="@string/app_name"
             android:src="@mipmap/ic_history"
 
@@ -112,9 +118,9 @@
             />
         <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="@dimen/_10sdp"
             android:text="History"
-            android:textSize="20sp"
+            android:textSize="@dimen/_16ssp"
             android:textColor="@color/black"
             android:layout_height="wrap_content" />
 
@@ -126,26 +132,26 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/border_color"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="@dimen/_20sdp"
         />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/signOut"
-        android:padding="10dp">
+        android:padding="@dimen/_10sdp">
         <ImageView
-            android:layout_width="30sp"
-            android:layout_height="30sp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
             android:contentDescription="@string/app_name"
             android:src="@mipmap/ic_signout"
 
             />
         <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="@dimen/_10sdp"
             android:text="Sign out"
-            android:textSize="20sp"
+            android:textSize="@dimen/_16ssp"
             android:textColor="@color/black"
             android:layout_height="wrap_content" />
 
@@ -157,7 +163,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/border_color"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="@dimen/_20sdp"
         />
 
 </LinearLayout>

@@ -32,6 +32,7 @@ import com.kftsoftwares.boutique.Fragments.Setting_Fragment;
 import com.kftsoftwares.boutique.Fragments.WishList_Fragment;
 import com.kftsoftwares.boutique.Interface.WishListInterfaceForActivity;
 import com.kftsoftwares.boutique.Models.CartViewModel;
+import com.kftsoftwares.boutique.Models.GetAllProductModel;
 import com.kftsoftwares.boutique.R;
 import com.kftsoftwares.boutique.database.DatabaseHandler;
 import com.kftsoftwares.boutique.utils.Util;
@@ -47,6 +48,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.kftsoftwares.boutique.utils.Constants.ADD_WISH_LIST;
+import static com.kftsoftwares.boutique.utils.Constants.GET_ALL_PRODUCTS;
 import static com.kftsoftwares.boutique.utils.Constants.GET_WISH_LIST;
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 import static com.kftsoftwares.boutique.utils.Constants.REMOVE_FROM_WISHLIST;
@@ -54,7 +56,7 @@ import static com.kftsoftwares.boutique.utils.Constants.UPDATED_TOKEN;
 import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 import static com.kftsoftwares.boutique.utils.Constants.VIEW_CART;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,WishListInterfaceForActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, WishListInterfaceForActivity {
 
 
     private static final String TAG = "MainActiv.BottomSlider";
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public BottomSheetBehavior mBottomSheetBehavior;
     public LinearLayout mBottomContainer;
     public Button mSubmit;
+    public ArrayList<GetAllProductModel> mGetAllProductModels;
 
 
     @Override
@@ -140,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mUtil = new Util();
 
+
         mHome = findViewById(R.id.homeRelativeLayout);
         mCategory = findViewById(R.id.categoryRelativeLayout);
         mProfile = findViewById(R.id.profileRelativeLayout);
@@ -154,11 +158,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBottomContainer = findViewById(R.id.container);
         mProfileImageHeader = findViewById(R.id.profileHeader);
         mSubmit = findViewById(R.id.submit);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.
-                beginTransaction().add(R.id.frameLayout, new Home(), "");
-        fragmentTransaction.commit();
-        changeColor(0);
+
         mHome.setOnClickListener(this);
         mCategory.setOnClickListener(this);
         mProfile.setOnClickListener(this);
@@ -169,13 +169,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mProfileImageHeader.setOnClickListener(this);
         mCartView.setOnClickListener(this);
         mUserIdArrayList = new ArrayList<>();
+        mGetAllProductModels = new ArrayList<>();
         sharedPreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         JSONArray jsonArray = new JSONArray();
+        //getAllProducts();
 
 
 
-
-   /*     Card card = new Card("4242-4242-4242-4242", 12, 2019, "123");
+     /*  Card card = new Card("4242-4242-4242-4242", 12, 2019, "123");
 
         if (!card.validateCard()) {
             Toast.makeText(this, "Not Validate", Toast.LENGTH_SHORT).show();
@@ -183,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else {
             Toast.makeText(this, "Validate", Toast.LENGTH_SHORT).show();
-            Stripe stripe = new Stripe(MainActivity.this, "pk_test_6pRNASCoBOKtIshFeQd4XMUh");
+            Stripe stripe = new Stripe(MainActivity.this, "pk_test_zUAsoiGmAgvLpzYruFVCr5Ej");
             stripe.createToken(
                     card,
                     new TokenCallback() {
@@ -199,7 +200,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }
             );
+
         }*/
+
 //Find bottom Sheet ID
         View bottomSheet = findViewById(R.id.bottom_sheet);
 
@@ -235,8 +238,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
             }
         });
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.
+                beginTransaction().add(R.id.frameLayout, new Home(), "");
+        fragmentTransaction.commit();
+        changeColor(0);
     }
 
 
@@ -277,11 +287,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.settingRelativeLayout:
 
-                if (sharedPreferences.getString(User_ID,"").equalsIgnoreCase(""))
-                {
+                if (sharedPreferences.getString(User_ID, "").equalsIgnoreCase("")) {
                     Toast.makeText(this, "Please login first", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this,LoginActivity.class));
-                }else {
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                } else {
 
                     if (f instanceof Setting_Fragment) {
 
@@ -451,7 +460,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
         ;
         // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req, MainActivity.this);
 
     }
 
@@ -513,7 +522,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         };
         // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req, MainActivity.this);
 
     }
 
@@ -598,7 +607,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
 
 // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req, MainActivity.this);
     }
 
 
@@ -660,7 +669,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         };
 // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req, MainActivity.this);
 
     }
 
@@ -718,7 +727,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
 
 // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req, MainActivity.this);
     }
 
     //---------------------ProgressBar-------------------------//
@@ -744,10 +753,104 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
     @Override
     public void moveToWishList(String clothId, int position, ArrayList<CartViewModel> cartViewModels) {
     }
 
+    //---------------GET ALL PRODUCTS---------------------------//
+    public void getAllProducts() {
+
+        if (mGetAllProductModels != null) {
+            mGetAllProductModels.clear();
+        }
+
+        String tag_string_req = "string_req";
+
+
+        showProgressBar(true);
+        final String userId = sharedPreferences.getString(User_ID, "");
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                GET_ALL_PRODUCTS, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONArray jsonArray = jsonObject.getJSONArray("data1");
+                    GetAllProductModel getAllProductModel = null;
+
+                    if (jsonArray.length() > 0) {
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                            getAllProductModel = new GetAllProductModel();
+                            getAllProductModel.setCategoryId(jsonObject1.getString("category_id"));
+                            getAllProductModel.setTitle(jsonObject1.getString("title"));
+                            getAllProductModel.setPrice(jsonObject1.getString("original_price"));
+                            getAllProductModel.setOfferPrice(jsonObject1.getString("offer_price"));
+                            getAllProductModel.setId(jsonObject1.getString("id"));
+                            if (jsonObject1.has("wishlist")) {
+                                if (sharedPreferences.getString(User_ID, "").equalsIgnoreCase("") && mUserIdArrayList.contains(jsonObject1.getString("id"))) {
+                                    getAllProductModel.setWish_list("1");
+                                } else {
+                                    getAllProductModel.setWish_list(jsonObject1.getString("wishlist"));
+                                }
+                            } else {
+                                getAllProductModel.setWish_list("0");
+
+                            }
+                            getAllProductModel.setBrandName(jsonObject1.getString("brand"));
+                            getAllProductModel.setCategoryName(jsonObject1.getString("category_name"));
+                            getAllProductModel.setImage1(jsonObject1.getString("image1"));
+
+                            mGetAllProductModels.add(getAllProductModel);
+
+                        }
+
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally {
+                    showProgressBar(false);
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                showProgressBar(false);
+                Toast.makeText(MainActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("user_id", userId);
+                return params;
+
+            }
+        };
+// Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req, this);
+
+
+    }
 
 }

@@ -62,11 +62,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText mEmail, mPassword;
     private SharedPreferences sharedpreferences;
     private DatabaseHandler mDatabaseHandler;
+    private String mValue = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            mValue = bundle.getString("value");
+
+        }
+
         getWindow().setBackgroundDrawableResource(R.drawable.bg);
         Button signUp = findViewById(R.id.signUp_button);
         Button signIn_button = findViewById(R.id.signIn_button);
@@ -244,9 +251,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         editor.commit();
                         uploadTheLocalData(jsonObject1.getString("userid"));
 
-
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
+                        if (mValue.equalsIgnoreCase("cart")) {
+                            Intent intent = new Intent(LoginActivity.this,ShippingDetails.class);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
                         finish();
 
                     } else {
@@ -435,6 +446,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
+                    mDatabaseHandler.DeleteAllData();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

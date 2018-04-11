@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -14,6 +15,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.kftsoftwares.boutique.activities.MainActivity;
+import com.kftsoftwares.boutique.utils.Util;
 
 import java.io.ByteArrayOutputStream;
 
@@ -28,6 +31,8 @@ public class AppController extends Application {
     ConnectivityManager connectivityManager;
     NetworkInfo wifiInfo, mobileInfo;
     boolean connected = false;
+    public boolean mShowDialog = false;
+    Util mUtil;
 
     private static AppController mInstance;
 
@@ -35,6 +40,7 @@ public class AppController extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+        mUtil = new Util();
     }
 
 
@@ -60,10 +66,30 @@ public class AppController extends Application {
         return this.mImageLoader;
     }
 
-    public <T> void addToRequestQueue(Request<T> req, String tag) {
+    public <T> void addToRequestQueue(Request<T> req, String tag ) {
         // set the default tag if tag is empty
-        req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
-        getRequestQueue().add(req);
+        if (isOnline())
+        {
+            req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
+            getRequestQueue().add(req);
+        }
+        else {
+     //       mUtil.checkConnection(getBaseContext(),false);
+        }
+
+    }
+
+    public <T> void addToRequestQueue(Request<T> req, String tag , Context context) {
+        // set the default tag if tag is empty
+        if (isOnline())
+        {
+            req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
+            getRequestQueue().add(req);
+        }
+        else {
+            mUtil.checkConnection(context,false);
+        }
+
     }
 
     public <T> void addToRequestQueue(Request<T> req) {

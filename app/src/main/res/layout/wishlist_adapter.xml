@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:padding="@dimen/_7sdp">
 
     <com.kftsoftwares.boutique.utils.CircularImageView
         android:id="@+id/profile_image"
-        android:layout_width="66dp"
-        android:layout_height="66dp"
+        android:layout_width="@dimen/_45sdp"
+        android:layout_height="@dimen/_45sdp"
         app:civ_border_color="#EEEEEE"
         app:civ_border_width="1dp"
         app:civ_shadow="true"
@@ -18,8 +18,8 @@
 
     <ImageView
         android:id="@+id/delete"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="@dimen/_18sdp"
+        android:layout_height="@dimen/_18sdp"
         android:layout_alignParentEnd="true"
         android:contentDescription="@string/app_name"
         android:src="@mipmap/orange_cancle" />
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginStart="10sp"
+        android:layout_marginStart="@dimen/_10sdp"
         android:layout_toEndOf="@+id/profile_image"
         android:layout_toStartOf="@+id/move_to_cart"
         android:orientation="vertical">
@@ -39,14 +39,14 @@
             android:layout_height="wrap_content"
             android:lines="1"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="@dimen/_14sdp" />
 
         <com.kftsoftwares.boutique.utils.TextViewRegular
             android:id="@+id/price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/gray"
-            android:textSize="16sp" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14sdp" />
 
 
     </LinearLayout>
@@ -54,15 +54,15 @@
     <Button
         android:id="@+id/move_to_cart"
         android:layout_width="wrap_content"
-        android:layout_height="25sp"
-        android:layout_marginEnd="10sp"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
         android:layout_toStartOf="@+id/delete"
         android:background="@drawable/sign_in_button"
         android:gravity="center"
-        android:paddingEnd="5dp"
-        android:paddingStart="7dp"
+        android:paddingEnd="@dimen/_3sdp"
+        android:paddingStart="@dimen/_5sdp"
         android:text=" Move to cart "
         android:textColor="@color/white"
-        android:textSize="12sp"
+        android:textSize="@dimen/_8ssp"
         tools:ignore="RtlHardcoded" />
 </RelativeLayout>
