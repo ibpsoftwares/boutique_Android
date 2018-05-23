@@ -66,6 +66,8 @@ public class Constants {
 
      public static final String CHECKOUT = HOST_URL + "checkout";
 
+     public static final String SAVE_ORDER = HOST_URL + "saveOrder";
+
      public static final String UPDATE_PROFILE = HOST_URL + "updateProfile";
 
      public static final String SHIPPING_DETAIL = HOST_URL + "shippingDetail";

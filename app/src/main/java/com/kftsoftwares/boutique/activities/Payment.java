@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,8 @@ public class Payment extends AppCompatActivity {
     private Button mNext;
     private ProgressDialog pDialog;
 
+    private ImageView mBackButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +60,7 @@ public class Payment extends AppCompatActivity {
         mCvv = findViewById(R.id.cvvNumber);
         mEmail = findViewById(R.id.email);
         mAmountTextView = findViewById(R.id.amount);
+        mBackButton = findViewById(R.id.backButton);
 
         mCardNumber.setText("4242424242424242");
         mMonth.setText("12");
@@ -84,6 +88,12 @@ public class Payment extends AppCompatActivity {
             }
 
         }
+        mBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
         mNext.setOnClickListener( new View.OnClickListener() {

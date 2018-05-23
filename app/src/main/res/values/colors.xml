@@ -5,10 +5,12 @@
     <color name="colorAccent">#FF4081</color>
     <color name="dark_blue">#2a7ba9</color>
     <color name="dark_pink">#cc73a9</color>
-    <color name="tabLayout">#273d43</color>
-    <color name="green">#2cb99e</color>
+    <color name="tabLayout">#0498bf</color>
+    <color name="tabLayout_pre">#273d43</color>
+    <color name="green">#8b5918</color>
     <color name="status_bar">#273d43</color>
-    <color name="light_tabLayout">#b0273d43</color>
+    <color name="light_tabLayout">#d60ea0c7</color>
+    <color name="light_tabLayout_pre">#b0273d43</color>
     <color name="black">#000000</color>
     <color name="border_color">#bebcbc</color>
     <color name="gray">#939191</color>
@@ -18,4 +20,18 @@
     <color name="white">#ffffff</color>
     <color name="red">#ff0000</color>
     <color name="orange">#ff501b</color>
+    <color name="grid_border_color">#7abebcbc</color>
+    <color name="red_theme_color">#0498bf</color>
+    <color name="help_background">#008645</color>
+    <color name="profile_background">#00837f</color>
+    <color name="changePassword_background">#e0432d</color>
+    <color name="history_background">#005ae5</color>
+    <color name="signOut_background">#ff47bb</color>
+    <string-array name="colors">
+        <item>#00BCD4</item>
+        <item>#009688</item>
+        <item>#795548</item>
+        <item>#607D8B</item>
+        <item>#f44336</item>
+    </string-array>
 </resources>

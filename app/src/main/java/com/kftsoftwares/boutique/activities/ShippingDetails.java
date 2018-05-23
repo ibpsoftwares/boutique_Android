@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -22,6 +23,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.kftsoftwares.boutique.Models.Image;
 import com.kftsoftwares.boutique.R;
 import com.kftsoftwares.boutique.volly.AppController;
 
@@ -81,6 +83,7 @@ public class ShippingDetails extends AppCompatActivity implements View.OnClickLi
         }
 
 
+
         mSpinner = findViewById(R.id.spinner);
 
         mName = findViewById(R.id.name);
@@ -106,6 +109,14 @@ public class ShippingDetails extends AppCompatActivity implements View.OnClickLi
                 } else {
                     officeDetailLayout.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        ImageView backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
@@ -271,7 +282,7 @@ public class ShippingDetails extends AppCompatActivity implements View.OnClickLi
                 params.put("zip_code", mZipCode.getText().toString());
                 params.put("username", mName.getText().toString());
                 params.put("city", mTownCity.getText().toString());
-                params.put("contact1", mPhoneNumber.getText().toString());
+                params.put("contact", mPhoneNumber.getText().toString());
                 params.put("country", mCountryName);
                 params.put("userdetail_id", mSharedPreference.getString(User_ID_FOR_UPDATE_PROFILE, ""));
                 params.put("state", mState.getText().toString());
@@ -295,7 +306,6 @@ public class ShippingDetails extends AppCompatActivity implements View.OnClickLi
                 }
                 return params;
             }
-
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
@@ -304,7 +314,6 @@ public class ShippingDetails extends AppCompatActivity implements View.OnClickLi
                 return params;
             }
         };
-
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }

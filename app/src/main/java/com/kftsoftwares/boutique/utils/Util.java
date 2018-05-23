@@ -207,7 +207,7 @@ public class Util {
         textView.setPaintFlags(paint.getFlags());
     }
 
-    public void checkConnection(Context context , boolean isConnected) {
+    public void checkConnection(Context context , boolean isConnected ) {
 
         if (isConnected)
         {
@@ -218,6 +218,12 @@ public class Util {
         }
     }
 
+    public void showDialog(Context context , String message) {
+
+
+            showSingleOkAlert(context,"Alert",message);
+
+    }
 
     private static String getScreenResolution(Context context)
     {

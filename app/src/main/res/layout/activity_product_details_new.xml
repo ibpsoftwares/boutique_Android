@@ -16,9 +16,8 @@
             android:id="@+id/backButton"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="match_parent"
+            android:layout_centerVertical="true"
             android:layout_margin="@dimen/_5sdp"
-            android:clickable="true"
-            android:focusable="true"
             android:contentDescription="@string/app_name"
             android:scaleType="fitCenter"
             android:src="@drawable/arrow_left" />
@@ -35,8 +34,6 @@
              />
 
     </LinearLayout>
-
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -180,8 +177,6 @@
             android:background="@color/tabLayout"
             tools:ignore="ButtonStyle"
             />
-
-
 
     </LinearLayout>
 </RelativeLayout>

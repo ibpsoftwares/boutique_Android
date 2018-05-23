@@ -15,7 +15,7 @@
             android:id="@+id/action_bar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
-            android:background="@color/tabLayout">
+            android:background="@color/red_theme_color">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -32,7 +32,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="@string/home"
                 android:textColor="#fff"
                 android:textSize="@dimen/_16ssp"
                 android:textStyle="bold"
@@ -90,12 +89,12 @@
             android:id="@+id/frameLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/tablayout"
+            android:layout_above="@+id/red_theme_color"
             android:layout_below="@+id/action_bar"
             android:background="@android:color/transparent" />
 
         <LinearLayout
-            android:id="@+id/tablayout"
+            android:id="@+id/red_theme_color"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:layout_alignParentBottom="true"
@@ -107,7 +106,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/tabLayout">
+                android:background="@color/red_theme_color">
 
                 <ImageView
                     android:id="@+id/homeImage"
@@ -140,7 +139,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
 
-                android:background="@color/tabLayout">
+                android:background="@color/red_theme_color">
 
                 <ImageView
                     android:id="@+id/category"
@@ -170,7 +169,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/tabLayout"
+                android:background="@color/red_theme_color"
                 android:visibility="gone">
 
                 <ImageView
@@ -203,7 +202,7 @@
                 android:layout_height="match_parent"
 
                 android:layout_weight="1"
-                android:background="@color/tabLayout">
+                android:background="@color/red_theme_color">
 
                 <ImageView
                     android:id="@+id/setting"
@@ -219,7 +218,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/setting"
                     android:layout_centerInParent="true"
-                    android:text="@string/setting"
+                    android:text="@string/account"
                     android:textColor="#fff"
                     android:textSize="@dimen/_12ssp"
 
@@ -234,7 +233,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/tabLayout">
+                android:background="@color/red_theme_color">
 
                 <RelativeLayout
                     android:id="@+id/wishList"
@@ -282,7 +281,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/tabLayout"
+                android:background="@color/red_theme_color"
                 android:visibility="gone">
 
                 <ImageView
@@ -330,7 +329,6 @@
         android:background="#EEEEEE"
         android:clipToPadding="true"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
-
 
         <include layout="@layout/bottom_sheet_content" />
 

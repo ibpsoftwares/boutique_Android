@@ -69,10 +69,15 @@
         <activity
             android:name=".activities.Profile_Activity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activities.Demo_Activity" />
-        <activity android:name=".activities.Main3Activity" />
-        <activity android:name=".activities.PaymentSuccessScreen" />
-        <activity android:name=".activities.History" />
+        <activity android:name=".activities.Demo_Activity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".activities.Main3Activity"
+
+            android:screenOrientation="portrait" />
+        <activity android:name=".activities.History"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

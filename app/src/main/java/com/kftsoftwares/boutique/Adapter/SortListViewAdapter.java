@@ -68,7 +68,6 @@ public class SortListViewAdapter extends BaseAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, ""+position, Toast.LENGTH_SHORT).show();
                 mSortInterfaceListener.value(position);
             }
         });

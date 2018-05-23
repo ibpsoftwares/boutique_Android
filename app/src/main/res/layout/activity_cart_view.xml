@@ -21,6 +21,8 @@
             android:scaleType="fitCenter"
             android:src="@drawable/arrow_left" />
 
+
+
         <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -80,6 +82,7 @@
                 android:text=""
                 android:id="@+id/totalItemCount"
                 android:padding="10sp"
+                android:layout_centerVertical="true"
                 android:textColor="@color/white"
                 android:layout_alignParentStart="true"
                 />
@@ -90,6 +93,7 @@
                 android:textSize="14sp"
                 android:layout_toEndOf="@+id/totalItemCount"
                 android:text=""
+                android:layout_centerVertical="true"
                 android:gravity="end"
                 android:id="@+id/amountCount"
                 android:padding="10sp"

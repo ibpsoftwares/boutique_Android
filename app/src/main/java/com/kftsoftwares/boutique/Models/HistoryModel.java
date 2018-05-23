@@ -6,23 +6,32 @@ package com.kftsoftwares.boutique.Models;
 
 public class HistoryModel {
 
-    String paymentType,amount,created,order_detail_id;
+    private String orderId;
+    private String status;
+    private String created;
+    private String categoryId;
+    private String clothId;
+    private String title;
+    private String originalPrice;
+    private String offerPrice;
+    private String quantity;
+    private String price;
+    private String image;
 
-
-    public String getPaymentType() {
-        return paymentType;
+    public String getOrderId() {
+        return orderId;
     }
 
-    public void setPaymentType(String paymentType) {
-        this.paymentType = paymentType;
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
-    public String getAmount() {
-        return amount;
+    public String getStatus() {
+        return status;
     }
 
-    public void setAmount(String amount) {
-        this.amount = amount;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getCreated() {
@@ -33,11 +42,67 @@ public class HistoryModel {
         this.created = created;
     }
 
-    public String getOrder_detail_id() {
-        return order_detail_id;
+    public String getCategoryId() {
+        return categoryId;
     }
 
-    public void setOrder_detail_id(String order_detail_id) {
-        this.order_detail_id = order_detail_id;
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getClothId() {
+        return clothId;
+    }
+
+    public void setClothId(String clothId) {
+        this.clothId = clothId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getOriginalPrice() {
+        return originalPrice;
+    }
+
+    public void setOriginalPrice(String originalPrice) {
+        this.originalPrice = originalPrice;
+    }
+
+    public String getOfferPrice() {
+        return offerPrice;
+    }
+
+    public void setOfferPrice(String offerPrice) {
+        this.offerPrice = offerPrice;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

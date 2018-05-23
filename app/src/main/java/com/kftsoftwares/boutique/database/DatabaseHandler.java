@@ -29,6 +29,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String USER_ID = "id";
     private static final String CLOTH_NAME = "name";
     private static final String CLOTH_IMAGE = "image";
+    private static final String CLOTH_CATEGORY_ID = "cloth_cat";
     private static final String SIZE = "size";
     private static final String SIZE_ID = "size_id";
     private static final String Price = "price";
@@ -44,7 +45,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_BOUTIQUE + "("
-                + USER_ID + " TEXT," + Price + " TEXT," + Count + " TEXT," + Category + " TEXT," + SIZE + " TEXT," + SIZE_ID + " TEXT," + CLOTH_NAME + " TEXT," + CLOTH_IMAGE + " TEXT" + ")";
+                + USER_ID + " TEXT," + Price + " TEXT," + CLOTH_CATEGORY_ID + " TEXT," + Count + " TEXT," + Category + " TEXT," + SIZE + " TEXT," + SIZE_ID + " TEXT," + CLOTH_NAME + " TEXT," + CLOTH_IMAGE + " TEXT" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
@@ -64,6 +65,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(USER_ID, cartViewModel.getClothId());
         contentValues.put(CLOTH_NAME, cartViewModel.getTitle());
         contentValues.put(CLOTH_IMAGE, cartViewModel.getImage1());
+        contentValues.put(CLOTH_CATEGORY_ID, cartViewModel.getCategoryId());
         contentValues.put(Price, cartViewModel.getPrice());
         contentValues.put(SIZE, cartViewModel.getSize());
         contentValues.put(SIZE_ID, cartViewModel.getSize_id());
@@ -94,6 +96,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 cartViewModel.setPrice(cursor.getString(cursor.getColumnIndex(Price)));
                 cartViewModel.setCategoryName(cursor.getString(cursor.getColumnIndex(Category)));
                 cartViewModel.setCount(cursor.getString(cursor.getColumnIndex(Count)));
+                cartViewModel.setCategoryId(cursor.getString(cursor.getColumnIndex(CLOTH_CATEGORY_ID)));
                 // Adding cartViewModel to list
                 contactList.add(cartViewModel);
             } while (cursor.moveToNext());
@@ -122,6 +125,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 cartViewModel.setCount(cursor.getString(cursor.getColumnIndex(Count)));
                 cartViewModel.setSize_id(cursor.getString(cursor.getColumnIndex(SIZE_ID)));
                 cartViewModel.setSize(cursor.getString(cursor.getColumnIndex(SIZE)));
+                cartViewModel.setCategoryId(cursor.getString(cursor.getColumnIndex(CLOTH_CATEGORY_ID)));
                 // Adding cartViewModel to list
                 contactList.add(cartViewModel);
             } while (cursor.moveToNext());

@@ -27,10 +27,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.kftsoftwares.boutique.Fragments.Category;
-import com.kftsoftwares.boutique.Fragments.Home;
+import com.kftsoftwares.boutique.Fragments.HomeNew;
 import com.kftsoftwares.boutique.Fragments.Setting_Fragment;
 import com.kftsoftwares.boutique.Fragments.WishList_Fragment;
 import com.kftsoftwares.boutique.Interface.WishListInterfaceForActivity;
+import com.kftsoftwares.boutique.Models.Banner;
 import com.kftsoftwares.boutique.Models.CartViewModel;
 import com.kftsoftwares.boutique.Models.GetAllProductModel;
 import com.kftsoftwares.boutique.R;
@@ -49,6 +50,7 @@ import java.util.Map;
 
 import static com.kftsoftwares.boutique.utils.Constants.ADD_WISH_LIST;
 import static com.kftsoftwares.boutique.utils.Constants.GET_ALL_PRODUCTS;
+import static com.kftsoftwares.boutique.utils.Constants.GET_BANNER_IMAGES;
 import static com.kftsoftwares.boutique.utils.Constants.GET_WISH_LIST;
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 import static com.kftsoftwares.boutique.utils.Constants.REMOVE_FROM_WISHLIST;
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public TextView mWishCountText, mCartCountText, mHeaderText;
     private Util mUtil;
     private ProgressBar mProgressBar;
+
     //testing
     public int mCartCount;
     private DatabaseHandler mDatabaseHandler;
@@ -74,7 +77,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public LinearLayout mBottomContainer;
     public Button mSubmit;
     public ArrayList<GetAllProductModel> mGetAllProductModels;
-
+    public ArrayList<Banner> mOffer1;
+    public ArrayList<Banner> mOffer2;
+    public String mBannerImage;
 
     @Override
     protected void onResume() {
@@ -127,10 +132,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (list.size() > 0) {
             mCartCountText.setVisibility(View.VISIBLE);
             mCartCountText.setText(String.valueOf(list.size()));
-
+            ((AppController) MainActivity.this.getApplication()).setSomeVariable(String.valueOf(list.size()));
         } else {
             mCartCountText.setVisibility(View.GONE);
-
+            ((AppController) MainActivity.this.getApplication()).setSomeVariable(String.valueOf(list.size()));
         }
 
     }
@@ -172,8 +177,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mGetAllProductModels = new ArrayList<>();
         sharedPreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         JSONArray jsonArray = new JSONArray();
-        //getAllProducts();
-
+        mOffer1 = new ArrayList<>();
+        mOffer2 = new ArrayList<>();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.
+                beginTransaction().add(R.id.frameLayout, new HomeNew(), "");
+        fragmentTransaction.commit();
+        changeColor(0);
 
 
      /*  Card card = new Card("4242-4242-4242-4242", 12, 2019, "123");
@@ -242,11 +252,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.
-                beginTransaction().add(R.id.frameLayout, new Home(), "");
-        fragmentTransaction.commit();
-        changeColor(0);
+
     }
 
 
@@ -257,14 +263,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.homeRelativeLayout:
 
-                if (f instanceof Home) {
+                if (f instanceof HomeNew) {
 
                 } else {
 
                     clearStack();
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.
-                            beginTransaction().replace(R.id.frameLayout, new Home(), "");
+                            beginTransaction().replace(R.id.frameLayout, new HomeNew(), "");
                     fragmentTransaction.commit();
                     changeColor(0);
                 }
@@ -390,7 +396,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     //---------------------------For Clear The Stack of Fragment----------------------//
-    private void clearStack() {
+    private void
+    clearStack() {
         for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++) {
             getSupportFragmentManager().popBackStack();
         }
@@ -548,6 +555,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         mCartCountText.setVisibility(View.GONE);
                         mCartCount = 0;
+                        ((AppController) MainActivity.this.getApplication()).setSomeVariable(String.valueOf(mCartCount));
 
                     } else {
 
@@ -564,7 +572,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
                         mCartCount = jsonArray.length();
-
+                        // set Value
+                        ((AppController) MainActivity.this.getApplication()).setSomeVariable(String.valueOf(mCartCount));
                         mCartCountText.setText(String.valueOf(jsonArray.length()));
                     }
 
@@ -808,7 +817,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             mGetAllProductModels.add(getAllProductModel);
 
                         }
-
+                        //clearStack();
 
                     }
 
@@ -849,6 +858,85 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req, this);
+
+
+    }
+    //-------------GET BANNER IMAGES----------------------//
+    private void getBannerImages() {
+
+        if (mOffer1!=null)
+        {
+            mOffer1.clear();
+        }
+        if(mOffer2!=null)
+        {
+            mOffer2.clear();
+        }
+
+        String tag_string_req = "string_req";
+
+        StringRequest strReq = new StringRequest(Request.Method.GET,
+                GET_BANNER_IMAGES, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+
+                try {
+
+                    JSONObject jsonObject = new JSONObject(response);
+                   // getAllProducts();
+                    JSONArray jsonArray = jsonObject.getJSONArray("offer1");
+
+                    Banner banner1 =null;
+                    for (int i=0;i<jsonArray.length();i++)
+                    {
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        banner1 = new Banner();
+                        banner1.setId(jsonObject1.getString("id"));
+                        banner1.setImage(jsonObject1.getString("image"));
+                        mOffer1.add(banner1);
+
+                    }
+                    JSONArray jsonArray1 = jsonObject.getJSONArray("offer2");
+
+                    Banner banner2 =null;
+                    for (int i=0;i<jsonArray1.length();i++)
+                    {
+                        JSONObject jsonObject1 = jsonArray1.getJSONObject(i);
+                        banner2 = new Banner();
+                        banner2.setId(jsonObject1.getString("id"));
+                        banner2.setImage(jsonObject1.getString("image"));
+                        mOffer2.add(banner2);
+
+
+                    }
+                    mBannerImage = jsonObject.getString("bannerImages");
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }
+
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+                return params;
+            }
+
+        };
+
+// Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
 
     }

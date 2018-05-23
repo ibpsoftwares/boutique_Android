@@ -5,17 +5,26 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.kftsoftwares.boutique.Adapter.AlbumsAdapter;
+import com.kftsoftwares.boutique.Adapter.SettingAdapter;
+import com.kftsoftwares.boutique.Models.GetAllProductModel;
 import com.kftsoftwares.boutique.R;
 import com.kftsoftwares.boutique.activities.Change_Password;
 import com.kftsoftwares.boutique.activities.History;
 import com.kftsoftwares.boutique.activities.MainActivity;
 import com.kftsoftwares.boutique.activities.Profile_Activity;
 import com.kftsoftwares.boutique.database.DatabaseHandler;
+import com.kftsoftwares.boutique.utils.SpacesItemDecoration;
+
+import java.util.ArrayList;
 
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 
@@ -23,12 +32,13 @@ import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 public class Setting_Fragment extends Fragment implements View.OnClickListener {
 
 
+
     @Override
     public void onResume() {
         super.onResume();
         ((MainActivity) getActivity()).mCartView.setVisibility(View.GONE);
         ((MainActivity) getActivity()).mCartCountText.setVisibility(View.GONE);
-        ((MainActivity) getActivity()).mHeaderText.setText("Setting");
+        ((MainActivity) getActivity()).mHeaderText.setText("Account");
 
 
     }
@@ -46,6 +56,8 @@ public class Setting_Fragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_setting_, container, false);
+
+
 
         LinearLayout changePassword = view.findViewById(R.id.changePassword);
         LinearLayout signOut = view.findViewById(R.id.signOut);
@@ -76,7 +88,7 @@ public class Setting_Fragment extends Fragment implements View.OnClickListener {
 
             case R.id.signOut:
                 DatabaseHandler handler = new DatabaseHandler(getActivity());
-             //   handler.DeleteAllData();
+                handler.DeleteAllData();
 
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
                 sharedPreferences.edit().clear().apply();

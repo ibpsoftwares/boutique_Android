@@ -109,8 +109,14 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
         mContext.mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                moveToCart(mClothIdForMove,mPositionForMove,mCheckSize,mCartViewModels,mSizeId);
-                mContext.mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                if (mSizeId.equalsIgnoreCase(""))
+                {
+                    Toast.makeText(mContext, "Please select size", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    moveToCart(mClothIdForMove, mPositionForMove, mCheckSize, mCartViewModels, mSizeId);
+                    mContext.mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
             }
         });
         return view;

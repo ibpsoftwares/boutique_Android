@@ -4,7 +4,7 @@
     <string name="enter_password">Enter Password</string>
     <string name="enter_confirm_password">Enter Mobile Number</string>
     <string name="enter_userName">Enter Name</string>
-    <string name="forget_password">Forget Password ?</string>
+    <string name="forget_password">Forgot Password ?</string>
     <string name="already_account">Already Have an Account ?</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
@@ -72,4 +72,5 @@
     <string name="add_new_address">Add new address</string>
     <string name="order_successfully_placed">Order Successfully Placed</string>
     <string name="history">History</string>
+    <string name="accounts">Account</string>
 </resources>

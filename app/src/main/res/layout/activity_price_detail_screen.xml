@@ -122,7 +122,6 @@ android:layout_above="@+id/linearLayout"
                     android:layout_margin="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:text="Rs 320"
                     android:textSize="@dimen/_16sdp" />
 
                 <com.kftsoftwares.boutique.utils.TextViewRegular
@@ -145,7 +144,6 @@ android:layout_above="@+id/linearLayout"
                     android:layout_margin="@dimen/_5sdp"
                     android:layout_marginEnd="@dimen/_10sdp"
                     android:layout_marginStart="@dimen/_10sdp"
-                    android:text="Rs 320"
                     android:textSize="@dimen/_16ssp" />
 
                 <View
@@ -177,7 +175,6 @@ android:layout_above="@+id/linearLayout"
                     android:layout_alignParentEnd="true"
                     android:layout_below="@+id/view2"
                     android:layout_margin="@dimen/_5sdp"
-                    android:text="Rs 540"
                     android:textColor="@color/tabLayout"
                     android:textSize="@dimen/_14ssp"
                     android:textStyle="bold" />
@@ -252,7 +249,7 @@ android:layout_above="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#2cb99e"
+            android:background="@color/green"
             android:fontFamily="@font/whitney_medium"
             android:text="@string/cancel"
             android:textColor="@color/white" />

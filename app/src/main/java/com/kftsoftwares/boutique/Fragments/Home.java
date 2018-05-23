@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,6 +68,8 @@ public class Home extends Fragment implements View.OnClickListener {
     private MainActivity mContext;
     private TextView mNoDataFound;
 
+    private RecyclerView mRecyclerView;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -86,7 +89,7 @@ public class Home extends Fragment implements View.OnClickListener {
         }
 
        mContext.mCartView.setVisibility(View.VISIBLE);
-         mContext.mHeaderText.setText("Home");
+         mContext.mHeaderText.setText("Collections");
         if ( mContext.mCartCount != 0) {
              mContext.mCartCountText.setVisibility(View.VISIBLE);
 
@@ -110,6 +113,8 @@ public class Home extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        mRecyclerView = view.findViewById(R.id.recycler_View);
 
         mViewPager = view.findViewById(R.id.viewPager);
 
@@ -366,7 +371,7 @@ mNoDataFound = view.findViewById(R.id.noDataFound);
 
                     JSONObject jsonObject = new JSONObject(response);
 
-                    JSONArray jsonArray = jsonObject.getJSONArray("bannerImages");
+                /*    JSONArray jsonArray = jsonObject.getJSONArray("bannerImages");
 
 
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -378,7 +383,7 @@ mNoDataFound = view.findViewById(R.id.noDataFound);
 
 
                     mCount = jsonArray.length();
-                    getArray(mBannerImages,0);
+                    getArray(mBannerImages,0);*/
 
 
                 } catch (JSONException e) {

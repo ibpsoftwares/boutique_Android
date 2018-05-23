@@ -5,18 +5,16 @@ package com.kftsoftwares.boutique.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,9 +23,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.kftsoftwares.boutique.Adapter.GridViewAdapter;
 import com.kftsoftwares.boutique.Adapter.PriceDetailAdapter;
-import com.kftsoftwares.boutique.Fragments.Home;
 import com.kftsoftwares.boutique.R;
 import com.kftsoftwares.boutique.volly.AppController;
 
@@ -38,7 +34,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.kftsoftwares.boutique.utils.Constants.CHECKOUT;
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 import static com.kftsoftwares.boutique.utils.Constants.ORDER_DETAIL;
 import static com.kftsoftwares.boutique.utils.Constants.UPDATED_TOKEN;
@@ -66,6 +61,13 @@ public class PriceDetailScreen extends AppCompatActivity {
         TextView deliveryAmount = findViewById(R.id.deliveryAmount);
         TextView totalPayableAmount = findViewById(R.id.totalPayableAmount);
         RadioGroup radioGroup = findViewById(R.id.radioGroup);
+        ImageView backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         final RadioButton creditCard = findViewById(R.id.creditCard);
         RadioButton cashOnDelivery = findViewById(R.id.cashOnDelivery);

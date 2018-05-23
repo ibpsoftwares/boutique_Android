@@ -17,6 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.kftsoftwares.boutique.Interface.WishListInterface;
 import com.kftsoftwares.boutique.Models.CartViewModel;
 import com.kftsoftwares.boutique.R;
+import com.kftsoftwares.boutique.activities.MainActivity;
 import com.kftsoftwares.boutique.activities.Productdetails;
 
 import java.util.ArrayList;
@@ -109,6 +110,8 @@ public class WishListAdapter extends BaseAdapter {
                 Intent i = new Intent(mContext, Productdetails.class);
 
                 i.putExtra("id", mWishList.get(position).getClothId());
+                i.putExtra("cat_id", mWishList.get(position).getCategoryId());
+                i.putExtra("cart_size", String.valueOf(((MainActivity)mContext).mCartCount));
 
                 mContext.startActivity(i);
             }

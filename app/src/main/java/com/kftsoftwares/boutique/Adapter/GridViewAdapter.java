@@ -3,9 +3,7 @@ package com.kftsoftwares.boutique.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Paint;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.util.Log;
@@ -148,12 +146,12 @@ public class GridViewAdapter extends BaseAdapter {
                     cartViewModel.setTitle(mArrayList.get(position).getTitle());
                     cartViewModel.setImage1(mArrayList.get(position).getImage1());
                     cartViewModel.setPrice(mArrayList.get(position).getPrice());
+                    cartViewModel.setCategoryId(mArrayList.get(position).getCategoryId());
                     cartViewModel.setSize("noData");
                     cartViewModel.setSize_id("");
                     cartViewModel.setCat("wishList");
                     cartViewModel.setCount("1");
                     sqLiteOpenHelper.addContact(cartViewModel);
-
                     mArrayList.get(position).setWish_list("1");
                     imageView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.heart));
                     if (sharedPreferences.getString(User_ID, "").equalsIgnoreCase(""))
@@ -161,10 +159,7 @@ public class GridViewAdapter extends BaseAdapter {
                     {
                         if (mContext instanceof MainActivity) {
                             ((MainActivity) mContext).getLocalWishListData();
-
-
                         } else {
-
                             //   ((ProductList) mContext).addToWishList(mArrayList.get(position).getId(), "home");
 
                         }
@@ -221,6 +216,8 @@ public class GridViewAdapter extends BaseAdapter {
 
                     Log.e("datawhenclick",mArrayList.get(position).getId());
                     i.putExtra("id", mArrayList.get(position).getId());
+                    i.putExtra("cat_id", mArrayList.get(position).getCategoryId());
+                 i.putExtra("cart_size",String.valueOf(((ProductList)mContext).mCartCount));
 
                     mContext.startActivity(i);
                 }

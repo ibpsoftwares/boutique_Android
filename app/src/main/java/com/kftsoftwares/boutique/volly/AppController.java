@@ -36,6 +36,17 @@ public class AppController extends Application {
 
     private static AppController mInstance;
 
+
+    private String mCartCount ="0";
+
+    public String getSomeVariable() {
+        return mCartCount;
+    }
+
+    public void setSomeVariable(String cartcount) {
+        this.mCartCount = cartcount;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -72,6 +83,7 @@ public class AppController extends Application {
         {
             req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
             getRequestQueue().add(req);
+
         }
         else {
      //       mUtil.checkConnection(getBaseContext(),false);

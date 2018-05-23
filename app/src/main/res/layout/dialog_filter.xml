@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="#2cb99e"
+        android:background="@color/green"
         android:text="@string/cancel"
         android:id="@+id/cancel"
         android:textColor="@color/white"

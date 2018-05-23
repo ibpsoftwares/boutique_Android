@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -14,8 +15,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.kftsoftwares.boutique.Adapter.CartViewAdapter;
@@ -23,6 +29,7 @@ import com.kftsoftwares.boutique.Interface.CartListInterface;
 import com.kftsoftwares.boutique.Models.CartViewModel;
 import com.kftsoftwares.boutique.R;
 import com.kftsoftwares.boutique.database.DatabaseHandler;
+import com.kftsoftwares.boutique.utils.Util;
 import com.kftsoftwares.boutique.volly.AppController;
 
 import org.json.JSONArray;
@@ -36,6 +43,8 @@ import java.util.Map;
 import static com.kftsoftwares.boutique.utils.Constants.CHECKOUT;
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 import static com.kftsoftwares.boutique.utils.Constants.REMOVE_FROM_CART;
+import static com.kftsoftwares.boutique.utils.Constants.SAVE_ORDER;
+import static com.kftsoftwares.boutique.utils.Constants.Symbol;
 import static com.kftsoftwares.boutique.utils.Constants.UPDATED_TOKEN;
 import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 import static com.kftsoftwares.boutique.utils.Constants.VIEW_CART;
@@ -96,7 +105,8 @@ public class    CartView extends AppCompatActivity implements CartListInterface 
                     i.putExtra("value","cart");
                     startActivity(i);
                 } else {
-                    checkOutApi();
+                //    checkOutApi();
+                    saveOrder();
                 }
             }
         });
@@ -104,7 +114,106 @@ public class    CartView extends AppCompatActivity implements CartListInterface 
 
     }
 
-    private void checkOutApi() {
+    private void saveOrder() {
+
+        final String user_id = mSharedPreferences.getString(User_ID, "");
+
+
+        JSONObject jsonObject = null;
+        final JSONArray jsonArray = new JSONArray();
+        for (int i = 0; i < mCartViewModel.size(); i++) {
+            jsonObject = new JSONObject();
+            try {
+                jsonObject.put("cart_id", mCartViewModel.get(i).getCartId());
+                jsonObject.put("user_id", user_id);
+                jsonObject.put("quantity", mCartViewModel.get(i).getCount());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            jsonArray.put(jsonObject);
+        }
+
+        final String checkOutData = jsonArray.toString();
+        String tag_string_req = "string_req";
+
+
+        final ProgressDialog pDialog = new ProgressDialog(CartView.this);
+        pDialog.setMessage("Loading...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                SAVE_ORDER, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                pDialog.cancel();
+                pDialog.dismiss();
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray jsonArray1 = jsonObject.getJSONArray("shippingDetails");
+
+                    if (jsonArray1.length()>0)
+                    {
+                        Intent i = new Intent(CartView.this, PriceDetailScreen.class);
+                        i.putExtra("response_value", response);
+                        startActivity(i);
+
+                    }
+                    else {
+                        Intent i = new Intent(CartView.this, ShippingDetails.class);
+                        i.putExtra("response_value", response);
+                        startActivity(i);
+
+                    }
+
+
+
+                    //  Toast.makeText(CartView.this, ""+jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pDialog.cancel();
+                pDialog.dismiss();
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    new Util().showDialog(CartView.this,"Connection Timeout");
+                } else if (error instanceof NetworkError) {
+                    new Util().showDialog(CartView.this,"No Internet Connection");
+                }
+            }
+        }
+        ) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", UPDATED_TOKEN);
+
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("cartArray", checkOutData);
+                return map;
+            }
+        };
+// Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+
+   /* private void checkOutApi() {
 
         JSONObject jsonObject = null;
         final JSONArray jsonArray = new JSONArray();
@@ -171,7 +280,11 @@ public class    CartView extends AppCompatActivity implements CartListInterface 
             public void onErrorResponse(VolleyError error) {
                 pDialog.cancel();
                 pDialog.dismiss();
-                Toast.makeText(CartView.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    new Util().showDialog(CartView.this,"Connection Timeout");
+                } else if (error instanceof NetworkError) {
+                    new Util().showDialog(CartView.this,"No Internet Connection");
+                }
             }
         }
         ) {
@@ -195,7 +308,7 @@ public class    CartView extends AppCompatActivity implements CartListInterface 
 // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
-    }
+    }*/
 
     private void getLocalCartListData() {
 
@@ -267,7 +380,14 @@ public class    CartView extends AppCompatActivity implements CartListInterface 
                             cartViewModel.setDeleteStatus(jsonObject1.getString("delete_status"));
                             cartViewModel.setPrice(jsonObject1.getString("original_price"));
                             cartViewModel.setOfferPrice(jsonObject1.getString("offer_price"));
-                            mAmountCountValue += Integer.valueOf(jsonObject1.getString("original_price"));
+
+                            if (jsonObject1.getString("offer_price") != null &&
+                                    !jsonObject1.getString("offer_price").equalsIgnoreCase("null")) {
+                                mAmountCountValue += Integer.valueOf(jsonObject1.getString("offer_price"));
+
+                            } else {
+                                mAmountCountValue += Integer.valueOf(jsonObject1.getString("original_price"));
+                            }
                             cartViewModel.setDescription(jsonObject1.getString("description"));
                             //cartViewModel.setProductNum(jsonObject1.getString("product_num"));
                             cartViewModel.setTitle(jsonObject1.getString("title"));
@@ -348,7 +468,14 @@ public class    CartView extends AppCompatActivity implements CartListInterface 
 
         for (CartViewModel cartViewModel : arrayList) {
 
-            mAmountCountValue = mAmountCountValue + Integer.valueOf(cartViewModel.getPrice()) * Integer.valueOf(cartViewModel.getCount());
+
+            if (cartViewModel.getOfferPrice() != null &&
+                    !cartViewModel.getOfferPrice().equalsIgnoreCase("null")) {
+                mAmountCountValue = mAmountCountValue + Integer.valueOf(cartViewModel.getOfferPrice()) * Integer.valueOf(cartViewModel.getCount());
+
+            } else {
+                mAmountCountValue = mAmountCountValue + Integer.valueOf(cartViewModel.getPrice()) * Integer.valueOf(cartViewModel.getCount());
+            }
 
 
         }

@@ -11,7 +11,7 @@
     <ImageView
         android:id="@+id/productImage"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_180sdp"
+        android:layout_height="@dimen/_200sdp"
         android:src="@mipmap/placeholder"
         android:adjustViewBounds="true"
         android:contentDescription="@string/app_name"

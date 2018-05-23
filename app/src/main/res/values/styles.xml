@@ -4,7 +4,8 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/tabLayout</item>
-        <item name="colorPrimaryDark">@color/light_tabLayout</item>
+        //status bar
+        <item name="colorPrimaryDark">@color/tabLayout</item>
         <item name="colorAccent">@color/tabLayout</item>
 
     </style>

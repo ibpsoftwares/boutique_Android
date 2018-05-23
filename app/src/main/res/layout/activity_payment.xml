@@ -11,15 +11,15 @@
         android:layout_height="@dimen/_42sdp"
         android:background="@color/tabLayout">
 
-        <ImageView
-            android:id="@+id/backButton"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:layout_centerVertical="true"
-            android:layout_margin="@dimen/_5sdp"
-            android:contentDescription="@string/app_name"
-            android:scaleType="fitCenter"
-            android:src="@drawable/arrow_left" />
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_margin="@dimen/_5sdp"
+        android:contentDescription="@string/app_name"
+        android:scaleType="fitCenter"
+        android:src="@drawable/arrow_left" />
         <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

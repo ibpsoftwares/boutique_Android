@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText mEmail, mPassword;
     private SharedPreferences sharedpreferences;
     private DatabaseHandler mDatabaseHandler;
-    private String mValue = "";
+     private String mValue = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             mValue = bundle.getString("value");
 
         }
-
         getWindow().setBackgroundDrawableResource(R.drawable.bg);
         Button signUp = findViewById(R.id.signUp_button);
         Button signIn_button = findViewById(R.id.signIn_button);
@@ -216,6 +215,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     //---------------------LOGIN API----------------------//
     private void loginApi() {
 
+        
+
         String tag_string_req = "string_req";
 
         final ProgressDialog pDialog = new ProgressDialog(this);
@@ -247,12 +248,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         editor.putString(Dob, jsonObject1.getString("dob"));
                         editor.putString(Image_Link, jsonObject1.getString("image"));
                         editor.putString(User_ID_FOR_UPDATE_PROFILE, jsonObject1.getString("userdetail_id"));
-
+                        editor.apply();
                         editor.commit();
                         uploadTheLocalData(jsonObject1.getString("userid"));
 
                         if (mValue.equalsIgnoreCase("cart")) {
-                            Intent intent = new Intent(LoginActivity.this,ShippingDetails.class);
+                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                             startActivity(intent);
                         } else {
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);

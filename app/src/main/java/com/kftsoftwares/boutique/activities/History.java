@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -39,9 +41,24 @@ public class History extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+        ImageView backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         mHistoryArray = new ArrayList<HistoryModel>();
         mListView = findViewById(R.id.listView);
         getHistory();
+        mListView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(History.this, "Want to Delete", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
 
     }
 
@@ -76,16 +93,22 @@ public class History extends AppCompatActivity {
 
                     for (int i = 0; i < jsonArray.length(); i++) {
                         historyModel = new HistoryModel();
+
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
-                        JSONObject jsonObject2 = jsonObject1.getJSONObject("OrderDetail");
+                        historyModel.setOrderId(jsonObject1.getString("order_id"));
+                        historyModel.setStatus(jsonObject1.getString("status"));
 
-                        historyModel.setCreated(jsonObject2.getString("created"));
-                        historyModel.setPaymentType(jsonObject2.getString("paymentType"));
-                        historyModel.setAmount(jsonObject2.getString("amount"));
-                        historyModel.setOrder_detail_id(jsonObject2.getString("id"));
+                        historyModel.setCreated(jsonObject1.getString("created"));
+                        historyModel.setCategoryId(jsonObject1.getString("category_id"));
 
-                        JSONObject jsonObject3 = jsonObject1.getJSONObject("Cart");
+
+                        historyModel.setClothId(jsonObject1.getString("cloth_id"));
+                        historyModel.setTitle(jsonObject1.getString("title"));
+                        historyModel.setQuantity(jsonObject1.getString("quantity"));
+                        historyModel.setPrice(jsonObject1.getString("price"));
+                        historyModel.setImage(jsonObject1.getString("image"));
+
 
                     mHistoryArray.add(historyModel);
                     }

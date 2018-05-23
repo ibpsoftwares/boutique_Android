@@ -60,14 +60,13 @@ import static com.kftsoftwares.boutique.utils.Constants.REMOVE_FROM_WISHLIST;
 import static com.kftsoftwares.boutique.utils.Constants.UPDATED_TOKEN;
 import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 
-public class ProductList extends AppCompatActivity implements View.OnClickListener, FilterListView ,SortListview{
-
+public class ProductList extends AppCompatActivity implements View.OnClickListener, FilterListView, SortListview {
     private GridView mGridView;
     private ArrayList<GetAllProductModel> mGetAllProductModels;
     private ArrayList<GetAllProductModel> mSortedGetAllProductModels;
     private ArrayList<Integer> mIdArrayList;
     private ArrayList<GetAllProductModel> mGetSortedList;
-    private String mId;
+    private String mId ="" , mOfferID="";
     private ImageView mBackButton;
     private RelativeLayout mlinearLayout;
     private ArrayList<String> mPriceArrayList;
@@ -80,9 +79,11 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
     private PopupWindow popupWindow;
     private GridViewAdapter mGridViewAdapter;
     private SharedPreferences sharedPreferences;
-    public  AlertDialog mAlert;
+    public AlertDialog mAlert;
     public ArrayList<String> mUserIdArrayList;
     private DatabaseHandler mDatabaseHandler;
+    public String mCartCount="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +95,12 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         if (bundle != null) {
             if (bundle.getString("id") != null) {
                 mId = bundle.getString("id");
+            }
+            if (bundle.getString("offer_id") != null) {
+                mOfferID = bundle.getString("offer_id");
+            }
+            if (bundle.getString("cart_id") != null) {
+                mCartCount = bundle.getString("cart_id");
             }
         }
         mGetAllProductModels = new ArrayList<>();
@@ -113,17 +120,22 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+
+
             }
+
             @Override
             public void afterTextChanged(Editable s) {
                 String text = searchEditText.getText().toString().toLowerCase(Locale.getDefault());
                 mGridViewAdapter.filter(text);
             }
         });
-        sharedPreferences = getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
 
         getProductList();
+
         getPriceList();
 
         mBackButton.setOnClickListener(new View.OnClickListener() {
@@ -145,20 +157,16 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
 
         List<CartViewModel> list = mDatabaseHandler.getAllDataOfWishlist();
 
-        if (mUserIdArrayList!=null)
-        {
+        if (mUserIdArrayList != null) {
             mUserIdArrayList.clear();
         }
 
-        if (list.size()>0)
-        {
-            for (int i = 0;i<list.size();i++)
-            {
+        if (list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
                 mUserIdArrayList.add(list.get(i).getClothId());
             }
 
-        }
-        else {
+        } else {
 
         }
 
@@ -179,7 +187,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         pDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                GET_ALL_CATEGORIES_BY_ID , new Response.Listener<String>() {
+                GET_ALL_CATEGORIES_BY_ID, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -213,26 +221,21 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
                             getAllProductModel.setDescription("description");
                             getAllProductModel.setColour("colour");
 
-                            if (jsonObject1.has("wishlist"))
-                            {
+                            if (jsonObject1.has("wishlist")) {
 
-                                if (sharedPreferences.getString(User_ID,"").equalsIgnoreCase("") && mUserIdArrayList.contains(jsonObject1.getString("id")))
-                                {
+                                if (sharedPreferences.getString(User_ID, "").equalsIgnoreCase("") && mUserIdArrayList.contains(jsonObject1.getString("id"))) {
                                     getAllProductModel.setWish_list("1");
 
-                                }
-
-                                else {
+                                } else {
                                     getAllProductModel.setWish_list(jsonObject1.getString("wishlist"));
 
                                 }
 
-                            }
-                            else {
+                            } else {
                                 getAllProductModel.setWish_list("0");
                             }
 
-                                mGetAllProductModels.add(getAllProductModel);
+                            mGetAllProductModels.add(getAllProductModel);
                         }
                         mlinearLayout.setVisibility(View.GONE);
                         mGridView.setVisibility(View.VISIBLE);
@@ -251,12 +254,22 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
                 Toast.makeText(ProductList.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         }
-        ){
+        ) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
-                map.put("category_id", mId);
-                map.put("user_id", userId);
+
+                if (!mId.equalsIgnoreCase("")) {
+                    map.put("category_id", mId);
+                    map.put("user_id", userId);
+                } else {
+                    if (sharedPreferences.getString(User_ID, "").equalsIgnoreCase("")) {
+                        map.put("offer_id", mOfferID);
+                    } else {
+                        map.put("user_id", userId);
+                        map.put("offer_id", mOfferID);
+                    }
+                }
                 return map;
             }
 
@@ -362,13 +375,13 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         sortList.add("Newest First");
         sortList.add("Oldest First");
 
-        SortListViewAdapter sortListViewAdapter = new SortListViewAdapter(ProductList.this,sortList,this);
+        SortListViewAdapter sortListViewAdapter = new SortListViewAdapter(ProductList.this, sortList, this);
         filterListView.setAdapter(sortListViewAdapter);
 
         Button button = customElementsView.findViewById(R.id.ok_Button);
         Button cancel = customElementsView.findViewById(R.id.cancel);
 
-       mAlert = new AlertDialog.Builder(this)
+        mAlert = new AlertDialog.Builder(this)
                 // This adds the custom view to the Dialog (optional):
                 .setView(customElementsView)
                 .setTitle(null)
@@ -491,8 +504,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
                 Toast.makeText(ProductList.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         }
-        )
-        {
+        ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
@@ -553,12 +565,10 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         popupWindow.setFocusable(true);
 
         int width = new Util().getWidth(ProductList.this);
-        if (width<=0)
-        {
+        if (width <= 0) {
             popupWindow.setWidth(500);
-        }
-        else {
-            popupWindow.setWidth(width/2);
+        } else {
+            popupWindow.setWidth(width / 2);
         }
         popupWindow.setHeight(600);
         popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.white_background));
@@ -685,23 +695,19 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         @Override
         public int compare(GetAllProductModel o1, GetAllProductModel o2) {
 
-            Double val1,val2;
+            Double val1, val2;
 
-            if (o1.getOfferPrice()==null &&o1.getOfferPrice().equalsIgnoreCase("null"))
-            {
-                val1 =Double.valueOf(o1.getOfferPrice());
-            }
-            else {
-                val1 =Double.valueOf(o1.getPrice());
+            if (o1.getOfferPrice() == null && o1.getOfferPrice().equalsIgnoreCase("null")) {
+                val1 = Double.valueOf(o1.getOfferPrice());
+            } else {
+                val1 = Double.valueOf(o1.getPrice());
 
             }
 
-            if (o2.getOfferPrice()==null &&o2.getOfferPrice().equalsIgnoreCase("null"))
-            {
-                val2 =Double.valueOf(o2.getOfferPrice());
-            }
-            else {
-                val2 =Double.valueOf(o2.getPrice());
+            if (o2.getOfferPrice() == null && o2.getOfferPrice().equalsIgnoreCase("null")) {
+                val2 = Double.valueOf(o2.getOfferPrice());
+            } else {
+                val2 = Double.valueOf(o2.getPrice());
 
             }
 
@@ -714,11 +720,10 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
     }
 
     //--------------DELETE DATA FROM WISH LIST--------------------------------//
-    public void deleteFromWishList(final String cloth_id ,final String way) {
+    public void deleteFromWishList(final String cloth_id, final String way) {
         String tag_string_req = "string_req";
 
         final String userId = sharedPreferences.getString(User_ID, "");
-
 
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -729,8 +734,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    if (way.equalsIgnoreCase("home"))
-                    {
+                    if (way.equalsIgnoreCase("home")) {
                         //    Home fragment = (Home) getSupportFragmentManager().findFragmentById(R.id.frameLayout);
                         //     fragment.getAllProducts();
 
@@ -757,6 +761,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
                 map.put("cloth_id", cloth_id);
                 return map;
             }
+
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
@@ -773,10 +778,9 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
 
 
     //---------------------API FOR GET ADD TO WISH LIST----------------------//
-    public void     addToWishList(final  String clothId,String way) {
+    public void addToWishList(final String clothId, String way) {
 
         String tag_string_req = "string_req";
-
 
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -805,9 +809,9 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
 
         )
 
-            {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Authorization", UPDATED_TOKEN);
 

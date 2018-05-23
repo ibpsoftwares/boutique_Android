@@ -1,5 +1,6 @@
 package com.kftsoftwares.boutique.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -124,6 +125,7 @@ public class CartViewAdapter extends BaseAdapter {
                 .into(circleImageView);
 
         size.setText("Size : "+ mCartList.get(position).getSize());
+
         ImageView delete= convertView.findViewById(R.id.delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,8 +139,12 @@ public class CartViewAdapter extends BaseAdapter {
                 Intent i = new Intent(mContext, Productdetails.class);
 
                 i.putExtra("id", mCartList.get(position).getClothId());
+                i.putExtra("cat_id", mCartList.get(position).getCategoryId());
+                i.putExtra("cart_size", String.valueOf(mCartList.size()));
 
                 mContext.startActivity(i);
+                ((Activity)mContext).finish();
+
             }
         });
 

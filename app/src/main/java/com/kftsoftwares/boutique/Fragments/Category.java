@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,9 +40,11 @@ public class Category extends Fragment {
     private ListView mListView;
     private ArrayList<String> mCategoryNameList;
     private ArrayList<String> mCategoryNameId;
+    private ArrayList<String> mCategoryImage;
     private RelativeLayout mNoDataFound;
     private SwipeRefreshLayout swipeRefreshLayout;
     private MainActivity mContext;
+    private RecyclerView mRecyclerView;
 
     @Override
     public void onAttach(Context context) {
@@ -58,16 +61,17 @@ public class Category extends Fragment {
         mListView = view.findViewById(R.id.listView);
         mCategoryNameList = new ArrayList<>();
         mCategoryNameId = new ArrayList<>();
+        mCategoryImage = new ArrayList<>();
         mNoDataFound = view.findViewById(R.id.no_data_image);
         swipeRefreshLayout = view.findViewById(R.id.swipeToRefresh);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getCategories();
+                getCategories(true);
             }
         });
-        getCategories();
+        getCategories(false);
 
         return view;
     }
@@ -86,13 +90,15 @@ public class Category extends Fragment {
 
 
     //---------------------GET CATEGORIES FROM SERVER------------------------//
-    private void getCategories() {
+    private void getCategories(final boolean value) {
 
 
 
         String tag_string_req = "string_req";
 
-        mContext.showProgressBar(true);
+        if (!value) {
+            mContext.showProgressBar(true);
+        }
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 GET_CATEGORIES, new Response.Listener<String>() {
@@ -106,6 +112,9 @@ public class Category extends Fragment {
                     }
                     if (mCategoryNameId != null) {
                         mCategoryNameId.clear();
+                    }
+                     if (mCategoryImage != null) {
+                        mCategoryImage.clear();
                     }
                     swipeRefreshLayout.setRefreshing(false);
                     JSONObject jsonObject = new JSONObject(response);
@@ -123,9 +132,10 @@ public class Category extends Fragment {
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                         mCategoryNameList.add(jsonObject1.getString("name"));
                         mCategoryNameId.add(jsonObject1.getString("id"));
+                        mCategoryImage.add(jsonObject1.getString("image"));
 
                     }
-                    ListViewAdapter listViewAdapter = new ListViewAdapter(mContext,mCategoryNameList,mCategoryNameId);
+                    ListViewAdapter listViewAdapter = new ListViewAdapter(mContext,mCategoryNameList,mCategoryNameId , mCategoryImage);
 
                     mListView.setAdapter(listViewAdapter);
                     }
@@ -133,7 +143,9 @@ public class Category extends Fragment {
                     e.printStackTrace();
                 }
                 finally {
-                    mContext.showProgressBar(false);
+                    if (!value) {
+                        mContext.showProgressBar(false);
+                    }
 
                 }
 
@@ -143,7 +155,7 @@ public class Category extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show();
-                mContext.showProgressBar(true);
+                mContext.showProgressBar(false);
 
             }
         }
