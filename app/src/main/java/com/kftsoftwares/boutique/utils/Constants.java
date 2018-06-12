@@ -30,7 +30,7 @@ public class Constants {
 
     public static final String LOGIN = HOST_URL + "login";
 
-    public static final String FORGET_PASSWORD = HOST_URL + "forget";
+    public static final String FORGET_PASSWORD = HOST_URL + "forgetpwd";
 
     public static final String GET_CATEGORIES = HOST_URL + "viewCategories";
 
@@ -78,4 +78,5 @@ public class Constants {
      public static final String PAYMENT = HOST_URL + "payment";
 
      public static final String HISTORY = HOST_URL + "orderHistory";
+     public static final String CANCEL_CHECKOUT = HOST_URL + "checkoutCancel";
 }

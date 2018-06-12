@@ -27,6 +27,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // Contacts Table Columns names
     private static final String USER_ID = "id";
+    private static final String PRODUCT_ID = "product_id";
     private static final String CLOTH_NAME = "name";
     private static final String CLOTH_IMAGE = "image";
     private static final String CLOTH_CATEGORY_ID = "cloth_cat";
@@ -35,6 +36,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String Price = "price";
     private static final String Category = "category";
     private static final String Count = "count";
+    private static final String Total_Stock = "total_stock";
+    private static final String Stock = "stock";
 
 
     public DatabaseHandler(Context context) {
@@ -45,7 +48,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_BOUTIQUE + "("
-                + USER_ID + " TEXT," + Price + " TEXT," + CLOTH_CATEGORY_ID + " TEXT," + Count + " TEXT," + Category + " TEXT," + SIZE + " TEXT," + SIZE_ID + " TEXT," + CLOTH_NAME + " TEXT," + CLOTH_IMAGE + " TEXT" + ")";
+                + USER_ID + " TEXT," + Price + " TEXT," +  Total_Stock + " TEXT," + PRODUCT_ID + " TEXT," +  Stock + " TEXT," + CLOTH_CATEGORY_ID + " TEXT," + Count + " TEXT," + Category + " TEXT," + SIZE + " TEXT," + SIZE_ID + " TEXT," + CLOTH_NAME + " TEXT," + CLOTH_IMAGE + " TEXT" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
@@ -59,11 +62,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
 
-    public void addContact(CartViewModel cartViewModel) {
+    public void add(CartViewModel cartViewModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(USER_ID, cartViewModel.getClothId());
         contentValues.put(CLOTH_NAME, cartViewModel.getTitle());
+        contentValues.put(PRODUCT_ID, cartViewModel.getProduct_id());
         contentValues.put(CLOTH_IMAGE, cartViewModel.getImage1());
         contentValues.put(CLOTH_CATEGORY_ID, cartViewModel.getCategoryId());
         contentValues.put(Price, cartViewModel.getPrice());
@@ -71,6 +75,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put(SIZE_ID, cartViewModel.getSize_id());
         contentValues.put(Category, cartViewModel.getCat());
         contentValues.put(Count, cartViewModel.getCount());
+        contentValues.put(Total_Stock, cartViewModel.getStock_size());
+        contentValues.put(Stock, cartViewModel.getOnlyStockSizeForlocal());
         // Inserting Row
         long i = db.insert(TABLE_BOUTIQUE, null, contentValues);
 
@@ -93,9 +99,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 cartViewModel.setClothId(cursor.getString(cursor.getColumnIndex(USER_ID)));
                 cartViewModel.setTitle(cursor.getString(cursor.getColumnIndex(CLOTH_NAME)));
                 cartViewModel.setImage1(cursor.getString(cursor.getColumnIndex(CLOTH_IMAGE)));
+                cartViewModel.setProduct_id(cursor.getString(cursor.getColumnIndex(PRODUCT_ID)));
                 cartViewModel.setPrice(cursor.getString(cursor.getColumnIndex(Price)));
                 cartViewModel.setCategoryName(cursor.getString(cursor.getColumnIndex(Category)));
                 cartViewModel.setCount(cursor.getString(cursor.getColumnIndex(Count)));
+                cartViewModel.setStock_size(cursor.getString(cursor.getColumnIndex(Total_Stock)));
+                cartViewModel.setOnlyStockSizeForlocal(cursor.getString(cursor.getColumnIndex(Stock)));
                 cartViewModel.setCategoryId(cursor.getString(cursor.getColumnIndex(CLOTH_CATEGORY_ID)));
                 // Adding cartViewModel to list
                 contactList.add(cartViewModel);
@@ -121,10 +130,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 cartViewModel.setTitle(cursor.getString(cursor.getColumnIndex(CLOTH_NAME)));
                 cartViewModel.setImage1(cursor.getString(cursor.getColumnIndex(CLOTH_IMAGE)));
                 cartViewModel.setPrice(cursor.getString(cursor.getColumnIndex(Price)));
+                cartViewModel.setProduct_id(cursor.getString(cursor.getColumnIndex(PRODUCT_ID)));
                 cartViewModel.setCategoryName(cursor.getString(cursor.getColumnIndex(Category)));
                 cartViewModel.setCount(cursor.getString(cursor.getColumnIndex(Count)));
                 cartViewModel.setSize_id(cursor.getString(cursor.getColumnIndex(SIZE_ID)));
                 cartViewModel.setSize(cursor.getString(cursor.getColumnIndex(SIZE)));
+                cartViewModel.setStock_size(cursor.getString(cursor.getColumnIndex(Total_Stock)));
+                cartViewModel.setOnlyStockSizeForlocal(cursor.getString(cursor.getColumnIndex(Stock)));
                 cartViewModel.setCategoryId(cursor.getString(cursor.getColumnIndex(CLOTH_CATEGORY_ID)));
                 // Adding cartViewModel to list
                 contactList.add(cartViewModel);
@@ -142,12 +154,43 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(strSQL);
         db.close();
     }
+
   public void updateCategoryWithSize(String value, String user_id , String size , String size_id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         String strSQL = "UPDATE " + TABLE_BOUTIQUE + " SET category = '" + value + "' , " + SIZE_ID +" = '" +size_id+ "' ," + SIZE + " = '"+ size +"' WHERE " + USER_ID + " = " + user_id +" AND "+ SIZE +" = 'noData'";
 
         db.execSQL(strSQL);
+        db.close();
+    }
+    public void updateCategoryWithSizeAndUpdateStock(String value, String user_id , String size , String size_id , String stock) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String strSQL = "UPDATE " + TABLE_BOUTIQUE + " SET category = '" + value + "' , " + SIZE_ID +" = '" +size_id+ "' ,  " + Total_Stock +" = '" +stock+ "' ,  " +  SIZE + " = '"+ size +"' WHERE " + USER_ID + " = " + user_id +" AND "+ SIZE +" = 'noData'" ;
+
+        db.execSQL(strSQL);
+
+
+        db.close();
+    }
+
+    public void updateWishListStock(String product , String stock) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String strSQL = "UPDATE " + TABLE_BOUTIQUE + " SET " + Total_Stock +" = '" +stock+ "' WHERE " + PRODUCT_ID + " = " + product +" AND "+ Category + "='wishList'" + " AND "+ SIZE +" = 'noData'" ;
+
+        db.execSQL(strSQL);
+
+
+        db.close();
+    } public void updateCartStock(String product , String stock , String size) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String strSQL = "UPDATE " + TABLE_BOUTIQUE + " SET " + Total_Stock +" = '" +stock+ "' WHERE " + PRODUCT_ID + " = " + product +" AND "+ Category + "='cart'" + " AND "+ SIZE +" = '"+ size +"'";
+
+        db.execSQL(strSQL);
+
+
         db.close();
     }
 
@@ -164,18 +207,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public boolean CheckIsDataAlreadyInDBorNot(String fieldValue) {
+    public int CheckSingleProductCountInCart(String fieldValue) {
         SQLiteDatabase sqldb = this.getWritableDatabase();
-        String Query = "SELECT * FROM " + TABLE_BOUTIQUE + " WHERE " + USER_ID + " ='" + fieldValue + "'" + " AND " + Category + "='cart'";
+        String Query = "SELECT * FROM " + TABLE_BOUTIQUE + " WHERE " + PRODUCT_ID + " ='" + fieldValue + "'" + " AND " + Category + "='cart'";
         Cursor cursor = sqldb.rawQuery(Query, null);
         int val = cursor.getCount();
         if (cursor.getCount() <= 0) {
             cursor.close();
-            return false;
+            return 0;
         }
         cursor.close();
-        return true;
-    } public boolean CheckIsDataAlreadyInDBorNotWithSize(String fieldValue , String size) {
+        return val;
+    }
+
+
+
+
+
+
+    public boolean CheckIsDataAlreadyInDBorNotWithSize(String fieldValue , String size) {
         SQLiteDatabase sqldb = this.getWritableDatabase();
         String Query = "SELECT * FROM " + TABLE_BOUTIQUE + " WHERE " + USER_ID + " ='" + fieldValue + "'" + " AND " + Category + "='cart'"  + " AND " + SIZE + "='"+size+"'";
         Cursor cursor = sqldb.rawQuery(Query, null);

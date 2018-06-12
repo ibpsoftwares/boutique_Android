@@ -56,15 +56,10 @@
         android:layout_below="@+id/action_bar" />
 
 
-
-
-
-
-
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/_30sdp"
         android:layout_alignParentBottom="true">
 
 
@@ -78,10 +73,10 @@
             <com.kftsoftwares.boutique.utils.TextViewRegular
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="@dimen/_14sdp"
                 android:text=""
                 android:id="@+id/totalItemCount"
-                android:padding="10sp"
+                android:padding="@dimen/_5sdp"
                 android:layout_centerVertical="true"
                 android:textColor="@color/white"
                 android:layout_alignParentStart="true"
@@ -90,13 +85,13 @@
             <com.kftsoftwares.boutique.utils.TextViewRegular
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="@dimen/_14sdp"
                 android:layout_toEndOf="@+id/totalItemCount"
                 android:text=""
                 android:layout_centerVertical="true"
                 android:gravity="end"
                 android:id="@+id/amountCount"
-                android:padding="10sp"
+                android:padding="@dimen/_5sdp"
                 android:textColor="@color/white"
                 android:layout_alignParentEnd="true"
                 />
@@ -115,10 +110,10 @@
             <com.kftsoftwares.boutique.utils.TextViewRegular
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="@dimen/_14sdp"
                 android:layout_centerInParent="true"
                 android:gravity="center"
-                android:padding="10sp"
+                android:padding="@dimen/_5sdp"
                 android:text="CHECKOUT"
                 android:textColor="@color/white"
                 />
@@ -140,7 +135,7 @@
             android:layout_centerInParent="true"
             android:src="@mipmap/cart_empty"
             android:id="@+id/image"
-            />
+            android:contentDescription="@string/app_name" />
 
         <com.kftsoftwares.boutique.utils.TextViewRegular
             android:layout_width="wrap_content"

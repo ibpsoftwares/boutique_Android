@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +62,7 @@ public class Home extends Fragment implements View.OnClickListener {
     final long DELAY_MS = 800;//delay in milliseconds before task is to be executed
     final long PERIOD_MS = 1800; // time in milliseconds between successive task executions.
     private int n = 0;
-    private int totalsize = 0;
+    private int mTotalsize = 0;
     int mMaxVal = 360;
     private MainActivity mContext;
     private TextView mNoDataFound;
@@ -195,17 +194,17 @@ mNoDataFound = view.findViewById(R.id.noDataFound);
     }
 
 
-    private void getArray(ArrayList<String> bannner, int val) {
-        if (val == bannner.size()) {
+    private void getArray(ArrayList<String> banner, int val) {
+        if (val == banner.size()) {
             n = 0;
         }
 
-        if(totalsize<=mMaxVal)
+        if(mTotalsize <=mMaxVal)
 
         {
-            totalsize++;
-            if (n < bannner.size()) {
-                mNewBannerImages.add(bannner.get(n));
+            mTotalsize++;
+            if (n < banner.size()) {
+                mNewBannerImages.add(banner.get(n));
                 n++;
                 getArray(mBannerImages, n);
 

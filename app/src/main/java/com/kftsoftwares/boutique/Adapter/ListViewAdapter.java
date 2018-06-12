@@ -40,9 +40,10 @@ public class ListViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+
        return mCategoryName.size();
 
-        //return 4;
+       //return 4;
     }
 
     @Override

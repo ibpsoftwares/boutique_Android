@@ -24,6 +24,7 @@
                 android:layout_below="@+id/orderId"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:background="@mipmap/checked_icon"
+                android:contentDescription="@string/app_name"
                  />
 
             <com.kftsoftwares.boutique.utils.TextViewRegular

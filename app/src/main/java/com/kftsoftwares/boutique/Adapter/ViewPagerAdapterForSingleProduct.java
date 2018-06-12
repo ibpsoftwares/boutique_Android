@@ -52,7 +52,7 @@ public class ViewPagerAdapterForSingleProduct extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         View itemView = mLayoutInflater.inflate(R.layout.pager_item, container, false);
 
-       ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView);
+       ImageView imageView = itemView.findViewById(R.id.imageView);
 
         final ProgressBar progressBar = itemView.findViewById(R.id.progress_Bar);
         // imageView.setImageResource(mImages[position]);

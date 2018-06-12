@@ -11,6 +11,7 @@
         android:layout_height="@dimen/_90sdp"
         android:src="@mipmap/checked_icon"
         android:layout_gravity="center"
+        android:contentDescription="@string/app_name"
         android:scaleType="fitXY" />
 
     <com.kftsoftwares.boutique.utils.TextViewRegular

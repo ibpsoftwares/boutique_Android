@@ -27,6 +27,7 @@
     <color name="changePassword_background">#e0432d</color>
     <color name="history_background">#005ae5</color>
     <color name="signOut_background">#ff47bb</color>
+    <color name="u">#62bb5a</color>
     <string-array name="colors">
         <item>#00BCD4</item>
         <item>#009688</item>

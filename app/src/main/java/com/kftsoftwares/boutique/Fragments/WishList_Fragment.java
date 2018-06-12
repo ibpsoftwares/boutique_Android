@@ -48,7 +48,7 @@ import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 
 public class WishList_Fragment extends Fragment implements WishListInterface {
 
-    private ListView mListview;
+    private ListView mListView;
     private ArrayList<CartViewModel> mCartViewModels;
     private RelativeLayout mWishListRelativeLayout;
     private DatabaseHandler mDatabaseHandler;
@@ -56,8 +56,9 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
     private WishListAdapter mWishListAdapter;
     private SharedPreferences sharedPreferences;
     private MainActivity mContext;
-    private String mCheckSize="";
-    private String mSizeId="";
+    private String mCheckSize = "";
+    private String mSizeId = "";
+    private String mTotalStock = "";
     private ArrayList<Size> mSizes;
     private int mPositionForMove;
     private String mClothIdForMove;
@@ -88,11 +89,11 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_wish_list_, container, false);
         mWishListAdapter = new WishListAdapter(mContext, new ArrayList<CartViewModel>(), WishList_Fragment.this);
-        mListview = view.findViewById(R.id.listView);
+        mListView = view.findViewById(R.id.listView);
         mWishListRelativeLayout = view.findViewById(R.id.no_data_image);
         mDatabaseHandler = new DatabaseHandler(mContext);
         sharedPreferences = mContext.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        mListview.setAdapter(mWishListAdapter);
+        mListView.setAdapter(mWishListAdapter);
         mCartViewModels = new ArrayList<>();
         mSizes = new ArrayList<>();
         mClothIds = new ArrayList<>();
@@ -109,11 +110,9 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
         mContext.mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mSizeId.equalsIgnoreCase(""))
-                {
+                if (mSizeId.equalsIgnoreCase("")) {
                     Toast.makeText(mContext, "Please select size", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     moveToCart(mClothIdForMove, mPositionForMove, mCheckSize, mCartViewModels, mSizeId);
                     mContext.mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }
@@ -133,14 +132,14 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
 
         if (mCartViewModels.size() > 0) {
             mWishListRelativeLayout.setVisibility(View.GONE);
-            mListview.setVisibility(View.VISIBLE);
+            mListView.setVisibility(View.VISIBLE);
             for (int i = 0; i < mCartViewModels.size(); i++) {
                 mClothIds.add(mCartViewModels.get(i).getClothId());
             }
             mWishListAdapter.UpdateData(mCartViewModels);
         } else {
             mWishListRelativeLayout.setVisibility(View.VISIBLE);
-            mListview.setVisibility(View.GONE);
+            mListView.setVisibility(View.GONE);
         }
 
     }
@@ -168,10 +167,10 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
                     if (jsonObject.has("message") && jsonObject.getString("message") != null && jsonObject.getString("message").equalsIgnoreCase("Wishlist Empty")) {
 
                         mWishListRelativeLayout.setVisibility(View.VISIBLE);
-                        mListview.setVisibility(View.GONE);
+                        mListView.setVisibility(View.GONE);
                     } else {
                         mWishListRelativeLayout.setVisibility(View.GONE);
-                        mListview.setVisibility(View.VISIBLE);
+                        mListView.setVisibility(View.VISIBLE);
                         JSONArray jsonArray = jsonObject.getJSONArray("Wishlist");
 
                         CartViewModel cartViewModel = null;
@@ -182,6 +181,7 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
                             cartViewModel.setCategoryId(object.getString("category_id"));
                             cartViewModel.setClothId(object.getString("cloth_id"));
                             cartViewModel.setImage1(object.getString("image1"));
+                            cartViewModel.setStock_size(object.getString("total_stock"));
                             cartViewModel.setDescription(object.getString("description"));
                             cartViewModel.setTitle(object.getString("title"));
                             cartViewModel.setPrice(object.getString("original_price"));
@@ -251,12 +251,12 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
         mCartViewModels.remove(position);
         if (mCartViewModels.size() > 0) {
             mWishListRelativeLayout.setVisibility(View.GONE);
-            mListview.setVisibility(View.VISIBLE);
+            mListView.setVisibility(View.VISIBLE);
 
             mWishListAdapter.UpdateData(mCartViewModels);
         } else {
             mWishListRelativeLayout.setVisibility(View.VISIBLE);
-            mListview.setVisibility(View.GONE);
+            mListView.setVisibility(View.GONE);
 
         }
 
@@ -266,8 +266,8 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
     @Override
     public void moveToWishList(String clothId, int positon, ArrayList<CartViewModel> cartViewModels) {
 
-        mCheckSize="";
-        mSizeId="";
+        mCheckSize = "";
+        mSizeId = "";
         getSizesFromServer(clothId);
         mClothIdForMove = clothId;
         mPositionForMove = positon;
@@ -278,13 +278,14 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
 
     }
 
-    private void moveToCart(String cloth_id, int position, String size, ArrayList<CartViewModel> cartViewModels , String mSizeId) {
+    private void moveToCart(String cloth_id, int position, String size, ArrayList<CartViewModel> cartViewModels, String mSizeId) {
         if (sharedPreferences.getString(User_ID, "").equalsIgnoreCase("")) {
 
             if (mDatabaseHandler.CheckIsDataAlreadyInDBorNotWithSize(cloth_id, size)) {
                 Toast.makeText(mContext, "Already Exists In Cart", Toast.LENGTH_SHORT).show();
             } else {
-                mDatabaseHandler.updateCategoryWithSize("cart", cloth_id, size, mSizeId);
+              //  mDatabaseHandler.updateCategoryWithSize("cart", cloth_id, size, mSizeId);
+                mDatabaseHandler.updateCategoryWithSizeAndUpdateStock("cart", cloth_id, size, mSizeId, mTotalStock);
                 getLocalWishListData();
                 mContext.getLocalCartListData();
                 mContext.getLocalWishListData();
@@ -434,22 +435,37 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
             button.setGravity(Gravity.CENTER);
             button.setTextColor(ContextCompat.getColor(mContext, R.color.black));
             button.setTextSize(10);
-            if (mCheckSize.equalsIgnoreCase(String.valueOf(size.get(i).getSize()))) {
-                button.setBackground(ContextCompat.getDrawable(mContext, R.drawable.round_button_colored));
-                button.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+            if (size.get(i).getStock().equalsIgnoreCase("0")) {
+                button.setBackground(ContextCompat.getDrawable(mContext, R.drawable.round_button_disable));
+                button.setClickable(false);
+                button.setFocusable(false);
+
             } else {
-                button.setBackground(ContextCompat.getDrawable(mContext, R.drawable.round_button));
-                button.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+                if (mCheckSize.equalsIgnoreCase(String.valueOf(size.get(i).getSize()))) {
+                    button.setBackground(ContextCompat.getDrawable(mContext, R.drawable.round_button_colored));
+                    button.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                } else {
+                    button.setBackground(ContextCompat.getDrawable(mContext, R.drawable.round_button));
+                    button.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+                }
             }
             // add our event handler (less memory than an anonymous inner class)
+            final int finalI = i;
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mCheckSize = button.getText().toString();
-                    mSizeId = String.valueOf(button.getId());
-                    button.setBackground(ContextCompat.getDrawable(mContext, R.drawable.round_button_colored));
-                    button.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-                    setUpSizes(size);
+
+                    if (size.get(finalI).getStock().equalsIgnoreCase("0")) {
+
+
+                    } else {
+                        mCheckSize = button.getText().toString();
+                        mSizeId = String.valueOf(button.getId());
+                        mTotalStock = size.get(finalI).getStock();
+                        button.setBackground(ContextCompat.getDrawable(mContext, R.drawable.round_button_colored));
+                        button.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                        setUpSizes(size);
+                    }
                 }
             });
             // add generated button to view
@@ -484,6 +500,7 @@ public class WishList_Fragment extends Fragment implements WishListInterface {
                         size = new Size();
                         size.setSize(jsonObject2.getString("size"));
                         size.setSize_id(jsonObject2.getString("id"));
+                        size.setStock(jsonObject1.getString("stock"));
 
                         mSizes.add(size);
 

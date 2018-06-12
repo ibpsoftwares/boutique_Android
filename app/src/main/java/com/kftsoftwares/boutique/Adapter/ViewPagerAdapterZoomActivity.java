@@ -46,7 +46,7 @@ public class ViewPagerAdapterZoomActivity extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         View itemView = mLayoutInflater.inflate(R.layout.zoom_adapter, container, false);
 
-       ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView);
+       ImageView imageView = itemView.findViewById(R.id.imageView);
 
         final ProgressBar progressBar = itemView.findViewById(R.id.progress_Bar);
         // imageView.setImageResource(mImages[position]);
@@ -87,7 +87,7 @@ public class ViewPagerAdapterZoomActivity extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return view == ((RelativeLayout) object);
+        return view == object;
     }
 
 }

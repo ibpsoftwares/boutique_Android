@@ -2,77 +2,85 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/_10sdp">
 
-    <com.mikhaellopez.circularimageview.CircularImageView
-        android:layout_width="@dimen/_66sdp"
-        android:layout_height="@dimen/_66sdp"
-        app:civ_border_color="#EEEEEE"
-        app:civ_border_width="1dp"
-        app:civ_shadow="true"
-        android:id="@+id/profile_image"
-        app:civ_shadow_radius="1"
-        app:civ_shadow_color="#8BC34A"/>
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/delete"
-        android:contentDescription="@string/app_name"
-        android:src="@mipmap/close" />
+        android:id="@+id/profile_image"
+        android:layout_width="@dimen/_85sdp"
+        android:layout_height="@dimen/_100sdp"
+        android:background="@color/white"
+        android:contentDescription="@string/app_name" />
+
     <com.kftsoftwares.boutique.utils.TextViewRegular
-        android:id="@+id/price"
+        android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:textColor="@color/dark_gray"
-        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_toEndOf="@+id/profile_image"
+        android:lines="1"
+        android:marqueeRepeatLimit="15"
+        android:text="Name of the cloth"
+        android:textColor="@color/black"
         android:textSize="@dimen/_16ssp" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/name"
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_toEndOf="@+id/profile_image"
-        android:orientation="vertical">
+        android:layout_margin="@dimen/_5sdp"
+        android:orientation="horizontal">
 
-        <com.kftsoftwares.boutique.utils.TextViewRegular
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
+        <Spinner
+            android:layout_width="@dimen/_100sdp"
             android:layout_height="wrap_content"
+            android:id="@+id/spinner"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:padding="@dimen/_5sdp"/>
+        <ImageView
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="wrap_content"
+            android:id="@+id/outOfStock"
+            android:gravity="center"
+            android:visibility="gone"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/out_of_stock_image"
+            android:layout_gravity="center"
+            android:padding="@dimen/_5sdp"/>
+        <TextView
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="wrap_content"
+            android:text="S"
+            android:id="@+id/size"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:textColor="@color/black"
-            android:textSize="@dimen/_16ssp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-
-            <com.kftsoftwares.boutique.utils.TextViewRegular
-                android:id="@+id/size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:background="@color/light_gray"
-                android:padding="@dimen/_5sdp"
-
-                android:textSize="@dimen/_14ssp" />
-
-            <com.kftsoftwares.boutique.utils.TextViewRegular
-                android:id="@+id/Quantity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:background="@color/light_gray"
-                android:textAllCaps="false"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:padding="@dimen/_5sdp"
-
-                android:textSize="@dimen/_14ssp" />
-        </LinearLayout>
-
+            android:textSize="@dimen/_16sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:padding="@dimen/_2sdp"
+            android:background="@drawable/rectangle"
+            />
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/delete"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_alignBottom="@+id/name"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/app_name"
+        android:src="@mipmap/close" />
+
+    <com.kftsoftwares.boutique.utils.TextViewBold
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/profile_image"
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_20ssp" />
+
 </RelativeLayout>

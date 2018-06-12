@@ -35,6 +35,7 @@
     android:layout_height="wrap_content"
     android:background="@mipmap/empty_bag"
     android:id="@+id/bag_image"
+    android:contentDescription="@string/app_name"
     android:layout_centerInParent="true"
     />
 

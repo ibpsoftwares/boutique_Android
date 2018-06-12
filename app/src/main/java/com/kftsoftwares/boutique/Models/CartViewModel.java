@@ -9,6 +9,7 @@ public class CartViewModel
 
 
     private String cartId;
+    private String product_id;
     private String clothId;
     private String categoryId;
     private String categoryName;
@@ -26,6 +27,33 @@ public class CartViewModel
     private String cat;
     private String size;
     private String size_id;
+    private String Stock_size;
+    private String onlyStockSizeForlocal;
+
+
+    public String getProduct_id() {
+        return product_id;
+    }
+
+    public void setProduct_id(String product_id) {
+        this.product_id = product_id;
+    }
+
+    public String getOnlyStockSizeForlocal() {
+        return onlyStockSizeForlocal;
+    }
+
+    public void setOnlyStockSizeForlocal(String onlyStockSizeForlocal) {
+        this.onlyStockSizeForlocal = onlyStockSizeForlocal;
+    }
+
+    public String getStock_size() {
+        return Stock_size;
+    }
+
+    public void setStock_size(String stock_size) {
+        Stock_size = stock_size;
+    }
 
     public String getSize_id() {
         return size_id;

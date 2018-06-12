@@ -69,6 +69,7 @@ public class WishListAdapter extends BaseAdapter {
 
         }
         ImageView circleImageView = convertView.findViewById(R.id.profile_image);
+        ImageView outOfStockText = convertView.findViewById(R.id.outOfStockText);
         TextView name = convertView.findViewById(R.id.name);
         TextView price = convertView.findViewById(R.id.price);
         Button moveToCart = convertView.findViewById(R.id.move_to_cart);
@@ -103,6 +104,20 @@ public class WishListAdapter extends BaseAdapter {
 
             }
         });
+
+        if (mWishList.get(position).getStock_size().equalsIgnoreCase("0"))
+        {
+            outOfStockText.setVisibility(View.VISIBLE);
+            moveToCart.setVisibility(View.GONE);
+            price.setVisibility(View.GONE);
+
+        }
+        else {
+            outOfStockText.setVisibility(View.GONE);
+            moveToCart.setVisibility(View.VISIBLE);
+            price.setVisibility(View.VISIBLE);
+
+        }
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -5,26 +5,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.kftsoftwares.boutique.Adapter.AlbumsAdapter;
-import com.kftsoftwares.boutique.Adapter.SettingAdapter;
-import com.kftsoftwares.boutique.Models.GetAllProductModel;
 import com.kftsoftwares.boutique.R;
 import com.kftsoftwares.boutique.activities.Change_Password;
 import com.kftsoftwares.boutique.activities.History;
 import com.kftsoftwares.boutique.activities.MainActivity;
 import com.kftsoftwares.boutique.activities.Profile_Activity;
 import com.kftsoftwares.boutique.database.DatabaseHandler;
-import com.kftsoftwares.boutique.utils.SpacesItemDecoration;
-
-import java.util.ArrayList;
 
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 

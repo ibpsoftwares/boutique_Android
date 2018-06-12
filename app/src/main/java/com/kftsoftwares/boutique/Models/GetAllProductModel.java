@@ -1,5 +1,8 @@
 package com.kftsoftwares.boutique.Models;
 
+
+import java.util.ArrayList;
+
 /**
  * Created by apple on 21/02/18.
  */
@@ -19,7 +22,32 @@ public class GetAllProductModel {
         private String image1;
         private String brandName;
         private String Wish_list;
+        private String Stock_size;
+        private ArrayList<Size> sizeArrayList;
 
+    public ArrayList<Size> getSizeArrayList() {
+        return sizeArrayList;
+    }
+
+    public void setSizeArrayList(ArrayList<Size> sizeArrayList) {
+        this.sizeArrayList = sizeArrayList;
+    }
+
+    public String getOfferprice() {
+        return offerprice;
+    }
+
+    public void setOfferprice(String offerprice) {
+        this.offerprice = offerprice;
+    }
+
+    public String getStock_size() {
+        return Stock_size;
+    }
+
+    public void setStock_size(String stock_size) {
+        Stock_size = stock_size;
+    }
 
     public String getWish_list() {
         return Wish_list;

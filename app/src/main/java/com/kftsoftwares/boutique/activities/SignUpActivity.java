@@ -44,7 +44,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        getWindow().setBackgroundDrawableResource(R.drawable.bg);
+     //   getWindow().setBackgroundDrawableResource(R.drawable.background_green);
 
         TextView alreadyHaveAnAccount = findViewById(R.id.alreadyHaveAnAccount);
         Button signUp = findViewById(R.id.signUp);

@@ -22,7 +22,7 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.MyViewHo
     private Context mContext;
     private int images[] = {R.mipmap.ic_help_white, R.mipmap.ic_profile_white,
             R.mipmap.ic_password_white, R.mipmap.ic_history_white, R.mipmap.ic_signout_white};
-    private String name[] = { "Help","Profile","Change Password","History","Signout"};
+    private String name[] = { "Help","Profile","Change Password","History","SignOut"};
 
     private int colors[] = { R.color.help_background,
             R.color.profile_background,
@@ -50,7 +50,6 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.MyViewHo
         holder.imageView.setImageResource(images[position]);
         holder.relativeLayout.setBackgroundColor(Color.parseColor(allColors[position]));
         holder.textView.setText(name[position]);
-       // holder.cardview.setCardBackgroundColor(colors[position]);
 
     }
 

@@ -6,7 +6,15 @@ package com.kftsoftwares.boutique.Models;
 
 public class Banner {
 
-    String id , image ,name , category_id;
+    String id , image ,name , category_id , stock_size;
+
+    public String getStock_size() {
+        return stock_size;
+    }
+
+    public void setStock_size(String stock_size) {
+        this.stock_size = stock_size;
+    }
 
     public String getCategory_id() {
         return category_id;

@@ -43,7 +43,7 @@ import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 public class Payment extends AppCompatActivity {
 
    private EditText mCardNumber ,mMonth,mYear,mCvv,mEmail;
-    private String mAmount;
+    private String mAmount, mCheckOutData="";
     private TextView mAmountTextView;
     private Button mNext;
     private ProgressDialog pDialog;
@@ -87,6 +87,11 @@ public class Payment extends AppCompatActivity {
                 mAmountTextView.setText(mAmount);
             }
 
+            if (b.getString("check_outData")!=null)
+            {
+                mCheckOutData = b.getString("check_outData");
+            }
+
         }
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +120,8 @@ public class Payment extends AppCompatActivity {
                                 public void onSuccess(Token token) {
                                     // Send token to your server
                                     String token1 =""+token.getId();
-                                    sendDataForPayment(token1,mAmount);
+                                  //  sendDataForPayment(token1,mAmount);
+                                    checkOrder(token1,mAmount);
                                 }
                                 public void onError(Exception error) {
                                     // Show localized error message
@@ -155,7 +161,7 @@ public class Payment extends AppCompatActivity {
                         String status = jsonArray.getString("status");
 
                         if (status.equalsIgnoreCase("succeeded")) {
-                            checkOrder();
+                          //  checkOrder();
                         } else {
 
                             showFailedDialog();
@@ -200,7 +206,7 @@ public class Payment extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
-    private void checkOrder() {
+    private void checkOrder(final String token ,final String amount) {
         String tag_string_req = "string_req";
 
         final SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
@@ -219,9 +225,24 @@ public class Payment extends AppCompatActivity {
                 pDialog.cancel();
                 pDialog.dismiss();
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    showDialog();
+                    if (response!=null) {
 
+                        JSONObject jsonObject = new JSONObject(response);
+                        JSONObject jsonArray = jsonObject.getJSONObject("customer_array");
+                        String status = jsonArray.getString("status");
+
+                        if (status.equalsIgnoreCase("succeeded")) {
+                            showDialog();
+                        } else {
+
+                            showFailedDialog();
+                        }
+
+                    }
+                    else {
+                        showFailedDialog();
+
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -251,6 +272,8 @@ public class Payment extends AppCompatActivity {
                 map.put("paymentType", "card");
                 map.put("amount", mAmount);
                 map.put("user_id", sharedPreferences.getString(User_ID,""));
+                map.put("cartArray", mCheckOutData);
+                map.put("token", token);
                 return map;
             }
         };

@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -85,6 +84,7 @@ public class GridViewAdapter extends BaseAdapter {
 
         final ImageView imageView = convertView.findViewById(R.id.imageHeart);
         final ImageView productImage = convertView.findViewById(R.id.productImage);
+        final ImageView outOfStock = convertView.findViewById(R.id.outOfStock);
         final TextView name = convertView.findViewById(R.id.name);
         final TextView price = convertView.findViewById(R.id.price);
         final TextView title = convertView.findViewById(R.id.title);
@@ -117,6 +117,15 @@ public class GridViewAdapter extends BaseAdapter {
         } else {
             imageView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.heartborder));
         }
+        if (mArrayList.get(position).getStock_size().equalsIgnoreCase("0"))
+        {
+            outOfStock.setVisibility(View.VISIBLE);
+        }
+        else {
+            outOfStock.setVisibility(View.GONE);
+
+        }
+
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,11 +156,14 @@ public class GridViewAdapter extends BaseAdapter {
                     cartViewModel.setImage1(mArrayList.get(position).getImage1());
                     cartViewModel.setPrice(mArrayList.get(position).getPrice());
                     cartViewModel.setCategoryId(mArrayList.get(position).getCategoryId());
+                    cartViewModel.setStock_size(mArrayList.get(position).getStock_size());
+                    cartViewModel.setProduct_id(mArrayList.get(position).getId());
+                    cartViewModel.setOnlyStockSizeForlocal("0");
                     cartViewModel.setSize("noData");
                     cartViewModel.setSize_id("");
                     cartViewModel.setCat("wishList");
                     cartViewModel.setCount("1");
-                    sqLiteOpenHelper.addContact(cartViewModel);
+                    sqLiteOpenHelper.add(cartViewModel);
                     mArrayList.get(position).setWish_list("1");
                     imageView.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.heart));
                     if (sharedPreferences.getString(User_ID, "").equalsIgnoreCase(""))
@@ -184,7 +196,6 @@ public class GridViewAdapter extends BaseAdapter {
 
        // name.setText(mArrayList.get(position).getBrandName());
         name.setText(mArrayList.get(position).getTitle());
-        final LinearLayout linearLayout = convertView.findViewById(R.id.linearLayout);
 
 
         Glide.with(mContext).load(mArrayList.get(position).getImage1())

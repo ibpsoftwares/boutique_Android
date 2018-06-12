@@ -83,6 +83,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
     private ScrollView mParentScrollView;
     private NestedScrollView mChildScrollView;
     private String mSizeDetail = "";
+    private String mSingleStockSize = "";
     public ArrayList<String> mUserIdArrayList;
     private DatabaseHandler mDatabaseHandler;
     private String mSizeID;
@@ -91,13 +92,18 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
     private ArrayList<Banner> mBannerList;
     private SingleProductRecyclerView mHomeSubRecyclerView;
     private String mCartCount ="0";
+    private ImageView mOutOfStock , mImageShade;
     private TextView mCartCountTextView;
+    private LinearLayout mOutOfStockLinearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_productdetails);
         mDescreption = findViewById(R.id.description);
+        mOutOfStock = findViewById(R.id.outOfStock);
+        mOutOfStockLinearLayout = findViewById(R.id.outOfStockLinerLayout);
+        mImageShade = findViewById(R.id.imageShade);
 
 
         mDatabaseHandler = new DatabaseHandler(Productdetails.this);
@@ -211,11 +217,15 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
 
         updateTextOnCartCount();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
     }
 
@@ -259,11 +269,15 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                             cartViewModel.setImage1(mSingleProductImage.get(0).getImage());
                             cartViewModel.setPrice(mSingleModel.get(0).getPrice());
                             cartViewModel.setCategoryId(mSingleModel.get(0).getCategoryId());
+                            cartViewModel.setStock_size(mSingleModel.get(0).getStockSize());
+                            cartViewModel.setProduct_id(mSingleModel.get(0).getId());
+
+                            cartViewModel.setOnlyStockSizeForlocal("0");
                             cartViewModel.setSize("noData");
                             cartViewModel.setSize_id("");
                             cartViewModel.setCat("wishList");
                             cartViewModel.setCount("1");
-                            mDatabaseHandler.addContact(cartViewModel);
+                            mDatabaseHandler.add(cartViewModel);
                             Toast.makeText(this, "Added in wishList", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -298,12 +312,14 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                         cartViewModel.setImage1(mSingleProductImage.get(0).getImage());
                         cartViewModel.setPrice(mSingleModel.get(0).getPrice());
                         cartViewModel.setCategoryId(mSingleModel.get(0).getCategoryId());
-
+                        cartViewModel.setProduct_id(mSingleModel.get(0).getId());
+                        cartViewModel.setStock_size(mSingleStockSize);
+                        cartViewModel.setOnlyStockSizeForlocal("0");
                         cartViewModel.setSize(mSizeDetail);
                         cartViewModel.setSize_id(mSizeID);
                         cartViewModel.setCat("cart");
                         cartViewModel.setCount("1");
-                        mDatabaseHandler.addContact(cartViewModel);
+                        mDatabaseHandler.add(cartViewModel);
                         Toast.makeText(this, "Added in cart", Toast.LENGTH_SHORT).show();
 
                         mCartCount = String.valueOf(Integer.valueOf(mCartCount)+1);
@@ -353,6 +369,13 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
             mImageString.clear();
         }
 
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mHomeSubRecyclerView = new SingleProductRecyclerView(Productdetails.this, new ArrayList<Banner>(), Productdetails.this);
+        mRecyclerView.setAdapter(mHomeSubRecyclerView);
+
+
+
         final ProgressDialog pDialog = new ProgressDialog(Productdetails.this);
         pDialog.setMessage("Loading...");
         pDialog.setCancelable(false);
@@ -363,7 +386,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void onResponse(String response) {
-                pDialog.cancel();
+                 pDialog.cancel();
                 pDialog.dismiss();
                 try {
                     JSONObject jsonObject = new JSONObject(response);
@@ -381,6 +404,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                             banner.setImage(jsonObject1.getString("image"));
                             banner.setName(jsonObject1.getString("title"));
                             banner.setId(jsonObject1.getString("id"));
+                            banner.setStock_size(jsonObject1.getString("total_stock"));
 
                             mBannerList.add(banner);
                         }
@@ -416,6 +440,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                         size = new Size();
                         size.setSize(object1.getString("size"));
                         size.setSize_id(object1.getString("id"));
+                        size.setStock(object1.getString("stock"));
                         mSingleProductSize.add(size);
 
                     }
@@ -435,7 +460,7 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                     } else {
                         mOldPrice.setVisibility(View.GONE);
                         mPrice.setText(Html.fromHtml(mSharedPreferences.getString(Symbol, "")) + " " + object.getString("original_price"));
-                        singleProduct.setPrice(Html.fromHtml(mSharedPreferences.getString(Symbol, "")) + " " + object.getString("original_price"));
+                        singleProduct.setPrice(object.getString("original_price"));
 
                     }
 
@@ -444,21 +469,40 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
                     //
                     //
                     // etText(object.getString("offer_price"));
-                    mName.setText(object.getString("title"));
-                    mBrandName.setText(object.getString("brand"));
+                    mName.setText(object.getString("brand"));
+
+                    if(object.getString("total_stock").equalsIgnoreCase("0"))
+                    {
+                      mOutOfStock.setVisibility(View.VISIBLE);
+                        mImageShade.setVisibility(View.VISIBLE);
+                        mOutOfStockLinearLayout.setVisibility(View.VISIBLE);
+                    }
+                    else{
+
+                        mOutOfStock.setVisibility(View.GONE);
+                        mImageShade.setVisibility(View.GONE);
+                        mOutOfStockLinearLayout.setVisibility(View.GONE);
+
+                    }
+
+
+                    mBrandName.setText(object.getString("title"));
                     mClotheId = object.getString("id");
                     singleProduct.setId(object.getString("id"));
                     singleProduct.setTitle(object.getString("title"));
                     singleProduct.setCategoryId(object.getString("category_id"));
+                    singleProduct.setStockSize(object.getString("total_stock"));
                     mSingleModel.add(singleProduct);
 
 
-                    mHomeSubRecyclerView = new SingleProductRecyclerView(Productdetails.this, mBannerList,
 
-                            Productdetails.this);
-                    mRecyclerView.setAdapter(mHomeSubRecyclerView);
                     System.out.print(mBannerList);
-                    ViewPagerAdapterForSingleProduct viewPagerAdapter = new ViewPagerAdapterForSingleProduct(Productdetails.this, mSingleProductImage, mImageString);
+                    mHomeSubRecyclerView.update(mBannerList);
+              /*      mRecyclerView.invalidate();
+                    mHomeSubRecyclerView.notifyDataSetChanged();
+              */
+
+              ViewPagerAdapterForSingleProduct viewPagerAdapter = new ViewPagerAdapterForSingleProduct(Productdetails.this, mSingleProductImage, mImageString);
 
                     mViewPager.setAdapter(viewPagerAdapter);
                     setupPagerIndidcatorDots();
@@ -519,20 +563,36 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
             button.setGravity(Gravity.CENTER);
             button.setTextColor(ContextCompat.getColor(this, R.color.black));
             button.setTextSize(16);
-            if (String.valueOf(mSingleProductSize.get(i).getSize()).equalsIgnoreCase(mSizeDetail)) {
+            if (mSingleProductSize.get(i).getStock().equalsIgnoreCase("0")) {
+                button.setBackground(ContextCompat.getDrawable(Productdetails.this, R.drawable.round_button_disable));
+                button.setClickable(false);
+                button.setFocusable(false);
+
+            } else
+            {
+                if (String.valueOf(mSingleProductSize.get(i).getSize()).equalsIgnoreCase(mSizeDetail)) {
                 button.setBackground(ContextCompat.getDrawable(Productdetails.this, R.drawable.round_button_colored));
                 button.setTextColor(ContextCompat.getColor(this, R.color.white));
             } else {
                 button.setBackground(ContextCompat.getDrawable(this, R.drawable.round_button));
                 button.setTextColor(ContextCompat.getColor(this, R.color.black));
             }
+        }
             // add our event handler (less memory than an anonymous inner class)
+            final int finalI = i;
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mSizeDetail = button.getText().toString();
-                    mSizeID = String.valueOf(button.getId());
-                    setUpSizes();
+                    if (mSingleProductSize.get(finalI).getStock().equalsIgnoreCase("0")) {
+
+
+                    }
+                    else {
+                        mSizeDetail = button.getText().toString();
+                        mSizeID = String.valueOf(button.getId());
+                        mSingleStockSize = mSingleProductSize.get(finalI).getStock() ;
+                        setUpSizes();
+                    }
                 }
             });
             // add generated button to view
@@ -711,6 +771,8 @@ public class Productdetails extends AppCompatActivity implements View.OnClickLis
     @Override
     public void productData(String id, String category_id) {
         getSingleProduct(id, category_id);
+
+
         mParentScrollView.post(new Runnable() {
             public void run() {
                 mParentScrollView.fullScroll(View.FOCUS_UP);

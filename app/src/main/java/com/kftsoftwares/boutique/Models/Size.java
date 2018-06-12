@@ -7,6 +7,15 @@ package com.kftsoftwares.boutique.Models;
 public class Size {
     private String image;
     private String size_id;
+    private String stock;
+
+    public String getStock() {
+        return stock;
+    }
+
+    public void setStock(String stock) {
+        this.stock = stock;
+    }
 
     public String getImage() {
         return image;

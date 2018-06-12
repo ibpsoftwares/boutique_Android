@@ -16,6 +16,17 @@ public class SingleProduct {
     private String price;
     private String colour;
     private String deleteStatus;
+    private String stockSize;
+
+
+    public String getStockSize() {
+        return stockSize;
+    }
+
+    public void setStockSize(String stockSize) {
+        this.stockSize = stockSize;
+    }
+
     public String getId() {
         return id;
     }

@@ -59,7 +59,7 @@ public class ShippingDetails extends AppCompatActivity implements View.OnClickLi
     private CheckBox mSaturday, mSunday;
     private Button mSubmit;
     private int mAddressSelectedValue = -1;
-    private String mResponse = "", mResponse_Schedule = "";
+    private String mResponse = "", mResponse_Schedule = "", mCheckOutData = "";
     private JSONArray mJsonArray;
 
     private String mCountryName="";
@@ -78,6 +78,9 @@ public class ShippingDetails extends AppCompatActivity implements View.OnClickLi
             }
             if (bundle.getString("jsonData") != null) {
                 mResponse_Schedule = bundle.getString("jsonData");
+
+            }   if (bundle.getString("check_outData") != null) {
+                mCheckOutData = bundle.getString("check_outData");
 
             }
         }
@@ -254,6 +257,7 @@ public class ShippingDetails extends AppCompatActivity implements View.OnClickLi
 
                     i.putExtra("response_value", mResponse);
                     i.putExtra("shipping_value", response);
+                    i.putExtra("check_outData", mCheckOutData);
                     startActivity(i);
                     finish();
 

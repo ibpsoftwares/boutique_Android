@@ -64,6 +64,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private DatabaseHandler mDatabaseHandler;
      private String mValue = "";
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,9 +74,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             mValue = bundle.getString("value");
-
         }
-        getWindow().setBackgroundDrawableResource(R.drawable.bg);
+       // getWindow().setBackgroundDrawableResource(R.drawable.background_green);
         Button signUp = findViewById(R.id.signUp_button);
         Button signIn_button = findViewById(R.id.signIn_button);
         ImageView backButton = findViewById(R.id.backImage);
@@ -215,8 +217,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     //---------------------LOGIN API----------------------//
     private void loginApi() {
 
-        
-
         String tag_string_req = "string_req";
 
         final ProgressDialog pDialog = new ProgressDialog(this);
@@ -301,6 +301,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //alertDialog.setMessage(null);
 
         final EditText input = new EditText(LoginActivity.this);
+        input.setSingleLine();
         input.setHint("Enter Email...");
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -319,10 +320,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Toast.makeText(LoginActivity.this, "Please enter correct email", Toast.LENGTH_SHORT).show();
 
                         } else {
-                            Toast.makeText(LoginActivity.this, "Need Api", Toast.LENGTH_SHORT).show();
+                          //  Toast.makeText(LoginActivity.this, "Need Api", Toast.LENGTH_SHORT).show();
 
 
-                            //   sendEmail(input.getText().toString());
+                             sendEmail(input.getText().toString());
                         }
 
                     }

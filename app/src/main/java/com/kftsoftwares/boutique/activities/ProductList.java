@@ -217,6 +217,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
                             getAllProductModel.setOfferPrice(jsonObject1.getString("offer_price"));
                             getAllProductModel.setBrandName(jsonObject1.getString("brand"));
                             getAllProductModel.setCategoryName(jsonObject1.getString("category_name"));
+                            getAllProductModel.setStock_size(jsonObject1.getString("total_stock"));
                             getAllProductModel.setImage1(jsonObject1.getString("image"));
                             getAllProductModel.setDescription("description");
                             getAllProductModel.setColour("colour");

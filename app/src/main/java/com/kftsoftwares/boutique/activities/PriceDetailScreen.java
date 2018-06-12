@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.kftsoftwares.boutique.utils.Constants.CANCEL_CHECKOUT;
 import static com.kftsoftwares.boutique.utils.Constants.MyPREFERENCES;
 import static com.kftsoftwares.boutique.utils.Constants.ORDER_DETAIL;
 import static com.kftsoftwares.boutique.utils.Constants.UPDATED_TOKEN;
@@ -43,6 +44,7 @@ public class PriceDetailScreen extends AppCompatActivity {
 
     private String mResponse = "";
     private String mShippingValue = "";
+    private String mCheckOutdata = "";
 
     private int mTotalCount;
     private int mPaymentCategory = -1;
@@ -65,7 +67,9 @@ public class PriceDetailScreen extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+             //   cancelCheckOut();
                 finish();
+
             }
         });
 
@@ -74,6 +78,7 @@ public class PriceDetailScreen extends AppCompatActivity {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+
 
                 if (creditCard.isChecked()) {
                     mPaymentCategory = 1;
@@ -96,6 +101,10 @@ public class PriceDetailScreen extends AppCompatActivity {
             if (bundle.getString("shipping_value") != null) {
 
                 mShippingValue = bundle.getString("shipping_value");
+
+            }   if (bundle.getString("check_outData") != null) {
+
+                mCheckOutdata = bundle.getString("check_outData");
             }
         }
 
@@ -104,6 +113,9 @@ public class PriceDetailScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+
+               // cancelCheckOut();
+
             }
         });
 
@@ -167,6 +179,7 @@ public class PriceDetailScreen extends AppCompatActivity {
 
                     Intent i = new Intent(PriceDetailScreen.this, Payment.class);
                     i.putExtra("amount", String.valueOf(mTotalAmount + mDeliveryCharges));
+                    i.putExtra("check_outData", mCheckOutdata);
                     startActivity(i);
                     finish();
                 }
@@ -174,6 +187,7 @@ public class PriceDetailScreen extends AppCompatActivity {
         });
 
     }
+
 
     private void checkOrder() {
         String tag_string_req = "string_req";
@@ -226,6 +240,8 @@ public class PriceDetailScreen extends AppCompatActivity {
                 map.put("paymentType", "cod");
                 map.put("amount", String.valueOf(mTotalAmount));
                 map.put("user_id", sharedPreferences.getString(User_ID,""));
+                map.put("cartArray", mCheckOutdata);
+
                 return map;
             }
         };
@@ -263,5 +279,11 @@ public class PriceDetailScreen extends AppCompatActivity {
         });
         // Show the dialog
         alert.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+      //  cancelCheckOut();
     }
 }
