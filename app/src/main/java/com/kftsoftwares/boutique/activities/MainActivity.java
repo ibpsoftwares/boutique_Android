@@ -323,8 +323,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 */
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                finish();
-
                 break;
 
             case R.id.imageView:

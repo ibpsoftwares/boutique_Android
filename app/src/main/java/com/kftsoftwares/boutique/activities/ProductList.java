@@ -64,10 +64,8 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
     private GridView mGridView;
     private ArrayList<GetAllProductModel> mGetAllProductModels;
     private ArrayList<GetAllProductModel> mSortedGetAllProductModels;
-    private ArrayList<Integer> mIdArrayList;
     private ArrayList<GetAllProductModel> mGetSortedList;
     private String mId ="" , mOfferID="";
-    private ImageView mBackButton;
     private RelativeLayout mlinearLayout;
     private ArrayList<String> mPriceArrayList;
     private LinearLayout mFilter;
@@ -107,7 +105,7 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         mSortedGetAllProductModels = new ArrayList<>();
         mGetSortedList = new ArrayList<>();
         mGridView = findViewById(R.id.gridView);
-        mBackButton = findViewById(R.id.backButton);
+        ImageView mBackButton = findViewById(R.id.backButton);
         mlinearLayout = findViewById(R.id.no_data_image);
         mFilter = findViewById(R.id.filter);
         LinearLayout sort = findViewById(R.id.sort);
@@ -146,7 +144,6 @@ public class ProductList extends AppCompatActivity implements View.OnClickListen
         });
 
         mFilterDataModel = new ArrayList<>();
-        mIdArrayList = new ArrayList<>();
         mFilterListViewAdapter = new FilterListViewAdapter(ProductList.this, new ArrayList<FilterDataModel>(), mVal, ProductList.this);
         mGridViewAdapter = new GridViewAdapter(ProductList.this, new ArrayList<GetAllProductModel>());
         mGridView.setAdapter(mGridViewAdapter);

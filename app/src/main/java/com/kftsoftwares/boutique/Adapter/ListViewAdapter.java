@@ -36,6 +36,7 @@ public class ListViewAdapter extends BaseAdapter {
         mCategoryName = categoryName;
         mCategoryId = categoryId;
         mCategoryImage = categoryImage;
+
     }
 
     @Override

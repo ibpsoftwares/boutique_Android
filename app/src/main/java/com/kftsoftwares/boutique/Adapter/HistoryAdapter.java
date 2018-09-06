@@ -16,7 +16,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.kftsoftwares.boutique.Models.HistoryModel;
 import com.kftsoftwares.boutique.R;
-import com.kftsoftwares.boutique.activities.ProductList;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,17 +32,18 @@ import static com.kftsoftwares.boutique.utils.Constants.Symbol;
 public class HistoryAdapter extends BaseAdapter {
 
     private Context mContext;
-    private ArrayList<String> mCategoryName,mCategoryId;
+    private ArrayList<String> mCategoryName, mCategoryId;
     private ArrayList<HistoryModel> mHistoryModelArrayList;
     private SharedPreferences sharedPreferences;
 
 
-    public HistoryAdapter(Context context , ArrayList<HistoryModel> historyModels) {
+    public HistoryAdapter(Context context, ArrayList<HistoryModel> historyModels) {
 
         mContext = context;
         mHistoryModelArrayList = historyModels;
-        sharedPreferences = context.getSharedPreferences(MyPREFERENCES,Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
     }
+
     @Override
     public int getCount() {
         return mHistoryModelArrayList.size();
@@ -62,9 +62,8 @@ public class HistoryAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        if (convertView == null)
-        {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.history_adapter,null);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.history_adapter, null);
 
         }
         TextView name = convertView.findViewById(R.id.name);
@@ -84,52 +83,42 @@ public class HistoryAdapter extends BaseAdapter {
         orderDate.setText(str);
 
 
-
-        price.setText("Amount: "+Html.fromHtml(sharedPreferences.getString(Symbol,""))+" "+mHistoryModelArrayList.get(position).getPrice());
+        price.setText("Amount: " + Html.fromHtml(sharedPreferences.getString(Symbol, "")) + " " + mHistoryModelArrayList.get(position).getPrice());
 
         name.setText(mHistoryModelArrayList.get(position).getTitle());
-        order_id.setText("SKU:"+mHistoryModelArrayList.get(position).getOrderId());
-        quantity.setText("Quantity: "+mHistoryModelArrayList.get(position).getQuantity());
+        order_id.setText("SKU:" + mHistoryModelArrayList.get(position).getOrderId());
+        quantity.setText("Quantity: " + mHistoryModelArrayList.get(position).getQuantity());
 
 
         Glide.with(mContext).load(mHistoryModelArrayList.get(position).getImage())
                 .dontTransform()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(product_image);
-        if (mHistoryModelArrayList.get(position).getStatus()!=null)
-        {
-            if (mHistoryModelArrayList.get(position).getStatus().equalsIgnoreCase("2"))
-            {
+        if (mHistoryModelArrayList.get(position).getStatus() != null) {
+            if (mHistoryModelArrayList.get(position).getStatus().equalsIgnoreCase("2")) {
 
                 orderStatus.setText("Placed");
-                status_image.setImageDrawable(ContextCompat.getDrawable(mContext,R.mipmap.delivered));
-            }
-           else if (mHistoryModelArrayList.get(position).getStatus().equalsIgnoreCase("3"))
-            {
+                status_image.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.delivered));
+            } else if (mHistoryModelArrayList.get(position).getStatus().equalsIgnoreCase("3")) {
 
                 orderStatus.setText("Shipped");
-                status_image.setImageDrawable(ContextCompat.getDrawable(mContext,R.mipmap.shipped));
+                status_image.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.shipped));
 
 
-            }
-           else if (mHistoryModelArrayList.get(position).getStatus().equalsIgnoreCase("4"))
-            {
+            } else if (mHistoryModelArrayList.get(position).getStatus().equalsIgnoreCase("4")) {
 
                 orderStatus.setText("Delivered");
-                status_image.setImageDrawable(ContextCompat.getDrawable(mContext,R.mipmap.delivered));
+                status_image.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.delivered));
 
 
-            }
-           else if (mHistoryModelArrayList.get(position).getStatus().equalsIgnoreCase("5"))
-            {
+            } else if (mHistoryModelArrayList.get(position).getStatus().equalsIgnoreCase("5")) {
                 orderStatus.setText("Cancelled");
-                status_image.setImageDrawable(ContextCompat.getDrawable(mContext,R.mipmap.cancel));
+                status_image.setImageDrawable(ContextCompat.getDrawable(mContext, R.mipmap.cancel));
 
 
             }
 
         }
-
 
 
         return convertView;

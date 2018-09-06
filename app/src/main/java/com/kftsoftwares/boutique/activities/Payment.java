@@ -26,7 +26,6 @@ import com.stripe.android.TokenCallback;
 import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,8 +41,8 @@ import static com.kftsoftwares.boutique.utils.Constants.User_ID;
 
 public class Payment extends AppCompatActivity {
 
-   private EditText mCardNumber ,mMonth,mYear,mCvv,mEmail;
-    private String mAmount, mCheckOutData="";
+    private EditText mCardNumber, mMonth, mYear, mCvv, mEmail;
+    private String mAmount, mCheckOutData = "";
     private TextView mAmountTextView;
     private Button mNext;
     private ProgressDialog pDialog;
@@ -67,28 +66,25 @@ public class Payment extends AppCompatActivity {
         mYear.setText("2019");
         mCvv.setText("123");
 
-          pDialog = new ProgressDialog(this);
+        pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
         pDialog.setCancelable(false);
 
         mNext = findViewById(R.id.next);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
 
-        mEmail.setText(sharedPreferences.getString(Email,""));
+        mEmail.setText(sharedPreferences.getString(Email, ""));
 
         Bundle b = getIntent().getExtras();
 
-        if (b!=null)
-        {
-            if (b.getString("amount")!=null)
-            {
+        if (b != null) {
+            if (b.getString("amount") != null) {
                 mAmount = b.getString("amount");
                 mAmountTextView.setText(mAmount);
             }
 
-            if (b.getString("check_outData")!=null)
-            {
+            if (b.getString("check_outData") != null) {
                 mCheckOutData = b.getString("check_outData");
             }
 
@@ -101,7 +97,7 @@ public class Payment extends AppCompatActivity {
         });
 
 
-        mNext.setOnClickListener( new View.OnClickListener() {
+        mNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -111,21 +107,21 @@ public class Payment extends AppCompatActivity {
                 if (!card.validateNumber()) {
                     // Do not continue token creation.
                     Toast.makeText(Payment.this, "Not Valid", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     Stripe stripe = new Stripe(Payment.this, "pk_test_zUAsoiGmAgvLpzYruFVCr5Ej");
                     stripe.createToken(
                             card,
                             new TokenCallback() {
                                 public void onSuccess(Token token) {
                                     // Send token to your server
-                                    String token1 =""+token.getId();
-                                  //  sendDataForPayment(token1,mAmount);
-                                    checkOrder(token1,mAmount);
+                                    String token1 = "" + token.getId();
+                                    //  sendDataForPayment(token1,mAmount);
+                                    checkOrder(token1, mAmount);
                                 }
+
                                 public void onError(Exception error) {
                                     // Show localized error message
-                                    Toast.makeText(Payment.this, ""+error, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Payment.this, "" + error, Toast.LENGTH_SHORT).show();
 
 
                                 }
@@ -137,14 +133,11 @@ public class Payment extends AppCompatActivity {
         });
 
 
-
-
     }
 
-    private void sendDataForPayment(final String token ,final String amount) {
+    private void sendDataForPayment(final String token, final String amount) {
 
         String tag_string_req = "string_req";
-
 
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -154,21 +147,20 @@ public class Payment extends AppCompatActivity {
                 pDialog.cancel();
                 pDialog.dismiss();
                 try {
-                    if (response!=null) {
+                    if (response != null) {
 
                         JSONObject jsonObject = new JSONObject(response);
                         JSONObject jsonArray = jsonObject.getJSONObject("customer_array");
                         String status = jsonArray.getString("status");
 
                         if (status.equalsIgnoreCase("succeeded")) {
-                          //  checkOrder();
+                            //  checkOrder();
                         } else {
 
                             showFailedDialog();
                         }
 
-                    }
-                    else {
+                    } else {
                         showFailedDialog();
 
                     }
@@ -206,10 +198,10 @@ public class Payment extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
-    private void checkOrder(final String token ,final String amount) {
+    private void checkOrder(final String token, final String amount) {
         String tag_string_req = "string_req";
 
-        final SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES,MODE_PRIVATE);
+        final SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
 
         final ProgressDialog pDialog = new ProgressDialog(Payment.this);
         pDialog.setMessage("Loading...");
@@ -225,7 +217,7 @@ public class Payment extends AppCompatActivity {
                 pDialog.cancel();
                 pDialog.dismiss();
                 try {
-                    if (response!=null) {
+                    if (response != null) {
 
                         JSONObject jsonObject = new JSONObject(response);
                         JSONObject jsonArray = jsonObject.getJSONObject("customer_array");
@@ -238,8 +230,7 @@ public class Payment extends AppCompatActivity {
                             showFailedDialog();
                         }
 
-                    }
-                    else {
+                    } else {
                         showFailedDialog();
 
                     }
@@ -271,7 +262,7 @@ public class Payment extends AppCompatActivity {
                 Map<String, String> map = new HashMap<>();
                 map.put("paymentType", "card");
                 map.put("amount", mAmount);
-                map.put("user_id", sharedPreferences.getString(User_ID,""));
+                map.put("user_id", sharedPreferences.getString(User_ID, ""));
                 map.put("cartArray", mCheckOutData);
                 map.put("token", token);
                 return map;
